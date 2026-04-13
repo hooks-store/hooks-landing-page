@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { LinkmeIcon } from './LinkmeIcon';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navItems = ['Características', 'Testimonios', 'Precios'];
+  const { locale } = useLanguage();
+  const isSpanish = locale === 'es';
+  const navItems: string[] = [];
+
+  const copy = {
+    login: isSpanish ? 'Iniciar sesión' : 'Log In',
+    primaryCta: isSpanish ? 'Crear gratis' : 'Start for free',
+    toggleMenuAria: isSpanish ? 'Abrir o cerrar menú' : 'Toggle menu',
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -54,9 +63,9 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-6 ml-auto">
-            <a href="#" className="text-white text-[15px] font-medium opacity-85 hover:opacity-100 transition-opacity">Log In</a>
-            <button className="bg-white text-black text-[15px] font-semibold px-6 py-2.5 rounded-full hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
-              Start for free
+            <a href="#" className="text-white text-[15px] font-medium opacity-85 hover:opacity-100 hover:text-[#D94B78] transition-opacity">{copy.login}</a>
+            <button className="bg-white text-black text-[15px] font-semibold px-6 py-2.5 rounded-full hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+              {copy.primaryCta}
             </button>
           </div>
 
@@ -64,7 +73,7 @@ export default function Navbar() {
           <button
             className="md:hidden text-white p-1"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+            aria-label={copy.toggleMenuAria}
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

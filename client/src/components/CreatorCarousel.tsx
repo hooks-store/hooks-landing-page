@@ -1,11 +1,15 @@
 import { useRef, useEffect, useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const creators = [
   {
     name: 'Liam Parker',
     handle: '@liamparker',
     followers: '8.4M',
-    bio: 'ALL MY LINKS',
+    bio: {
+      en: 'ALL MY LINKS',
+      es: 'TODOS MIS LINKS',
+    },
     image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80',
     imagePosition: 'center 20%',
     socials: ['IG', 'X', 'TT', 'FB', 'YT', 'TH'],
@@ -14,7 +18,10 @@ const creators = [
     name: 'Ava Martinez',
     handle: '@avamartinez',
     followers: '6.1M',
-    bio: 'Beauty, style and daily routines',
+    bio: {
+      en: 'Beauty, style and daily routines',
+      es: 'Belleza, estilo y rutinas diarias',
+    },
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80',
     imagePosition: 'center 18%',
     socials: ['SP', 'IG', 'X', 'FB', 'LI', 'YT', 'TT'],
@@ -23,7 +30,10 @@ const creators = [
     name: 'Noah Brooks',
     handle: '@noahbrooks',
     followers: '5.3M',
-    bio: 'Street culture and travel stories',
+    bio: {
+      en: 'Street culture and travel stories',
+      es: 'Cultura urbana e historias de viaje',
+    },
     image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=1200&q=80',
     imagePosition: 'center 22%',
     socials: ['IG', 'X', 'TT', 'FB', 'YT'],
@@ -32,7 +42,10 @@ const creators = [
     name: 'Mia Collins',
     handle: '@miacollins',
     followers: '4.9M',
-    bio: 'Creator tips, wellness and vlogs',
+    bio: {
+      en: 'Creator tips, wellness and vlogs',
+      es: 'Tips para creadores, bienestar y vlogs',
+    },
     image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80',
     imagePosition: 'center 25%',
     socials: ['IG', 'X', 'YT', 'TT'],
@@ -41,7 +54,10 @@ const creators = [
     name: 'Ethan Ross',
     handle: '@ethanross',
     followers: '3.7M',
-    bio: 'Fitness, productivity and business',
+    bio: {
+      en: 'Fitness, productivity and business',
+      es: 'Fitness, productividad y negocio',
+    },
     image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80',
     imagePosition: 'center 30%',
     socials: ['TT', 'FB', 'X', 'YT', 'LI', 'IG'],
@@ -50,7 +66,10 @@ const creators = [
     name: 'Sofia Patel',
     handle: '@sofiapatel',
     followers: '2.9M',
-    bio: 'Fashion editorials and city moments',
+    bio: {
+      en: 'Fashion editorials and city moments',
+      es: 'Editoriales de moda y momentos en la ciudad',
+    },
     image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80',
     imagePosition: 'center 18%',
     socials: ['IG', 'YT', 'TT', 'X'],
@@ -59,7 +78,10 @@ const creators = [
     name: 'Daniel Reed',
     handle: '@danielreed',
     followers: '7.2M',
-    bio: 'Founder life and creator economy',
+    bio: {
+      en: 'Founder life and creator economy',
+      es: 'Vida de fundador y economía de creadores',
+    },
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80',
     imagePosition: 'center 18%',
     socials: ['IG', 'TT', 'YT', 'X'],
@@ -68,7 +90,10 @@ const creators = [
     name: 'Isabella Cruz',
     handle: '@isabellacruz',
     followers: '3.5M',
-    bio: 'Lifestyle shoots and travel diaries',
+    bio: {
+      en: 'Lifestyle shoots and travel diaries',
+      es: 'Lifestyle, sesiones y diarios de viaje',
+    },
     image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80',
     imagePosition: 'center 22%',
     socials: ['IG', 'TT', 'YT', 'X'],
@@ -87,16 +112,21 @@ const socialColors: Record<string, string> = {
 };
 
 export default function CreatorCarousel() {
+  const { locale } = useLanguage();
+  const isSpanish = locale === 'es';
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHoverPaused, setIsHoverPaused] = useState(false);
+  const [isClickPaused, setIsClickPaused] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const animRef = useRef<number>(0);
+  const isAutoScrollPaused = isDragging || isHoverPaused || isClickPaused;
 
   // Auto-scroll
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el || isDragging) return;
+    if (!el || isAutoScrollPaused) return;
 
     let pos = el.scrollLeft;
 
@@ -111,7 +141,7 @@ export default function CreatorCarousel() {
 
     animRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animRef.current);
-  }, [isDragging]);
+  }, [isAutoScrollPaused]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -130,6 +160,10 @@ export default function CreatorCarousel() {
   };
 
   const handleMouseUp = () => setIsDragging(false);
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+    setIsHoverPaused(false);
+  };
 
   // Touch support
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -161,10 +195,11 @@ export default function CreatorCarousel() {
       <div
         ref={scrollRef}
         className="flex gap-5 overflow-x-hidden cursor-grab active:cursor-grabbing select-none px-8"
+        onMouseEnter={() => setIsHoverPaused(true)}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -172,15 +207,18 @@ export default function CreatorCarousel() {
         {allCreators.map((creator, index) => (
           <div
             key={index}
-            className="shrink-0 w-[260px] md:w-[280px] rounded-2xl bg-[#141414] overflow-hidden group hover:bg-[#1A1A1A] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+            className="shrink-0 w-[260px] md:w-[280px] rounded-2xl bg-[#141414] overflow-hidden group hover:bg-[#1A1A1A] transition-[background-color,box-shadow] duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+            onClick={() => setIsClickPaused(true)}
           >
             {/* Avatar area */}
             <div className="h-52 relative overflow-hidden">
               <img
                 src={creator.image}
-                alt={`${creator.name} portrait`}
-                className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                alt={isSpanish ? `Retrato de ${creator.name}` : `${creator.name} portrait`}
+                className="w-full h-full object-cover"
                 style={{ objectPosition: creator.imagePosition }}
+                draggable={false}
+                onDragStart={(e) => e.preventDefault()}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
             </div>
@@ -210,9 +248,9 @@ export default function CreatorCarousel() {
               </div>
 
               <p className="text-white text-sm text-center mb-1.5 font-medium">
-                {creator.followers} Total Followers <span className="text-[#8A8F98] text-xs">▾</span>
+                {creator.followers} {isSpanish ? 'Seguidores totales' : 'Total Followers'} <span className="text-[#8A8F98] text-xs">▾</span>
               </p>
-              <p className="text-[#8A8F98] text-xs text-center whitespace-pre-line leading-relaxed">{creator.bio}</p>
+              <p className="text-[#8A8F98] text-xs text-center whitespace-pre-line leading-relaxed">{isSpanish ? creator.bio.es : creator.bio.en}</p>
             </div>
           </div>
         ))}

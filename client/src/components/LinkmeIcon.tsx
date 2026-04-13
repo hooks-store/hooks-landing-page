@@ -1,8 +1,12 @@
+import { useLanguage } from "@/contexts/LanguageContext";
+
 export function LinkmeIcon({ size = 32 }: { size?: number }) {
+  const { locale } = useLanguage();
+
   return (
     <img
       src="/favicon.png"
-      alt="Hooks logo"
+      alt={locale === "es" ? "Logo de Hooks" : "Hooks logo"}
       width={size}
       height={size}
       className="object-contain shrink-0"

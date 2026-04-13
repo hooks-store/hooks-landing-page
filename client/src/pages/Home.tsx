@@ -13,16 +13,16 @@ import CreatorCarousel from '@/components/CreatorCarousel';
 import WorldMap from '@/components/WorldMap';
 import AppIconGrid from '@/components/AppIconGrid';
 import { LinkmeIcon } from '@/components/LinkmeIcon';
-import { useScrollAnimation, useCountUp } from '@/hooks/useScrollAnimation';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Eye, Globe, ShoppingBag, Lock,
-  DollarSign, ChevronDown, BarChart3, Users,
+  ChevronDown, BarChart3, Users,
   Instagram, Facebook, Youtube, Music2, Check
 } from 'lucide-react';
 
 // Image URLs
 const HERO_BG = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/hero-bg-UR5rzfvPVvMwDzTyCqzw6u.webp';
-const CREATOR_LIFESTYLE = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-lifestyle-eAePL9YnBxbQUubnYhm3fa.webp';
+const PHONE_GUY_FOR_LATER = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-lifestyle-eAePL9YnBxbQUubnYhm3fa.webp';
 const FEMALE_CREATOR = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/female-creator-KoNNQiTsKfMVtWm8xvoSep.webp';
 const CREATOR_CTA_BG = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-cta-bg-C9mdqCe3aNkVQnH8bbSzUM.webp';
 const FEATURE_VIDEO_DIGITAL_PRODUCT = '/videos/features/digital-product-builder.mov';
@@ -32,14 +32,287 @@ const COACHING_FRAMES = [
   '/images/coaching-frames/frame-04.png',
   '/images/coaching-frames/frame-05.png',
 ];
+const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
+
+const HOME_COPY = {
+  en: {
+    hero: {
+      rotatingWords: ['brand', 'store', 'page'],
+      titleStart: 'Build your',
+      titleEnd: 'and sell from one link',
+      subheadline: 'Digital products, courses, coaching, memberships, and more. Hooks gives you what you need to turn your audience into revenue.',
+    },
+    manifesto: {
+      intro: 'The platform for the new creator economy. ',
+      line1: 'Grow your audience. ',
+      line2: 'Turn followers into customers. ',
+      line3: 'Sell products. Offer services. ',
+      line4: 'Monetize your content.',
+    },
+    features: {
+      eyebrow: 'All-in-one creator toolkit',
+      headline: 'Build, sell, and scale from one platform',
+      cards: {
+        digitalProducts: {
+          title: 'Digital Product Builder',
+          desc: 'Create and sell digital products directly from your Hooks profile with checkout-ready product cards.',
+          metricLabel: 'Total Sales',
+          metricValue: '$6,467',
+        },
+        courses: {
+          title: 'Course Builder',
+          desc: 'Publish paid courses in minutes so followers can learn from you and buy access in one tap.',
+          metricLabel: 'Enrolled Students',
+          metricValue: '1,204',
+        },
+        coaching: {
+          title: 'Coaching Calls',
+          desc: 'Promote paid coaching calls from your profile and turn expertise into booked sessions.',
+          metricLabel: 'Calls Booked',
+          metricValue: '34 this week',
+        },
+        memberships: {
+          title: 'Memberships',
+          desc: 'Offer members-only content behind a paywall to build recurring revenue from your audience.',
+          metricLabel: 'Active Members',
+          metricValue: '892',
+        },
+        analytics: {
+          title: 'Analytics',
+          desc: 'Track clicks, earnings, and engagement in real time from a single analytics dashboard.',
+          metricLabel: 'Profile Views',
+          metricValue: '1.2M',
+        },
+        designSite: {
+          title: 'Design your link-in-bio site',
+          desc: 'Build a fully customizable branded link and website experience that matches your style, voice, and business goals.',
+          imageAlt: 'Design your link-in-bio site preview',
+          metricLabel: 'Published Sites',
+          metricValue: '3,912',
+        },
+      },
+    },
+    analytics: {
+      eyebrow: 'Around the world',
+      headline: 'Track your global analytics',
+      profileViews: 'Profile Views',
+      linkClicks: 'Link Clicks',
+      countries: [
+        { flag: '🇧🇷', country: 'Brazil', views: '307k views', rank: 1 },
+        { flag: '🇺🇸', country: 'USA', views: '96k views', rank: 2 },
+        { flag: '🇵🇹', country: 'Portugal', views: '117k views', rank: 3 },
+      ],
+      cardOneTitle: 'Real-time global analytics, for free.',
+      cardOneBody: 'Hooks keeps your profile accessible worldwide, whether you receive hundreds or millions of clicks. Everything runs smoothly and you can always see where your profile is being viewed.',
+      cardTwoTitle: 'Premium analytics animation loop.',
+      cardTwoBody: 'A polished live analytics canvas that complements your global stats view with richer motion and performance storytelling.',
+      frameTitle: 'Premium analytics animation',
+    },
+    finalCta: {
+      line1: 'Build your store.',
+      line2: 'Share your links.',
+      line3: 'Get paid.',
+      primaryCta: 'Start for free',
+      trust1: 'No card required',
+      trust2: 'Live in minutes',
+      trust3: 'Built for creators',
+    },
+    phone: {
+      totalFollowers: 'Total Followers',
+      allLinks: 'ALL MY LINKS',
+      youtube: 'YouTube',
+    },
+    memberships: {
+      title: 'Creator Circle Membership',
+      perMonth: '/ month',
+      cta: 'Get this now',
+    },
+  },
+  es: {
+    hero: {
+      rotatingWords: ['marca', 'tienda', 'página'],
+      titleStart: 'Construye tu',
+      titleEnd: 'y vende desde un solo link',
+      subheadline: 'Productos digitales, cursos, consultorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.',
+    },
+    manifesto: {
+      intro: 'La plataforma para la nueva economía de creadores. ',
+      line1: 'Haz crecer tu audiencia. ',
+      line2: 'Convierte seguidores en clientes. ',
+      line3: 'Vende productos. Ofrece servicios. ',
+      line4: 'Monetiza tu contenido.',
+    },
+    features: {
+      eyebrow: 'Monetiza a tu manera',
+      headline: 'Todo lo que puedes vender con Hooks',
+      cards: {
+        digitalProducts: {
+          title: 'Productos digitales',
+          desc: 'Guías, plantillas, ebooks, recursos descargables y archivos premium.',
+          metricLabel: 'Ventas totales',
+          metricValue: '$6,467',
+        },
+        courses: {
+          title: 'Cursos online',
+          desc: 'Organiza módulos, contenidos y acceso para tus estudiantes.',
+          metricLabel: 'Estudiantes inscritos',
+          metricValue: '1,204',
+        },
+        coaching: {
+          title: 'Consultorías y sesiones',
+          desc: 'Reserva llamadas, mentorías o servicios 1 a 1 desde tu perfil.',
+          metricLabel: 'Sesiones reservadas',
+          metricValue: '34 esta semana',
+        },
+        memberships: {
+          title: 'Membresías',
+          desc: 'Crea acceso recurrente para tu comunidad con pagos periódicos.',
+          metricLabel: 'Miembros activos',
+          metricValue: '892',
+        },
+        analytics: {
+          title: 'Analítica',
+          desc: 'Mide clics, ingresos y actividad en tiempo real desde un único panel.',
+          metricLabel: 'Visitas del perfil',
+          metricValue: '1.2M',
+        },
+        designSite: {
+          title: 'Diseña tu sitio link-in-bio',
+          desc: 'Crea una experiencia de perfil y sitio totalmente personalizable para reflejar tu estilo, voz y negocio.',
+          imageAlt: 'Vista previa del sitio link-in-bio',
+          metricLabel: 'Sitios publicados',
+          metricValue: '3,912',
+        },
+      },
+    },
+    analytics: {
+      eyebrow: 'Analítica en tiempo real',
+      headline: 'Entiende tu crecimiento con claridad',
+      profileViews: 'Visitas del perfil',
+      linkClicks: 'Clics en el link',
+      countries: [
+        { flag: '🇧🇷', country: 'Brasil', views: '307k vistas', rank: 1 },
+        { flag: '🇺🇸', country: 'EE. UU.', views: '96k vistas', rank: 2 },
+        { flag: '🇵🇹', country: 'Portugal', views: '117k vistas', rank: 3 },
+      ],
+      cardOneTitle: 'Analítica global en tiempo real, gratis.',
+      cardOneBody: 'Hooks mantiene tu perfil accesible en todo el mundo, recibas cientos o millones de clics. Todo funciona de forma estable y puedes ver claramente desde dónde llega tu actividad.',
+      cardTwoTitle: 'Loop premium de analítica.',
+      cardTwoBody: 'Un canvas de analítica en vivo que complementa tus métricas globales con una narrativa visual más sólida.',
+      frameTitle: 'Animación premium de analítica',
+    },
+    finalCta: {
+      line1: 'Construye tu tienda.',
+      line2: 'Comparte tu link.',
+      line3: 'Empieza a cobrar.',
+      primaryCta: 'Crear gratis',
+      trust1: 'Sin tarjeta de crédito',
+      trust2: 'Activo en minutos',
+      trust3: 'Hecho para creadores',
+    },
+    phone: {
+      totalFollowers: 'Seguidores totales',
+      allLinks: 'TODOS MIS LINKS',
+      youtube: 'YouTube',
+    },
+    memberships: {
+      title: 'Membresía Creator Circle',
+      perMonth: '/ mes',
+      cta: 'Consíguelo ahora',
+    },
+  },
+} as const;
 
 export default function Home() {
+  const { locale } = useLanguage();
+  const copy = HOME_COPY[locale];
+  const heroRotatingWords = copy.hero.rotatingWords;
   const [heroLoaded, setHeroLoaded] = useState(false);
+  const [heroWordIndex, setHeroWordIndex] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setHeroLoaded(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    setHeroWordIndex(0);
+  }, [locale]);
+
+  useEffect(() => {
+    const wordTimer = setInterval(() => {
+      setHeroWordIndex((current) => (current + 1) % heroRotatingWords.length);
+    }, 2200);
+
+    return () => clearInterval(wordTimer);
+  }, [heroRotatingWords.length]);
+
+  const featureCards = [
+    {
+      title: copy.features.cards.digitalProducts.title,
+      desc: copy.features.cards.digitalProducts.desc,
+      videoSrc: FEATURE_VIDEO_DIGITAL_PRODUCT,
+      videoClassName: 'object-contain p-2 bg-[#0B1926]',
+      overlayClass: 'from-[#0B1926]/34 via-[#0B1926]/8 to-transparent',
+      metricLabel: copy.features.cards.digitalProducts.metricLabel,
+      metricValue: copy.features.cards.digitalProducts.metricValue,
+      icon: <ShoppingBag className="w-3.5 h-3.5 text-orange-500" />,
+    },
+    {
+      title: copy.features.cards.courses.title,
+      desc: copy.features.cards.courses.desc,
+      videoSrc: FEATURE_VIDEO_COURSE_BUILDER,
+      overlayClass: 'from-[#0B1926]/36 via-[#0B1926]/9 to-transparent',
+      metricLabel: copy.features.cards.courses.metricLabel,
+      metricValue: copy.features.cards.courses.metricValue,
+      icon: <Check className="w-3.5 h-3.5 text-blue-500" />,
+    },
+    {
+      title: copy.features.cards.coaching.title,
+      desc: copy.features.cards.coaching.desc,
+      preview: <CoachingCallsFeaturePreview />,
+      overlayClass: 'from-[#0B1926]/38 via-[#0B1926]/12 to-transparent',
+      metricLabel: copy.features.cards.coaching.metricLabel,
+      metricValue: copy.features.cards.coaching.metricValue,
+      icon: <Users className="w-3.5 h-3.5 text-green-600" />,
+    },
+    {
+      title: copy.features.cards.memberships.title,
+      desc: copy.features.cards.memberships.desc,
+      preview: <MembershipsFeaturePreview />,
+      overlayClass: 'from-[#0B1926]/30 via-[#0B1926]/7 to-transparent',
+      metricLabel: copy.features.cards.memberships.metricLabel,
+      metricValue: copy.features.cards.memberships.metricValue,
+      icon: <Lock className="w-3.5 h-3.5 text-purple-500" />,
+    },
+    {
+      title: copy.features.cards.analytics.title,
+      desc: copy.features.cards.analytics.desc,
+      preview: <AnalyticsFeaturePreview />,
+      overlayClass: 'from-[#0B1926]/30 via-[#0B1926]/6 to-transparent',
+      metricLabel: copy.features.cards.analytics.metricLabel,
+      metricValue: copy.features.cards.analytics.metricValue,
+      icon: <BarChart3 className="w-3.5 h-3.5 text-indigo-500" />,
+    },
+    {
+      title: copy.features.cards.designSite.title,
+      desc: copy.features.cards.designSite.desc,
+      preview: (
+        <iframe
+          src="/videos/features/design-link-in-bio-site-loop.html"
+          title={copy.features.cards.designSite.imageAlt}
+          className="w-full h-full border-0 pointer-events-none bg-[#050814]"
+          loading="lazy"
+          tabIndex={-1}
+          aria-hidden="true"
+        />
+      ),
+      overlayClass: 'from-[#0B1926]/34 via-[#0B1926]/10 to-transparent',
+      metricLabel: copy.features.cards.designSite.metricLabel,
+      metricValue: copy.features.cards.designSite.metricValue,
+      icon: <Globe className="w-3.5 h-3.5 text-cyan-500" />,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white overflow-x-hidden">
@@ -73,9 +346,11 @@ export default function Home() {
                 transition: 'all 0.6s ease-out 0.2s',
               }}
             >
-              <span className="italic">Construye tu marca</span>
+              <span className="italic">
+                {copy.hero.titleStart} <span className="text-[#D94B78]">{heroRotatingWords[heroWordIndex % heroRotatingWords.length]}</span>
+              </span>
               <br />
-              y vende desde un solo link
+              {copy.hero.titleEnd}
             </h1>
             <p
               className="text-[#C0C0C0] text-base md:text-[17px] max-w-[550px] leading-[1.6] mb-8"
@@ -85,7 +360,7 @@ export default function Home() {
                 transition: 'all 0.6s ease-out 0.5s',
               }}
             >
-              Productos digitales, cursos, consultorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.
+              {copy.hero.subheadline}
             </p>
             <div
               style={{
@@ -112,15 +387,15 @@ export default function Home() {
       </section>
 
       {/* ===== 2. MANIFESTO / CREATOR CAROUSEL ===== */}
-      <section className="py-20 md:py-32">
+      <section className="pt-20 pb-12 md:pt-32 md:pb-20">
         <div className="container">
           <SectionWrapper>
             <h2 className="text-[32px] sm:text-[40px] md:text-[52px] lg:text-[60px] font-bold leading-[1.12] tracking-[-0.02em] max-w-[1000px]">
-              <span className="text-white">La plataforma para la nueva economía de creadores. </span>
-              <span className="text-[#B0B0B0]">Haz crecer tu audiencia. </span>
-              <span className="text-[#808080]">Convierte seguidores en clientes. </span>
-              <span className="text-[#E85D75]">Vende productos. Ofrece servicios. </span>
-              <span className="text-[#555555]">Monetiza tu contenido.</span>
+              <span className="text-white">{copy.manifesto.intro}</span>
+              <span className="text-[#B0B0B0]">{copy.manifesto.line1}</span>
+              <span className="text-[#808080]">{copy.manifesto.line2}</span>
+              <span className="text-[#D94B78]">{copy.manifesto.line3}</span>
+              <span className="text-[#555555]">{copy.manifesto.line4}</span>
             </h2>
           </SectionWrapper>
         </div>
@@ -132,66 +407,20 @@ export default function Home() {
       </section>
 
       {/* ===== 3. FEATURE CARDS SECTION ===== */}
-      <section className="py-20 md:py-32">
+      <section className="pt-4 pb-16 md:pt-6 md:pb-24">
         <div className="container">
           <SectionWrapper>
-            <h2 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] max-w-[600px] mb-12 md:mb-16">
-              For everyone from creators to enterprise
+            <p className={SECTION_EYEBROW_CLASS}>{copy.features.eyebrow}</p>
+            <h2 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] max-w-[700px] mb-12 md:mb-16">
+              {copy.features.headline}
             </h2>
           </SectionWrapper>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
-            {[
-              {
-                title: 'Digital Product Builder',
-                desc: 'Create and sell digital products directly from your Linkme profile with checkout-ready product cards.',
-                videoSrc: FEATURE_VIDEO_DIGITAL_PRODUCT,
-                videoClassName: 'object-contain p-2 bg-[#0B1926]',
-                overlayClass: 'from-[#0B1926]/34 via-[#0B1926]/8 to-transparent',
-                metricLabel: 'Total Sales',
-                metricValue: '$6,467',
-                icon: <ShoppingBag className="w-3.5 h-3.5 text-orange-500" />,
-              },
-              {
-                title: 'Course Builder',
-                desc: 'Publish paid courses in minutes so followers can learn from you and buy access in one tap.',
-                videoSrc: FEATURE_VIDEO_COURSE_BUILDER,
-                overlayClass: 'from-[#0B1926]/36 via-[#0B1926]/9 to-transparent',
-                metricLabel: 'Enrolled Students',
-                metricValue: '1,204',
-                icon: <Check className="w-3.5 h-3.5 text-blue-500" />,
-              },
-              {
-                title: 'Coaching Calls',
-                desc: 'Promote paid coaching calls from your profile to turn consultorías into booked sessions.',
-                preview: <CoachingCallsFeaturePreview />,
-                overlayClass: 'from-[#0B1926]/38 via-[#0B1926]/12 to-transparent',
-                metricLabel: 'Calls Booked',
-                metricValue: '34 this week',
-                icon: <Users className="w-3.5 h-3.5 text-green-600" />,
-              },
-              {
-                title: 'Memberships',
-                desc: 'Offer members-only content behind a paywall to build recurring revenue from your audience.',
-                preview: <MembershipsFeaturePreview />,
-                overlayClass: 'from-[#0B1926]/30 via-[#0B1926]/7 to-transparent',
-                metricLabel: 'Active Members',
-                metricValue: '892',
-                icon: <Lock className="w-3.5 h-3.5 text-purple-500" />,
-              },
-              {
-                title: 'Analytics',
-                desc: 'Track clicks, earnings, and engagement in real time from a single analytics dashboard.',
-                preview: <AnalyticsFeaturePreview />,
-                overlayClass: 'from-[#0B1926]/30 via-[#0B1926]/6 to-transparent',
-                metricLabel: 'Profile Views',
-                metricValue: '1.2M',
-                icon: <BarChart3 className="w-3.5 h-3.5 text-indigo-500" />,
-              },
-            ].map((card, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featureCards.map((card, i) => (
               <SectionWrapper key={card.title} delay={i * 80}>
                 <div className="border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-all duration-300 group">
-                  <div className="h-[350px] relative overflow-hidden">
+                  <div className="h-[390px] relative overflow-hidden">
                     {card.videoSrc ? (
                       <video
                         src={card.videoSrc}
@@ -215,8 +444,8 @@ export default function Home() {
                       <div className="text-black font-bold text-lg mt-1 leading-tight">{card.metricValue}</div>
                     </div>
                   </div>
-                  <div className="bg-[#0A0A0A] p-6 pt-5">
-                    <h3 className="text-white text-[22px] font-semibold mb-2">{card.title}</h3>
+                  <div className="bg-[#0A0A0A] p-7 pt-6">
+                    <h3 className="text-white text-[24px] font-semibold mb-2">{card.title}</h3>
                     <p className="text-[#8A8F98] text-[15px] leading-[1.6]">{card.desc}</p>
                   </div>
                 </div>
@@ -227,12 +456,12 @@ export default function Home() {
       </section>
 
       {/* ===== 7. ANALYTICS SECTION ===== */}
-      <section className="py-20 md:py-32">
+      <section className="pt-4 pb-20 md:pt-6 md:pb-32">
         <div className="container">
           <SectionWrapper>
-            <p className="text-[#E8930C] text-base font-semibold mb-3">Around the world</p>
+            <p className={SECTION_EYEBROW_CLASS}>{copy.analytics.eyebrow}</p>
             <h2 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] mb-12 md:mb-16">
-              Track your global analytics
+              {copy.analytics.headline}
             </h2>
           </SectionWrapper>
 
@@ -248,7 +477,7 @@ export default function Home() {
                         <Eye className="w-4 h-4 text-blue-500" />
                       </div>
                       <div>
-                        <div className="text-[10px] text-gray-500 font-medium">Profile Views</div>
+                        <div className="text-[10px] text-gray-500 font-medium">{copy.analytics.profileViews}</div>
                         <div className="text-black font-bold text-lg leading-tight">1.2M</div>
                       </div>
                     </div>
@@ -260,7 +489,7 @@ export default function Home() {
                         <Globe className="w-4 h-4 text-green-500" />
                       </div>
                       <div>
-                        <div className="text-[10px] text-gray-500 font-medium">Link Clicks</div>
+                        <div className="text-[10px] text-gray-500 font-medium">{copy.analytics.linkClicks}</div>
                         <div className="text-black font-bold text-lg leading-tight">14k</div>
                       </div>
                     </div>
@@ -269,11 +498,7 @@ export default function Home() {
                   {/* Country breakdown */}
                   <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10" style={{ animationDelay: '1.5s' }}>
                     <div className="space-y-2.5">
-                      {[
-                        { flag: '🇧🇷', country: 'Brazil', views: '307k views', rank: 1 },
-                        { flag: '🇺🇸', country: 'USA', views: '96k views', rank: 2 },
-                        { flag: '🇵🇹', country: 'Portugal', views: '117k views', rank: 3 },
-                      ].map((item) => (
+                      {copy.analytics.countries.map((item) => (
                         <div key={item.rank} className="flex items-center gap-3">
                           <span className="text-xl">{item.flag}</span>
                           <div>
@@ -287,9 +512,9 @@ export default function Home() {
                 </div>
 
                 <div className="mt-6 pt-5 border-t border-white/10">
-                  <h3 className="text-white font-bold text-xl mb-3">Real-time global analytics, for free.</h3>
+                  <h3 className="text-white font-bold text-xl mb-3">{copy.analytics.cardOneTitle}</h3>
                   <p className="text-[#8A8F98] text-[15px] leading-[1.6] max-w-[700px]">
-                    Linkme makes sure your profile is accessible worldwide, providing seamless access whether you receive hundreds or millions of clicks. We keep everything running smoothly and show you where your profile is being viewed, giving you all the analytics you need.
+                    {copy.analytics.cardOneBody}
                   </p>
                 </div>
               </div>
@@ -298,16 +523,16 @@ export default function Home() {
                 <div className="relative h-[260px] md:h-[340px] lg:h-[380px] rounded-2xl overflow-hidden border border-white/10 bg-[#050814]">
                   <iframe
                     src="/videos/features/premium_analytics_loop_v2.html"
-                    title="Premium analytics animation"
+                    title={copy.analytics.frameTitle}
                     className="w-full h-full"
                     loading="lazy"
                   />
                 </div>
 
                 <div className="mt-6 pt-5 border-t border-white/10">
-                  <h3 className="text-white font-bold text-xl mb-3">Premium analytics animation loop.</h3>
+                  <h3 className="text-white font-bold text-xl mb-3">{copy.analytics.cardTwoTitle}</h3>
                   <p className="text-[#8A8F98] text-[15px] leading-[1.6]">
-                    A polished live analytics canvas that complements your global stats view with richer motion and performance storytelling.
+                    {copy.analytics.cardTwoBody}
                   </p>
                 </div>
               </div>
@@ -316,154 +541,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== 8. PLATFORM/MANAGEMENT SECTION ===== */}
-      <section className="py-20 md:py-32">
-        <div className="container">
-          <SectionWrapper>
-            <p className="text-[#E8930C] text-base font-semibold mb-3">One platform</p>
-            <h2 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] mb-12 md:mb-16">
-              Manage everything in one place
-            </h2>
-          </SectionWrapper>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <SectionWrapper>
-              <DashboardCard />
-            </SectionWrapper>
-            <SectionWrapper delay={120}>
-              <MobileCard />
-            </SectionWrapper>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 10. INTEGRATIONS GRID ===== */}
-      <section className="py-20 md:py-32">
-        <div className="container">
-          <SectionWrapper>
-            <h2 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] max-w-[700px] mb-4">
-              Add all your favorite apps to your Linkme profile
-            </h2>
-            <p className="text-[#8A8F98] text-[17px] leading-[1.6] max-w-[600px] mb-12 md:mb-16">
-              Easily integrate the platforms you already use like Instagram, TikTok, and YouTube. Linkme brings all your favorite apps together in one seamless profile.
-            </p>
-          </SectionWrapper>
-          <SectionWrapper delay={200}>
-            <AppIconGrid />
-          </SectionWrapper>
-        </div>
-      </section>
-
-      {/* ===== 11. SOCIAL PROOF / STATS ===== */}
-      <section className="py-20 md:py-32">
-        <div className="container">
-          <SectionWrapper>
-            <h2 className="text-[32px] sm:text-[40px] md:text-[48px] font-bold leading-[1.1] tracking-[-0.02em] text-center mb-16 md:mb-24">
-              There's no better place<br className="hidden sm:block" /> for creators
-            </h2>
-          </SectionWrapper>
-
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
-            <div className="lg:w-1/2">
-              <SectionWrapper>
-                <h3 className="text-[28px] md:text-[36px] font-bold mb-8">All in one platform.</h3>
-                <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 md:gap-16 mb-6">
-                  <StatBlock label="More Conversions" value={39} suffix="%" />
-                  <div className="w-px bg-white/10 self-stretch hidden md:block" />
-                  <StatBlock label="Countries Global Reach" value={180} suffix="+" />
-                </div>
-                <div className="w-64 h-0.5 bg-[#E8930C] mb-6" />
-                <p className="text-[#8A8F98] text-base leading-[1.6] max-w-[500px]">
-                  LinkMe gives creators everything they need to grow, earn, and succeed in one powerful platform, no tech skills required. From featured links to digital product sales, it's the easiest way to turn followers into revenue.
-                </p>
-              </SectionWrapper>
-            </div>
-
-            <div className="lg:w-1/2 relative">
-              <SectionWrapper delay={200}>
-                <SocialProofMockup />
-              </SectionWrapper>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 12. SPEED/PERFORMANCE SECTION ===== */}
-      <section className="py-20 md:py-32">
-        <div className="container">
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
-            <div className="lg:w-1/2">
-              <SectionWrapper>
-                <div className="relative rounded-2xl overflow-hidden">
-                  <img src={CREATOR_LIFESTYLE} alt="Creator using phone" className="w-full h-[500px] object-cover" />
-                  {/* Floating stat badges */}
-                  <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-xl animate-bob">
-                    <div className="text-gray-400 text-[10px] font-medium">Total Sales</div>
-                    <div className="text-black font-bold text-xl">$3,622.71</div>
-                    <div className="text-green-500 text-xs font-semibold mt-0.5">↗ 204%</div>
-                  </div>
-                  <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-xl animate-bob" style={{ animationDelay: '0.5s' }}>
-                    <div className="text-gray-400 text-[10px] font-medium">New Followers</div>
-                    <div className="text-black font-bold text-xl">62.44K</div>
-                    <span className="text-purple-600 text-[10px] font-semibold bg-purple-100 rounded px-1.5 py-0.5 mt-0.5 inline-block">↗ 311%</span>
-                  </div>
-                  {[
-                    { flag: '🇺🇸', country: 'USA', pct: '84%', style: { top: '45%', left: '12%' } },
-                    { flag: '🇨🇦', country: 'Canada', pct: '56%', style: { top: '62%', left: '8%' } },
-                    { flag: '🇧🇷', country: 'Brazil', pct: '36%', style: { top: '55%', right: '8%' } },
-                    { flag: '🇲🇽', country: 'Mexico', pct: '33%', style: { bottom: '12%', left: '12%' } },
-                    { flag: '🇦🇺', country: 'Australia', pct: '48%', style: { bottom: '12%', right: '12%' } },
-                  ].map((badge, i) => (
-                    <div
-                      key={i}
-                      className="absolute bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-xl flex items-center gap-2 animate-bob"
-                      style={{ ...badge.style, animationDelay: `${i * 0.4}s` } as React.CSSProperties}
-                    >
-                      <span className="text-base">{badge.flag}</span>
-                      <span className="text-black text-xs font-bold">{badge.country}</span>
-                      <span className="text-green-500 text-xs font-semibold">↗{badge.pct}</span>
-                    </div>
-                  ))}
-                </div>
-              </SectionWrapper>
-            </div>
-
-            <div className="lg:w-1/2">
-              <SectionWrapper delay={200}>
-                <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-[1.1] tracking-[-0.02em] mb-6">
-                  Blazingly Fast
-                </h2>
-                <p className="text-[#8A8F98] text-[17px] leading-[1.6]">
-                  Linkme loads in a blink. We know time is money. If a page is slow, people leave. Your fans want to see your stuff right away, so Linkme shows it all instantly and keeps them with you.
-                </p>
-              </SectionWrapper>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ===== 13. FINAL CTA SECTION ===== */}
       <section className="py-20 md:py-28">
         <div className="container">
           <SectionWrapper>
             <div className="max-w-[750px] mx-auto px-6 md:px-8 text-center">
-              <h2 className="text-5xl md:text-6xl font-bold leading-[0.98] tracking-tight text-[#F1F3F7]">
-                Build your store.<br />
-                Share your links.<br />
-                Get paid.
+              <h2 className="text-5xl md:text-6xl font-bold leading-[1.04] tracking-tight text-[#F1F3F7]">
+                {copy.finalCta.line1}<br />
+                {copy.finalCta.line2}<br />
+                {copy.finalCta.line3}
               </h2>
 
               <button
                 type="button"
-                className="mt-12 min-w-[132px] bg-white text-black text-[15px] font-semibold px-6 py-2.5 rounded-full transition-all duration-200 hover:bg-[#e45b73] hover:text-white active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e45b73]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
+                className="mt-12 min-w-[164px] bg-white text-black text-[16px] font-semibold px-8 py-3 rounded-full hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
-                Start for free
+                {copy.finalCta.primaryCta}
               </button>
 
-              <div className="mt-6 flex flex-col items-center gap-6 text-[#B6BCC7] text-[15px]">
-                <p>✓ No card required</p>
-                <p>✓ Live in minutes</p>
-                <p>✓ Built for creators</p>
+              <div className="mt-6 flex flex-col items-center gap-6 text-[15px]">
+                <p className="text-[#FF624F]">✓ {copy.finalCta.trust1}</p>
+                <p className="text-[#D94B78]">✓ {copy.finalCta.trust2}</p>
+                <p className="text-[#5B4BFF]">✓ {copy.finalCta.trust3}</p>
               </div>
             </div>
           </SectionWrapper>
@@ -478,6 +577,9 @@ export default function Home() {
 // ===== SUB-COMPONENTS =====
 
 function PhoneMockup() {
+  const { locale } = useLanguage();
+  const copy = HOME_COPY[locale].phone;
+
   return (
     <div className="relative w-64 sm:w-72 md:w-[19rem] lg:w-[22.5rem] xl:w-[24rem] aspect-[9/16]">
       <div className="w-full h-full">
@@ -515,19 +617,19 @@ function PhoneMockup() {
               </div>
 
               <p className="text-white text-[10px] font-semibold text-center mt-2">
-                132.4M Total Followers <ChevronDown className="w-3 h-3 inline -mt-0.5" />
+                132.4M {copy.totalFollowers} <ChevronDown className="w-3 h-3 inline -mt-0.5" />
               </p>
-              <p className="text-white/95 text-[10px] tracking-[0.12em] font-semibold text-center mt-1">ALL MY LINKS</p>
+              <p className="text-white/95 text-[10px] tracking-[0.12em] font-semibold text-center mt-1">{copy.allLinks}</p>
             </div>
 
             <div className="absolute left-2.5 right-2.5 bottom-2.5 grid grid-rows-[1fr_auto] gap-2">
               <div className="relative h-28 sm:h-32 rounded-[1rem] overflow-hidden border border-white/12">
-                <img src={CREATOR_LIFESTYLE} alt="" className="w-full h-full object-cover" />
+                <img src={HERO_BG} alt="" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
                 <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-lg">
                   <Youtube className="w-3.5 h-3.5 text-[#EF4444]" />
                 </div>
-                <p className="absolute bottom-2 left-0 right-0 text-center text-white text-[11px] font-semibold">YouTube</p>
+                <p className="absolute bottom-2 left-0 right-0 text-center text-white text-[11px] font-semibold">{copy.youtube}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-2 h-16 sm:h-20">
@@ -556,6 +658,9 @@ function PhoneMockup() {
 }
 
 function MembershipsFeaturePreview() {
+  const { locale } = useLanguage();
+  const copy = HOME_COPY[locale].memberships;
+
   return (
     <div className="h-full w-full bg-gradient-to-b from-[#D9E0EE] to-[#BCC7DA] p-5 flex items-center justify-center">
       <div className="w-[72%] h-[94%] bg-[#F5F8FE] rounded-[22px] overflow-hidden shadow-[0_24px_60px_rgba(15,23,42,0.25)] border border-white/70 relative">
@@ -565,8 +670,8 @@ function MembershipsFeaturePreview() {
           <div className="absolute top-8 left-20 w-28 h-12 rounded-full bg-[#4740B8]/45 blur-sm animate-bob" style={{ animationDelay: '0.9s' }} />
         </div>
         <div className="px-4 pt-4">
-          <h4 className="text-[#1F2535] text-[14px] font-bold leading-tight">Creator Circle Membership</h4>
-          <p className="text-[#1F2535] text-[13px] font-bold mt-1">$12 <span className="font-medium text-[#5B657E]">/ month</span></p>
+          <h4 className="text-[#1F2535] text-[14px] font-bold leading-tight">{copy.title}</h4>
+          <p className="text-[#1F2535] text-[13px] font-bold mt-1">$12 <span className="font-medium text-[#5B657E]">{copy.perMonth}</span></p>
           <div className="flex items-center gap-2 mt-2.5">
             <div className="w-5 h-5 rounded-full bg-[#E1E7F4]" />
             <span className="text-[#6E7690] text-[10px]">@creatorstudio</span>
@@ -579,7 +684,7 @@ function MembershipsFeaturePreview() {
           </div>
         </div>
         <div className="absolute left-4 right-4 bottom-4 h-9 rounded-xl bg-[#1E2432] flex items-center justify-center shadow-[0_12px_24px_rgba(15,23,42,0.35)]">
-          <span className="text-white text-[11px] font-semibold">Get this now</span>
+          <span className="text-white text-[11px] font-semibold">{copy.cta}</span>
         </div>
       </div>
     </div>
@@ -628,169 +733,16 @@ function CoachingCallsFeaturePreview() {
 }
 
 function AnalyticsFeaturePreview() {
+  const { locale } = useLanguage();
+
   return (
     <iframe
       src="/videos/features/premium_analytics_loop_v2.html"
       className="w-full h-full border-0 pointer-events-none"
       loading="lazy"
-      title="Premium analytics animation"
+      title={HOME_COPY[locale].analytics.frameTitle}
       tabIndex={-1}
       aria-hidden="true"
     />
-  );
-}
-
-function DashboardCard() {
-  return (
-    <div className="card-navy-teal overflow-hidden h-full transition-all duration-300">
-      <div className="h-[420px] relative p-6 overflow-hidden bg-gradient-to-br from-[#0B1926] to-[#0F2840]">
-        <div className="bg-[#111827] rounded-xl p-5 shadow-2xl max-w-sm mx-auto">
-          <div className="flex items-center gap-2 mb-5">
-            <LinkmeIcon size={20} />
-            <span className="text-white text-sm font-semibold">Hooks</span>
-          </div>
-          <div className="grid grid-cols-3 gap-3 mb-5">
-            {[
-              { icon: <Lock className="w-4 h-4 text-gray-500" />, label: 'Total Sales', value: '1,391', color: 'text-green-400' },
-              { icon: <DollarSign className="w-4 h-4 text-gray-500" />, label: 'Total revenue', value: '$6,467.31', color: 'text-green-400' },
-              { icon: <Eye className="w-4 h-4 text-gray-500" />, label: 'Profile Views', value: '3.2 M', color: 'text-green-400' },
-            ].map((stat, i) => (
-              <div key={i} className="bg-[#1F2937] rounded-lg p-3">
-                {stat.icon}
-                <div className="text-gray-500 text-[9px] mt-1.5">{stat.label}</div>
-                <div className="text-white font-bold text-sm mt-0.5">{stat.value}</div>
-                <div className={`${stat.color} text-[9px] mt-0.5 font-medium`}>↗ +12%</div>
-              </div>
-            ))}
-          </div>
-          <div className="text-gray-500 text-xs mb-2 font-medium">Top Locations</div>
-          <div className="space-y-1.5">
-            {['Miami', 'Los Angeles', 'New York', 'London'].map((city, i) => (
-              <div key={i} className="flex items-center gap-2 text-gray-400 text-xs">
-                <span className="text-gray-600 w-3">{i + 1}.</span> {city}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="p-6 pt-4">
-        <h3 className="text-white text-xl font-semibold mb-2">Track your growth in real-time</h3>
-        <p className="text-[#8A8F98] text-[15px] leading-[1.6]">View clicks, earnings, and engagement all in one place with Linkme's powerful analytics.</p>
-      </div>
-    </div>
-  );
-}
-
-function MobileCard() {
-  return (
-    <div className="card-navy-teal overflow-hidden h-full transition-all duration-300">
-      <div className="h-[420px] relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0B1926] to-[#0F2840]">
-        <div className="w-52 h-[380px] bg-black rounded-[2.5rem] border-[3px] border-gray-700 p-1.5 relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-black rounded-b-2xl z-10" />
-          <div className="w-full h-full rounded-[2rem] overflow-hidden bg-gradient-to-b from-amber-400 via-orange-400 to-orange-500 relative">
-            <div className="absolute top-3 left-4 text-white/70 text-[10px]">1:47</div>
-            <div className="absolute top-3 right-4 flex items-center gap-1">
-              <div className="flex gap-[2px]">
-                {[1,2,3,4].map(i => <div key={i} className="w-[3px] h-[6px] bg-white/70 rounded-sm" style={{height: `${i*2+2}px`}} />)}
-              </div>
-              <div className="text-white/70 text-[8px]">⚡</div>
-            </div>
-            <div className="absolute top-12 left-0 right-0 text-center">
-              <div className="text-white/80 text-[11px]">Tuesday, July 29</div>
-              <div className="text-white text-5xl font-bold mt-1 tracking-tight">1:47</div>
-            </div>
-            <div className="absolute bottom-6 left-3 right-3 space-y-2">
-              {[
-                { msg: 'Brand deal accepted for $5,000!', time: '1:47' },
-                { msg: 'Hat sale of $19!', time: '1:47' },
-              ].map((notif, i) => (
-                <div key={i} className="bg-white/25 backdrop-blur-md rounded-2xl p-2.5 flex items-center gap-2.5">
-                  <LinkmeIcon size={22} />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-white text-[10px] font-semibold">Hooks</div>
-                    <div className="text-white/90 text-[9px] truncate">{notif.msg}</div>
-                  </div>
-                  <span className="text-white/50 text-[8px] shrink-0">{notif.time}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="p-6 pt-4">
-        <h3 className="text-white text-xl font-semibold mb-2">Run your business from anywhere</h3>
-        <p className="text-[#8A8F98] text-[15px] leading-[1.6]">Do it all on the go with the full-featured Linkme mobile app, your business, in your pocket.</p>
-      </div>
-    </div>
-  );
-}
-
-const HOODIE_PRODUCT = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/hoodie-product-GRZbibXBHC57GZStZ4Zchj.webp';
-
-function SocialProofMockup() {
-  return (
-    <div className="relative w-full max-w-[480px] mx-auto">
-      <div className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl overflow-hidden h-[400px] flex items-center justify-center relative">
-        <img src={HOODIE_PRODUCT} alt="Hoodie product" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-      </div>
-
-      {/* Order summary */}
-      <div className="absolute top-6 -right-2 md:right-2 bg-white rounded-xl p-4 shadow-2xl w-52 animate-bob z-10">
-        <h4 className="text-black font-bold text-sm mb-3">Order summary</h4>
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-8 h-8 bg-gray-100 rounded" />
-          <div>
-            <div className="text-black text-[11px] font-medium">Limited EP</div>
-            <div className="text-gray-400 text-[9px]">Grey Hoodie</div>
-          </div>
-        </div>
-        <div className="bg-gray-50 rounded-lg px-2 py-1.5 mb-2">
-          <span className="text-gray-400 text-[10px]">Discount code</span>
-        </div>
-        <div className="text-[10px] text-gray-500 space-y-1">
-          <div className="flex justify-between"><span>Subtotal</span><span className="text-black font-medium">$45.00</span></div>
-          <div className="flex justify-between"><span>Shipping</span><span className="text-black font-medium">$5.00</span></div>
-          <div className="flex justify-between font-bold text-black text-[11px] pt-1 border-t border-gray-100"><span>Total</span><span>$50.00</span></div>
-        </div>
-      </div>
-
-      {/* Payment method */}
-      <div className="absolute bottom-6 right-0 md:right-4 bg-white rounded-xl p-3 shadow-2xl w-52 animate-bob z-10" style={{ animationDelay: '1s' }}>
-        <div className="text-black text-[11px] font-medium mb-2 flex items-center gap-1.5">
-          <span>💳</span> Choose a Payment Method
-        </div>
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2 py-1.5">
-            <span className="text-[10px]">💳</span>
-            <span className="text-gray-700 text-[10px]">Credit or debit card</span>
-            <div className="ml-auto w-3 h-3 rounded-full border-2 border-blue-500 bg-blue-500" />
-          </div>
-          <div className="flex items-center gap-2 border border-gray-100 rounded-lg px-2 py-1.5">
-            <span className="text-blue-600 text-[10px] font-bold">P</span>
-            <span className="text-gray-500 text-[10px]">PayPal</span>
-          </div>
-          <div className="flex items-center gap-2 border border-gray-100 rounded-lg px-2 py-1.5">
-            <span className="text-[10px]">🍎</span>
-            <span className="text-gray-500 text-[10px]">Apple Pay</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  );
-}
-
-function StatBlock({ label, value, suffix }: { label: string; value: number; suffix: string }) {
-  const { ref, isVisible } = useScrollAnimation(0.3);
-  const animatedValue = useCountUp(value, 1500, isVisible);
-
-  return (
-    <div ref={ref}>
-      <p className="text-[#E8930C] text-sm font-semibold mb-2">{label}</p>
-      <p className="text-white text-[48px] md:text-[64px] font-bold tracking-tight leading-none">
-        {animatedValue}{suffix}
-      </p>
-    </div>
   );
 }
