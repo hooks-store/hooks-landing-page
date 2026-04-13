@@ -69,7 +69,7 @@ export default function Footer() {
           ))}
         </div>
         <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[#8A8F98] text-sm">&copy; {new Date().getFullYear()} Linkme. All rights reserved.</p>
+          <p className="text-[#8A8F98] text-sm">&copy; {new Date().getFullYear()} Hooks. All rights reserved.</p>
           <div className="flex gap-6">
             {['Privacy', 'Terms', 'Cookies'].map((item) => (
               <a key={item} href="#" className="text-[#8A8F98] text-xs hover:text-white transition-colors duration-200">

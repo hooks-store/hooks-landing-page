@@ -2,59 +2,75 @@ import { useRef, useEffect, useState } from 'react';
 
 const creators = [
   {
-    name: 'Sergio Kun Aguero',
-    handle: '@kunaguero',
-    followers: '92.4M',
+    name: 'Liam Parker',
+    handle: '@liamparker',
+    followers: '8.4M',
     bio: 'ALL MY LINKS',
-    gradient: 'from-amber-600 to-orange-500',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80',
+    imagePosition: 'center 20%',
     socials: ['IG', 'X', 'TT', 'FB', 'YT', 'TH'],
   },
   {
-    name: 'Kyle Kuzma',
-    handle: '@kuz',
-    followers: '9.2M',
-    bio: 'NBA champ living the dream',
-    gradient: 'from-gray-700 to-gray-900',
+    name: 'Ava Martinez',
+    handle: '@avamartinez',
+    followers: '6.1M',
+    bio: 'Beauty, style and daily routines',
+    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80',
+    imagePosition: 'center 18%',
     socials: ['SP', 'IG', 'X', 'FB', 'LI', 'YT', 'TT'],
   },
   {
-    name: 'Gary Brecka',
-    handle: '@garybrecka',
-    followers: '4.7M',
-    bio: 'Human Biologist | Biohacker',
-    gradient: 'from-blue-900 to-slate-800',
+    name: 'Noah Brooks',
+    handle: '@noahbrooks',
+    followers: '5.3M',
+    bio: 'Street culture and travel stories',
+    image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=1200&q=80',
+    imagePosition: 'center 22%',
     socials: ['IG', 'X', 'TT', 'FB', 'YT'],
   },
   {
-    name: 'Tyler Herro',
-    handle: '@nolimitherro',
-    followers: '3.2M',
-    bio: 'Slow Motion',
-    gradient: 'from-pink-600 to-rose-500',
+    name: 'Mia Collins',
+    handle: '@miacollins',
+    followers: '4.9M',
+    bio: 'Creator tips, wellness and vlogs',
+    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80',
+    imagePosition: 'center 25%',
     socials: ['IG', 'X', 'YT', 'TT'],
   },
   {
-    name: 'Mall of America',
-    handle: '@mallofamerica',
-    followers: '1.1M',
-    bio: 'There\'s a place for fun in your life',
-    gradient: 'from-red-600 to-red-800',
+    name: 'Ethan Ross',
+    handle: '@ethanross',
+    followers: '3.7M',
+    bio: 'Fitness, productivity and business',
+    image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80',
+    imagePosition: 'center 30%',
     socials: ['TT', 'FB', 'X', 'YT', 'LI', 'IG'],
   },
   {
-    name: 'Alex Rivera',
-    handle: '@alexrivera',
-    followers: '5.8M',
-    bio: 'Content Creator & Entrepreneur',
-    gradient: 'from-emerald-600 to-teal-700',
+    name: 'Sofia Patel',
+    handle: '@sofiapatel',
+    followers: '2.9M',
+    bio: 'Fashion editorials and city moments',
+    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80',
+    imagePosition: 'center 18%',
     socials: ['IG', 'YT', 'TT', 'X'],
   },
   {
-    name: 'Mia Chen',
-    handle: '@miachen',
-    followers: '2.3M',
-    bio: 'Fashion & Lifestyle',
-    gradient: 'from-purple-600 to-violet-700',
+    name: 'Daniel Reed',
+    handle: '@danielreed',
+    followers: '7.2M',
+    bio: 'Founder life and creator economy',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80',
+    imagePosition: 'center 18%',
+    socials: ['IG', 'TT', 'YT', 'X'],
+  },
+  {
+    name: 'Isabella Cruz',
+    handle: '@isabellacruz',
+    followers: '3.5M',
+    bio: 'Lifestyle shoots and travel diaries',
+    image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80',
+    imagePosition: 'center 22%',
     socials: ['IG', 'TT', 'YT', 'X'],
   },
 ];
@@ -159,11 +175,14 @@ export default function CreatorCarousel() {
             className="shrink-0 w-[260px] md:w-[280px] rounded-2xl bg-[#141414] overflow-hidden group hover:bg-[#1A1A1A] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
           >
             {/* Avatar area */}
-            <div className={`h-52 bg-gradient-to-br ${creator.gradient} flex items-end justify-center relative overflow-hidden`}>
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors duration-300" />
-              <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center text-3xl font-bold text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
-                {creator.name.charAt(0)}
-              </div>
+            <div className="h-52 relative overflow-hidden">
+              <img
+                src={creator.image}
+                alt={`${creator.name} portrait`}
+                className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                style={{ objectPosition: creator.imagePosition }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
             </div>
 
             {/* Info */}

@@ -1,6 +1,6 @@
 # Linkme Landing Page
 
-A high-fidelity clone of the [link.me](https://link.me) landing page — a premium, dark-themed SaaS marketing site for a creator-focused link-in-bio platform. Built with React 19, TypeScript, Tailwind CSS 4, and Vite 7.
+A high-fidelity Hooks landing page — a premium, dark-themed SaaS marketing site for a creator-focused link-in-bio platform. Built with React 19, TypeScript, Tailwind CSS 4, and Vite 7.
 
 ---
 
@@ -88,7 +88,7 @@ hooks-landing-page/
 │       ├── components/
 │       │   ├── Navbar.tsx          # Fixed navbar — backdrop-blur, scroll-aware, mobile drawer
 │       │   ├── Footer.tsx          # Multi-column footer with social links
-│       │   ├── UrlInputBar.tsx     # Pill-shaped "link.me/yourname" CTA input
+│       │   ├── UrlInputBar.tsx     # Pill-shaped "hooks.store/yourname" CTA input
 │       │   ├── LinkmeIcon.tsx      # Logo icon (pink→orange gradient) + wordmark
 │       │   ├── SectionWrapper.tsx  # Scroll-triggered fade-up animation wrapper
 │       │   ├── CreatorCarousel.tsx # Auto-scrolling, draggable creator card carousel

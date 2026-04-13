@@ -94,4 +94,4 @@
 
 ## Selected Approach: Idea 1 — "Midnight Editorial"
 
-This approach most faithfully replicates the link.me aesthetic shown in the screenshots. The editorial boldness with magazine-scale typography, the flat black background with navy-teal card depth, the floating UI mockup compositions, and the purposeful scroll animations all match the reference material precisely. The orange accent usage, the content-dense-but-breathable spacing, and the photographic richness are all hallmarks of the original design that this approach captures.
+This approach most faithfully replicates the Hooks aesthetic shown in the screenshots. The editorial boldness with magazine-scale typography, the flat black background with navy-teal card depth, the floating UI mockup compositions, and the purposeful scroll animations all match the reference material precisely. The orange accent usage, the content-dense-but-breathable spacing, and the photographic richness are all hallmarks of the original design that this approach captures.

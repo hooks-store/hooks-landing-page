@@ -1,0 +1,419 @@
+{
+  "project_goal": {
+    "summary": "Replace the current Hooks-style landing page copy with Hooks-specific Spanish copy while preserving the premium layout, pacing, and hierarchy.",
+    "positioning": "Hooks is a creator-first platform to monetize an audience from one link.",
+    "must_feel_like": [
+      "premium",
+      "creator-first",
+      "clear",
+      "modern",
+      "conversion-focused"
+    ],
+    "must_not_feel_like": [
+      "generic SaaS brochure",
+      "cheap link-in-bio clone",
+      "limited to only digital products",
+      "literal translation of Hooks"
+    ]
+  },
+  "global_rules": {
+    "primary_cta": "Crear gratis",
+    "secondary_cta": "Iniciar sesión",
+    "nav_items": [
+      "Características",
+      "Casos de uso",
+      "Precios"
+    ],
+    "tone": [
+      "headlines should be short",
+      "Spanish should feel natural and sharp",
+      "premium and modern",
+      "less explanatory, more decisive"
+    ],
+    "avoid_phrases": [
+      "todo en un solo lugar",
+      "sin complicaciones",
+      "plataforma completa",
+      "comienza a generar ingresos",
+      "la mejor plataforma para creadores"
+    ],
+    "preferred_language": [
+      "marca",
+      "audiencia",
+      "monetizar",
+      "vender",
+      "crecer",
+      "negocio digital",
+      "perfil",
+      "link"
+    ],
+    "visual_rules": [
+      "keep dark premium sections",
+      "keep large typography",
+      "keep strong whitespace",
+      "keep rounded cards",
+      "keep visual-first storytelling",
+      "avoid old Hooks-style floating icons and feature bubbles",
+      "avoid dense bordered SaaS grids unless already integral to the layout"
+    ]
+  },
+  "navbar": {
+    "section_id": "navbar",
+    "current_section_guess": "top navigation bar",
+    "strict_copy": true,
+    "replace": {
+      "logo_text": "Hooks",
+      "nav_links": [
+        "Características",
+        "Casos de uso",
+        "Precios"
+      ],
+      "login_text": "Iniciar sesión",
+      "primary_cta_text": "Crear gratis"
+    }
+  },
+  "sections": [
+    {
+      "section_id": "hero",
+      "current_section_guess": "hero",
+      "strict_copy": true,
+      "section_purpose": "Immediate value proposition and primary conversion point.",
+      "eyebrow": "La forma más simple de monetizar tu audiencia",
+      "headline": "Construye tu marca y vende desde un solo link",
+      "subheadline": "Productos digitales, cursos, consultorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.",
+      "primary_cta": "Crear gratis",
+      "secondary_text": "Más de 10,000 creadores ya venden con Hooks",
+      "input_placeholder": "hooks.store/tu-nombre"
+    },
+    {
+      "section_id": "platform_statement",
+      "current_section_guess": "large editorial statement section below hero",
+      "strict_copy": true,
+      "section_purpose": "Broad creator-economy positioning section.",
+      "headline": "La plataforma para la nueva economía de creadores",
+      "highlight_lines": [
+        "Haz crecer tu audiencia.",
+        "Convierte seguidores en clientes.",
+        "Vende productos.",
+        "Ofrece servicios.",
+        "Monetiza tu contenido."
+      ]
+    },
+    {
+      "section_id": "social_proof",
+      "current_section_guess": "stats / results section",
+      "strict_copy": true,
+      "section_purpose": "Proof that Hooks is used and produces outcomes.",
+      "eyebrow": "Resultados reales",
+      "headline": "Creadores reales. Negocios reales.",
+      "subheadline": "Desde primeros ingresos hasta marcas digitales en crecimiento, Hooks impulsa a creadores que quieren vender mejor.",
+      "stats": [
+        {
+          "value": "+10K",
+          "label": "creadores activos"
+        },
+        {
+          "value": "+$900K",
+          "label": "generados en la plataforma"
+        },
+        {
+          "value": "+46K",
+          "label": "productos vendidos"
+        },
+        {
+          "value": "91%",
+          "label": "de actividad de creadores"
+        }
+      ]
+    },
+    {
+      "section_id": "creator_examples",
+      "current_section_guess": "creator showcase / storefront example section",
+      "strict_copy": true,
+      "section_purpose": "Show how different creators use Hooks.",
+      "headline": "Así se ve un negocio con Hooks",
+      "subheadline": "Perfiles pensados para convertir visitas en ventas, reservas y clientes.",
+      "examples": [
+        {
+          "type": "Creador de contenido",
+          "microcopy": "Vende recursos, enlaces y contenido exclusivo"
+        },
+        {
+          "type": "Educador digital",
+          "microcopy": "Organiza cursos, materiales y acceso para estudiantes"
+        },
+        {
+          "type": "Coach / Consultor",
+          "microcopy": "Ofrece sesiones, reservas y productos desde un solo perfil"
+        }
+      ]
+    },
+    {
+      "section_id": "creator_stages",
+      "current_section_guess": "3-card audience segmentation section",
+      "strict_copy": true,
+      "section_purpose": "Replace People/Business/Agencies with a creator journey.",
+      "headline": "Para creadores en distintas etapas",
+      "cards": [
+        {
+          "title": "Para empezar",
+          "body": "Crea un perfil, publica lo que vendes y comparte tu link en minutos."
+        },
+        {
+          "title": "Para crecer",
+          "body": "Convierte tu audiencia en clientes con productos, servicios y contenido pago."
+        },
+        {
+          "title": "Para escalar",
+          "body": "Centraliza ventas, pagos, analítica y operaciones en una sola plataforma."
+        }
+      ]
+    },
+    {
+      "section_id": "monetization_options",
+      "current_section_guess": "feature cards / monetization grid section",
+      "strict_copy": true,
+      "section_purpose": "Show breadth of what Hooks can sell.",
+      "eyebrow": "Monetiza a tu manera",
+      "headline": "Todo lo que puedes vender con Hooks",
+      "cards": [
+        {
+          "title": "Productos digitales",
+          "body": "Guías, plantillas, ebooks, recursos descargables y archivos premium."
+        },
+        {
+          "title": "Cursos online",
+          "body": "Organiza módulos, contenidos y acceso para tus estudiantes."
+        },
+        {
+          "title": "Consultorías y sesiones",
+          "body": "Reserva llamadas, mentorías o servicios 1 a 1 desde tu perfil."
+        },
+        {
+          "title": "Membresías",
+          "body": "Crea acceso recurrente para tu comunidad con pagos periódicos."
+        },
+        {
+          "title": "Contenido exclusivo",
+          "body": "Comparte acceso pago a recursos, experiencias o contenido premium."
+        }
+      ]
+    },
+    {
+      "section_id": "analytics",
+      "current_section_guess": "analytics / dashboard / world map section",
+      "strict_copy": true,
+      "section_purpose": "Show clarity and control through analytics.",
+      "eyebrow": "Analítica en tiempo real",
+      "headline": "Entiende tu crecimiento con claridad",
+      "subheadline": "Visualiza ventas, clics, actividad y rendimiento desde un solo panel para tomar mejores decisiones.",
+      "supporting_points": [
+        "Ventas y conversiones",
+        "Clics y rendimiento del perfil",
+        "Seguimiento de crecimiento",
+        "Datos útiles para optimizar lo que vendes"
+      ]
+    },
+    {
+      "section_id": "all_in_one",
+      "current_section_guess": "all-in-one / fewer tools / split layout section",
+      "strict_copy": true,
+      "section_purpose": "Position Hooks as the operating system, not just another tool.",
+      "eyebrow": "Menos herramientas, más foco",
+      "headline": "Administra tu negocio digital desde un solo lugar",
+      "subheadline": "Hooks integra perfil, ventas, pagos, reservas y analítica para que no dependas de múltiples plataformas desconectadas.",
+      "chips": [
+        "Perfil de venta",
+        "Reservas",
+        "Cursos",
+        "Productos digitales",
+        "Pagos",
+        "Analítica"
+      ]
+    },
+    {
+      "section_id": "comparison",
+      "current_section_guess": "comparison / replace-tools section",
+      "strict_copy": true,
+      "section_purpose": "Replace the many-tools comparison with a cleaner narrative.",
+      "headline": "Deja de pagar por múltiples herramientas",
+      "subheadline": "Con Hooks puedes concentrar en un solo flujo lo que antes resolvías con varias plataformas.",
+      "rows": [
+        {
+          "title": "Link en bio optimizado",
+          "body": "Muestra enlaces, productos y llamadas a la acción desde un perfil pensado para convertir."
+        },
+        {
+          "title": "Reservas y sesiones",
+          "body": "Gestiona consultorías y disponibilidad desde el mismo perfil."
+        },
+        {
+          "title": "Cursos y contenido",
+          "body": "Organiza acceso a materiales y experiencias pagas."
+        },
+        {
+          "title": "Analítica",
+          "body": "Mide clics, actividad y crecimiento sin salir de Hooks."
+        }
+      ],
+      "before_after": {
+        "before_label": "Antes",
+        "before_value": "Varios pagos mensuales y herramientas desconectadas",
+        "after_label": "Ahora",
+        "after_value": "Un solo sistema y pago solo cuando vendes"
+      }
+    },
+    {
+      "section_id": "how_it_works",
+      "current_section_guess": "3-step section",
+      "strict_copy": true,
+      "section_purpose": "Simple 3-step onboarding story.",
+      "eyebrow": "Empieza en minutos",
+      "headline": "Crea, publica y empieza a vender",
+      "steps": [
+        {
+          "number": "1",
+          "title": "Crea tu perfil",
+          "body": "Personaliza tu página con tu marca, enlaces y propuesta."
+        },
+        {
+          "number": "2",
+          "title": "Sube lo que vendes",
+          "body": "Añade productos, cursos, sesiones o contenido exclusivo."
+        },
+        {
+          "number": "3",
+          "title": "Comparte tu link",
+          "body": "Lleva a tu audiencia a un perfil diseñado para convertir visitas en ingresos."
+        }
+      ]
+    },
+    {
+      "section_id": "pricing",
+      "current_section_guess": "pricing block",
+      "strict_copy": true,
+      "section_purpose": "Make pricing feel frictionless and trustworthy.",
+      "eyebrow": "Precios simples y transparentes",
+      "headline": "Sin mensualidades. Solo pagas cuando vendes.",
+      "subheadline": "Empieza gratis y usa Hooks sin costos fijos.",
+      "price_line": "9.9% + $0.50 por transacción",
+      "supporting_points": [
+        "Sin tarjeta al empezar",
+        "Sin pago mensual",
+        "Sin costo fijo para publicar"
+      ]
+    },
+    {
+      "section_id": "global_payments",
+      "current_section_guess": "global reach / world / payments section",
+      "strict_copy": true,
+      "section_purpose": "Communicate global selling and payment ease.",
+      "eyebrow": "Pagos globales",
+      "headline": "Vende a una audiencia sin fronteras",
+      "subheadline": "Hooks facilita pagos y cobros para que puedas monetizar tu trabajo con una experiencia simple tanto para ti como para tus clientes.",
+      "supporting_points": [
+        "Cobros internacionales",
+        "Métodos de pago flexibles",
+        "Experiencia de pago optimizada para móvil"
+      ]
+    },
+    {
+      "section_id": "mobile_speed",
+      "current_section_guess": "speed / performance / mobile section",
+      "strict_copy": true,
+      "section_purpose": "Tie speed and mobile optimization to conversion.",
+      "eyebrow": "Diseñado para convertir",
+      "headline": "Una experiencia rápida, clara y pensada para móvil",
+      "subheadline": "Tus visitas llegan desde redes sociales. Hooks está diseñado para cargar rápido, verse bien y facilitar la compra desde el primer clic."
+    },
+    {
+      "section_id": "final_cta",
+      "current_section_guess": "final call to action section",
+      "strict_copy": true,
+      "section_purpose": "Final conversion push.",
+      "headline": "Tu negocio empieza con un link",
+      "subheadline": "Únete a miles de creadores que ya usan Hooks para vender productos, servicios y contenido desde un solo lugar.",
+      "primary_cta": "Crear gratis",
+      "trust_line": "Sin tarjeta de crédito · Configuración rápida · Soporte en español"
+    },
+    {
+      "section_id": "footer",
+      "current_section_guess": "footer",
+      "strict_copy": true,
+      "section_purpose": "Simple footer with stronger brand line.",
+      "brand_sentence": "Hooks es la plataforma para creadores que quieren vender, crecer y monetizar desde un solo link.",
+      "columns": [
+        {
+          "title": "Producto",
+          "links": [
+            "Características",
+            "Casos de uso",
+            "Precios",
+            "FAQs"
+          ]
+        },
+        {
+          "title": "Legal",
+          "links": [
+            "Términos y condiciones",
+            "Política de privacidad"
+          ]
+        },
+        {
+          "title": "Contacto",
+          "links": [
+            "hola@hooks.store"
+          ]
+        }
+      ]
+    }
+  ],
+  "replace_map": [
+    {
+      "old": "Tu tienda de productos digitales en minutos",
+      "new": "Construye tu marca y vende desde un solo link"
+    },
+    {
+      "old": "No es solo un link-en-bio",
+      "new": "Tu perfil, tu tienda y tu negocio en un solo lugar"
+    },
+    {
+      "old": "Una solución más simple",
+      "new": "Menos herramientas, más foco"
+    },
+    {
+      "old": "Tan fácil como 1, 2, 3",
+      "new": "Crea, publica y empieza a vender"
+    },
+    {
+      "old": "¿Listo para crear tu tienda?",
+      "new": "Tu negocio empieza con un link"
+    },
+    {
+      "old": "Todo lo que necesitas para vender online",
+      "new": "Todo lo que puedes vender con Hooks"
+    },
+    {
+      "old": "Comenzar gratis",
+      "new": "Crear gratis"
+    }
+  ],
+  "optional_cleanup": {
+    "remove_if_present": [
+      "floating circular feature icons",
+      "oversized generic blue feature badges",
+      "celebrity or Hooks-specific names",
+      "enterprise copy",
+      "English text",
+      "mixed CTA wording"
+    ],
+    "keep_if_present": [
+      "dark premium sections",
+      "large product visuals",
+      "input-style CTA module",
+      "creator profile showcases",
+      "analytics visuals",
+      "high-contrast rounded cards"
+    ]
+  }
+}

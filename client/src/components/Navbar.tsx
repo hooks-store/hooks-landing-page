@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { LinkmeLogo } from './LinkmeIcon';
 import { Menu, X } from 'lucide-react';
+import { LinkmeIcon } from './LinkmeIcon';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navItems = ['Características', 'Testimonios', 'Precios'];
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -33,24 +34,26 @@ export default function Navbar() {
           borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
         }}
       >
-        <div className="container h-full flex items-center justify-between">
-          <LinkmeLogo />
+        <div className="container h-full flex items-center justify-between md:justify-start md:gap-14 lg:gap-20">
+          <div className="flex items-center gap-3">
+            <LinkmeIcon size={40} />
+            <span className="text-white text-[28px] font-bold tracking-[-0.02em] leading-none">Hooks</span>
+          </div>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-10">
-            {['People', 'Business', 'Agencies'].map((item) => (
+          <div className="hidden md:flex items-center gap-8 lg:gap-12">
+            {navItems.map((item) => (
               <a
                 key={item}
                 href="#"
-                className="text-white text-[15px] font-medium opacity-85 hover:opacity-100 transition-opacity relative group"
+                className="text-white text-[21px] font-semibold opacity-90 hover:opacity-100 transition-opacity leading-none"
               >
                 {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#E8930C] group-hover:w-full transition-all duration-300" />
               </a>
             ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6 ml-auto">
             <a href="#" className="text-white text-[15px] font-medium opacity-85 hover:opacity-100 transition-opacity">Log In</a>
             <button className="bg-white text-black text-[15px] font-semibold px-6 py-2.5 rounded-full hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
               Start for free
@@ -81,7 +84,7 @@ export default function Navbar() {
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          {['People', 'Business', 'Agencies'].map((item, i) => (
+          {navItems.map((item, i) => (
             <a
               key={item}
               href="#"
@@ -95,28 +98,6 @@ export default function Navbar() {
               {item}
             </a>
           ))}
-          <hr className="border-white/10" />
-          <a
-            href="#"
-            className="text-white text-lg font-medium"
-            style={{
-              opacity: mobileOpen ? 1 : 0,
-              transform: mobileOpen ? 'translateX(0)' : 'translateX(20px)',
-              transition: 'all 0.3s ease-out 0.3s',
-            }}
-          >
-            Log In
-          </a>
-          <button
-            className="bg-white text-black text-base font-semibold px-6 py-3 rounded-full w-full hover:shadow-lg transition-shadow"
-            style={{
-              opacity: mobileOpen ? 1 : 0,
-              transform: mobileOpen ? 'translateY(0)' : 'translateY(10px)',
-              transition: 'all 0.3s ease-out 0.35s',
-            }}
-          >
-            Start for free
-          </button>
         </div>
       </div>
     </>

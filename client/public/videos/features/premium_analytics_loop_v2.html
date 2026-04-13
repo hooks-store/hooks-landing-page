@@ -1,0 +1,1667 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Premium Analytics Loop</title>
+  <style>
+    :root {
+      --bg-1: #050814;
+      --bg-2: #0a1020;
+      --bg-3: #0e1630;
+      --panel: rgba(9, 14, 28, 0.76);
+      --panel-strong: rgba(12, 18, 36, 0.92);
+      --line: rgba(255, 255, 255, 0.08);
+      --line-soft: rgba(255, 255, 255, 0.05);
+      --text: #edf4ff;
+      --muted: rgba(237, 244, 255, 0.64);
+      --muted-strong: rgba(237, 244, 255, 0.82);
+      --cyan: #6fe7ff;
+      --cyan-soft: rgba(111, 231, 255, 0.2);
+      --blue: #5d8bff;
+      --blue-soft: rgba(93, 139, 255, 0.24);
+      --violet: #9d82ff;
+      --violet-soft: rgba(157, 130, 255, 0.24);
+      --green: #82f4c9;
+      --green-soft: rgba(130, 244, 201, 0.22);
+      --shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
+      --radius: 28px;
+      --pad: clamp(22px, 2.1vw, 34px);
+      --gap: clamp(14px, 1.4vw, 20px);
+      --dashboard-base-width: 1240;
+      --dashboard-base-height: 760;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: transparent;
+    }
+
+    body {
+      display: grid;
+      place-items: stretch;
+    }
+
+    #app {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(75% 90% at 14% 4%, rgba(93, 139, 255, 0.20), transparent 54%),
+        radial-gradient(68% 80% at 88% 12%, rgba(157, 130, 255, 0.16), transparent 52%),
+        radial-gradient(55% 60% at 50% 120%, rgba(111, 231, 255, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg-3), var(--bg-1));
+      isolation: isolate;
+    }
+
+    #app::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+      background-size: 72px 72px;
+      opacity: 0.18;
+      mask-image: radial-gradient(circle at 50% 45%, rgba(0,0,0,0.95) 18%, rgba(0,0,0,0.74) 58%, transparent 92%);
+      pointer-events: none;
+    }
+
+    #app::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.06), transparent 32%),
+        radial-gradient(80% 100% at 50% -10%, rgba(255,255,255,0.12), transparent 42%),
+        radial-gradient(50% 50% at 50% 115%, rgba(255,255,255,0.04), transparent 60%);
+      mix-blend-mode: screen;
+      opacity: 0.34;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(70px);
+      opacity: 0.42;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: drift 16s ease-in-out infinite;
+    }
+
+    .orb.one {
+      width: 360px;
+      height: 360px;
+      left: -80px;
+      top: 8%;
+      background: rgba(93, 139, 255, 0.32);
+    }
+
+    .orb.two {
+      width: 420px;
+      height: 420px;
+      right: -120px;
+      top: 0;
+      background: rgba(157, 130, 255, 0.24);
+      animation-duration: 18s;
+      animation-delay: -5s;
+    }
+
+    .orb.three {
+      width: 340px;
+      height: 340px;
+      left: 28%;
+      bottom: -140px;
+      background: rgba(111, 231, 255, 0.16);
+      animation-duration: 22s;
+      animation-delay: -8s;
+    }
+
+    .dashboard {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: calc(var(--dashboard-base-width) * 1px);
+      height: calc(var(--dashboard-base-height) * 1px);
+      padding: var(--pad);
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+
+    .top-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+      min-height: 145px;
+      height: min(23%, 180px);
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1.54fr 0.86fr;
+      gap: var(--gap);
+      min-height: 0;
+      flex: 1;
+    }
+
+    .right-col {
+      display: grid;
+      grid-template-rows: 1.08fr 0.92fr;
+      gap: var(--gap);
+      min-height: 0;
+    }
+
+    .panel,
+    .metric {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.028), transparent 40%),
+        linear-gradient(180deg, rgba(12, 18, 36, 0.90), rgba(8, 12, 24, 0.86));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(22px) saturate(118%);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .panel::before,
+    .metric::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent 22%, transparent 78%, rgba(255,255,255,0.06));
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .panel::after,
+    .metric::after {
+      content: "";
+      position: absolute;
+      inset: auto -30% 74% -30%;
+      height: 120px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform: translateX(-28%);
+      filter: blur(12px);
+      opacity: 0.55;
+      animation: sweep 9s linear infinite;
+      pointer-events: none;
+    }
+
+    .metric {
+      --metric-glow-a: rgba(111, 231, 255, 0.16);
+      --metric-glow-b: rgba(93, 139, 255, 0.15);
+      --metric-glow-c: rgba(157, 130, 255, 0.12);
+      padding: 18px 20px 16px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 8px;
+    }
+
+    .metric > :not(.accent) {
+      position: relative;
+      z-index: 1;
+    }
+
+    #metric-revenue {
+      --metric-glow-a: rgba(111, 231, 255, 0.16);
+      --metric-glow-b: rgba(93, 139, 255, 0.15);
+      --metric-glow-c: rgba(157, 130, 255, 0.12);
+    }
+
+    #metric-conversion {
+      --metric-glow-a: rgba(130, 244, 201, 0.15);
+      --metric-glow-b: rgba(111, 231, 255, 0.15);
+      --metric-glow-c: rgba(93, 139, 255, 0.12);
+    }
+
+    #metric-efficiency {
+      --metric-glow-a: rgba(157, 130, 255, 0.16);
+      --metric-glow-b: rgba(93, 139, 255, 0.15);
+      --metric-glow-c: rgba(111, 231, 255, 0.12);
+    }
+
+    .metric-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .label {
+      font-size: clamp(0.75rem, 0.88vw, 0.92rem);
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+    }
+
+    .delta,
+    .live-pill,
+    .mini-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      padding: 8px 12px;
+      font-size: clamp(0.68rem, 0.76vw, 0.82rem);
+      line-height: 1;
+      color: var(--muted-strong);
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 999px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(14px);
+    }
+
+    .delta {
+      padding-inline: 10px;
+      min-width: 74px;
+      justify-content: center;
+    }
+
+    .value {
+      font-size: clamp(1.95rem, 2.65vw, 3.1rem);
+      line-height: 0.95;
+      font-weight: 640;
+      letter-spacing: -0.04em;
+      color: var(--text);
+    }
+
+    .value small {
+      font-size: 0.46em;
+      color: var(--muted);
+      font-weight: 560;
+      margin-left: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .metric-chart-shell {
+      position: relative;
+      min-height: 82px;
+      display: flex;
+      align-items: flex-end;
+      padding: 8px 10px 7px;
+      margin-top: auto;
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.022), transparent 24%),
+        rgba(6, 10, 20, 0.56);
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.03),
+        inset 0 -18px 28px rgba(0,0,0,0.14);
+    }
+
+    .metric-chart-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(88% 110% at 12% 100%, var(--metric-glow-a), transparent 48%),
+        radial-gradient(78% 110% at 76% 100%, var(--metric-glow-b), transparent 54%),
+        linear-gradient(90deg, transparent, rgba(255,255,255,0.024), transparent);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .metric-chart-shell::after {
+      content: "";
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      bottom: -30px;
+      height: 72px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--metric-glow-a), var(--metric-glow-b), var(--metric-glow-c));
+      filter: blur(26px);
+      opacity: 0.72;
+      pointer-events: none;
+    }
+
+    .spark {
+      position: relative;
+      width: 100%;
+      height: 60px;
+      overflow: visible;
+      align-self: auto;
+      z-index: 1;
+    }
+
+    .spark-line {
+      fill: none;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 14px rgba(111, 231, 255, 0.26));
+    }
+
+    .spark-area {
+      stroke: none;
+      opacity: 0.52;
+    }
+
+    .spark-grid line {
+      stroke: rgba(255,255,255,0.065);
+      stroke-width: 1;
+    }
+
+    .metric .accent {
+      position: absolute;
+      inset: auto 24px 18px 24px;
+      height: 74px;
+      width: auto;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--metric-glow-a) 18%, var(--metric-glow-b) 54%, var(--metric-glow-c) 84%, transparent);
+      filter: blur(26px);
+      opacity: 0.74;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
+
+    .panel-inner {
+      position: relative;
+      height: 100%;
+      padding: 20px 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 1;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .eyebrow {
+      font-size: clamp(0.7rem, 0.78vw, 0.82rem);
+      line-height: 1;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: clamp(1.18rem, 1.4vw, 1.54rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      font-weight: 620;
+    }
+
+    .panel-subtitle {
+      margin: 6px 0 0;
+      font-size: clamp(0.78rem, 0.9vw, 0.92rem);
+      color: var(--muted);
+    }
+
+    .live-pill .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(130, 244, 201, 0.42);
+      animation: pulse 1.8s ease-out infinite;
+    }
+
+    .chart-body {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.022), transparent 24%),
+        rgba(6, 10, 20, 0.62);
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .chart-body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(80% 100% at 25% 0%, rgba(111, 231, 255, 0.12), transparent 46%), radial-gradient(80% 100% at 95% 20%, rgba(93, 139, 255, 0.12), transparent 54%);
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .chart-topline {
+      position: absolute;
+      inset: 16px 18px auto 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .stat-pair {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .stat-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-block span {
+      font-size: 0.76rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .stat-block strong {
+      font-size: 1rem;
+      font-weight: 620;
+      letter-spacing: -0.02em;
+    }
+
+    #line-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .grid-line {
+      stroke: rgba(255,255,255,0.075);
+      stroke-width: 1;
+    }
+
+    .grid-line.soft {
+      stroke: rgba(255,255,255,0.045);
+      stroke-dasharray: 4 8;
+    }
+
+    .y-label {
+      font-size: 11px;
+      fill: rgba(237, 244, 255, 0.48);
+      letter-spacing: 0.04em;
+    }
+
+    #line-area {
+      fill: url(#chart-area-gradient);
+      opacity: 0.92;
+    }
+
+    #line-glow {
+      fill: none;
+      stroke: url(#chart-line-gradient);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.22;
+      filter: blur(10px);
+    }
+
+    #line-path {
+      fill: none;
+      stroke: url(#chart-line-gradient);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 18px rgba(111, 231, 255, 0.32));
+    }
+
+    .point {
+      fill: rgba(255,255,255,0.92);
+      stroke: rgba(111, 231, 255, 0.55);
+      stroke-width: 3;
+      filter: drop-shadow(0 0 10px rgba(111, 231, 255, 0.24));
+    }
+
+    .point.soft {
+      fill: rgba(255,255,255,0.25);
+      stroke: rgba(255,255,255,0.18);
+      stroke-width: 1.5;
+      filter: none;
+    }
+
+    #scan-line {
+      stroke: rgba(255,255,255,0.12);
+      stroke-width: 1;
+      stroke-dasharray: 6 8;
+    }
+
+    #marker-core {
+      fill: var(--text);
+      filter: drop-shadow(0 0 14px rgba(255,255,255,0.26));
+    }
+
+    #marker-ring {
+      fill: none;
+      stroke: rgba(111, 231, 255, 0.72);
+      stroke-width: 3;
+    }
+
+    #tooltip rect {
+      fill: rgba(7, 11, 21, 0.82);
+      stroke: rgba(255,255,255,0.08);
+      stroke-width: 1;
+      backdrop-filter: blur(16px);
+    }
+
+    #tooltip text.value {
+      font-size: 15px;
+      fill: var(--text);
+      font-weight: 640;
+      letter-spacing: -0.02em;
+    }
+
+    #tooltip text.label {
+      font-size: 11px;
+      fill: rgba(237, 244, 255, 0.62);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .axis-x {
+      position: absolute;
+      left: 80px;
+      right: 28px;
+      bottom: 16px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .axis-x span {
+      justify-self: end;
+      transform: translateX(50%);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: rgba(237, 244, 255, 0.42);
+      text-transform: uppercase;
+    }
+
+    .mix-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 14px;
+      align-items: center;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .donut-wrap {
+      position: relative;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    #donut-svg {
+      width: min(100%, 290px);
+      aspect-ratio: 1;
+      overflow: visible;
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.24));
+    }
+
+    .donut-track {
+      fill: none;
+      stroke: rgba(255,255,255,0.08);
+      stroke-width: 22;
+    }
+
+    .donut-glow {
+      fill: none;
+      stroke-width: 26;
+      opacity: 0.16;
+      filter: blur(8px);
+      stroke-linecap: round;
+    }
+
+    .donut-seg {
+      fill: none;
+      stroke-width: 22;
+      stroke-linecap: round;
+      transform: rotate(-90deg);
+      transform-origin: 130px 130px;
+      filter: drop-shadow(0 0 12px rgba(111, 231, 255, 0.14));
+    }
+
+    .donut-center {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    .donut-center span {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .donut-center strong {
+      font-size: clamp(1.08rem, 1.2vw, 1.26rem);
+      font-weight: 620;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .donut-center em {
+      font-style: normal;
+      font-size: clamp(1.5rem, 2vw, 2rem);
+      font-weight: 640;
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+      color: var(--text);
+    }
+
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px 12px;
+    }
+
+    .swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.02);
+    }
+
+    .legend-name {
+      font-size: 0.84rem;
+      color: var(--muted-strong);
+      min-width: 0;
+    }
+
+    .legend-val {
+      font-size: 0.86rem;
+      color: var(--text);
+      font-weight: 620;
+    }
+
+    .legend-track {
+      grid-column: 2 / span 2;
+      height: 7px;
+      width: 100%;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .legend-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      border-radius: inherit;
+      box-shadow: 0 0 14px currentColor;
+    }
+
+    .swatch.organic, .legend-fill.organic, .donut-seg.organic, .donut-glow.organic { color: var(--cyan); stroke: var(--cyan); background: var(--cyan); }
+    .swatch.paid, .legend-fill.paid, .donut-seg.paid, .donut-glow.paid { color: var(--blue); stroke: var(--blue); background: var(--blue); }
+    .swatch.email, .legend-fill.email, .donut-seg.email, .donut-glow.email { color: var(--violet); stroke: var(--violet); background: var(--violet); }
+    .swatch.direct, .legend-fill.direct, .donut-seg.direct, .donut-glow.direct { color: var(--green); stroke: var(--green); background: var(--green); }
+
+    .bars-card {
+      flex: 1;
+      min-height: 0;
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.022), transparent 22%),
+        rgba(6, 10, 20, 0.58);
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bars-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(90% 80% at 18% 0%, rgba(111, 231, 255, 0.09), transparent 46%), radial-gradient(80% 100% at 90% 0%, rgba(157, 130, 255, 0.10), transparent 50%);
+      pointer-events: none;
+    }
+
+    .bars-area {
+      position: absolute;
+      inset: 18px 18px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .bars-topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .bars-grid {
+      position: relative;
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+      align-items: end;
+      padding: 0 4px 6px;
+      min-height: 0;
+    }
+
+    .bars-grid::before,
+    .bars-grid::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+      pointer-events: none;
+    }
+
+    .bars-grid::before { top: 22%; }
+    .bars-grid::after { top: 62%; }
+
+    .bar {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .bar-track {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 52px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.05);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 32%;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04) 18%, currentColor 36%, currentColor 72%, rgba(0,0,0,0.08) 100%);
+      box-shadow: 0 0 18px currentColor;
+      transform-origin: bottom center;
+    }
+
+    .bar.cap-a .bar-fill { color: var(--cyan); }
+    .bar.cap-b .bar-fill { color: var(--blue); }
+    .bar.cap-c .bar-fill { color: var(--violet); }
+    .bar.cap-d .bar-fill { color: var(--green); }
+
+    .bar-label {
+      position: absolute;
+      left: 50%;
+      bottom: -24px;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: rgba(237, 244, 255, 0.44);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .bars-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer-metric {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .footer-metric span {
+      font-size: 0.74rem;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    .footer-metric strong {
+      font-size: 1rem;
+      font-weight: 620;
+      letter-spacing: -0.02em;
+    }
+
+    .footer-tags {
+      display: inline-flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      line-height: 1;
+      color: var(--muted-strong);
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .corner-chip {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      background: rgba(7, 11, 21, 0.62);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 18px 34px rgba(0,0,0,0.24);
+      backdrop-filter: blur(16px);
+      font-size: 0.78rem;
+      color: var(--muted-strong);
+      z-index: 3;
+    }
+
+    .corner-chip .chip-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--cyan), var(--violet));
+      box-shadow: 0 0 0 5px rgba(255,255,255,0.02), 0 0 18px rgba(111, 231, 255, 0.38);
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(4%, -3%, 0) scale(1.08); }
+    }
+
+    @keyframes sweep {
+      0% { transform: translateX(-45%); }
+      100% { transform: translateX(55%); }
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(130, 244, 201, 0.48); }
+      80% { box-shadow: 0 0 0 12px rgba(130, 244, 201, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(130, 244, 201, 0); }
+    }
+
+    @media (max-width: 760px) {
+      .axis-x {
+        left: 60px;
+        right: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+
+    <div class="dashboard" id="dashboard">
+      <section class="top-row">
+        <article class="metric" id="metric-revenue">
+          <div class="metric-top">
+            <span class="label">Net revenue</span>
+            <span class="delta" id="delta-revenue">+12.4%</span>
+          </div>
+          <div class="value" id="value-revenue">$2.64M</div>
+          <div class="metric-chart-shell">
+            <svg class="spark" id="spark-revenue" viewBox="0 0 180 66" preserveAspectRatio="none" aria-hidden="true">
+            <g class="spark-grid">
+              <line x1="0" y1="16" x2="180" y2="16"></line>
+              <line x1="0" y1="42" x2="180" y2="42"></line>
+            </g>
+            <defs>
+              <linearGradient id="spark-grad-revenue" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#6fe7ff" stop-opacity="0.25" />
+                <stop offset="60%" stop-color="#5d8bff" stop-opacity="0.88" />
+                <stop offset="100%" stop-color="#9d82ff" stop-opacity="1" />
+              </linearGradient>
+              <linearGradient id="spark-fill-revenue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#6fe7ff" stop-opacity="0.24" />
+                <stop offset="100%" stop-color="#6fe7ff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path class="spark-area" id="spark-area-revenue" fill="url(#spark-fill-revenue)"></path>
+            <path class="spark-line" id="spark-line-revenue" stroke="url(#spark-grad-revenue)"></path>
+            </svg>
+          </div>
+          <div class="accent"></div>
+        </article>
+
+        <article class="metric" id="metric-conversion">
+          <div class="metric-top">
+            <span class="label">Conversion rate</span>
+            <span class="delta" id="delta-conversion">+0.8 pts</span>
+          </div>
+          <div class="value" id="value-conversion">5.08%</div>
+          <div class="metric-chart-shell">
+            <svg class="spark" id="spark-conversion" viewBox="0 0 180 66" preserveAspectRatio="none" aria-hidden="true">
+            <g class="spark-grid">
+              <line x1="0" y1="16" x2="180" y2="16"></line>
+              <line x1="0" y1="42" x2="180" y2="42"></line>
+            </g>
+            <defs>
+              <linearGradient id="spark-grad-conversion" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#82f4c9" stop-opacity="0.22" />
+                <stop offset="60%" stop-color="#6fe7ff" stop-opacity="0.82" />
+                <stop offset="100%" stop-color="#5d8bff" stop-opacity="1" />
+              </linearGradient>
+              <linearGradient id="spark-fill-conversion" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#82f4c9" stop-opacity="0.22" />
+                <stop offset="100%" stop-color="#82f4c9" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path class="spark-area" id="spark-area-conversion" fill="url(#spark-fill-conversion)"></path>
+            <path class="spark-line" id="spark-line-conversion" stroke="url(#spark-grad-conversion)"></path>
+            </svg>
+          </div>
+          <div class="accent"></div>
+        </article>
+
+        <article class="metric" id="metric-efficiency">
+          <div class="metric-top">
+            <span class="label">Efficiency</span>
+            <span class="delta" id="delta-efficiency">+0.5x</span>
+          </div>
+          <div class="value" id="value-efficiency">4.72x</div>
+          <div class="metric-chart-shell">
+            <svg class="spark" id="spark-efficiency" viewBox="0 0 180 66" preserveAspectRatio="none" aria-hidden="true">
+            <g class="spark-grid">
+              <line x1="0" y1="16" x2="180" y2="16"></line>
+              <line x1="0" y1="42" x2="180" y2="42"></line>
+            </g>
+            <defs>
+              <linearGradient id="spark-grad-efficiency" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#9d82ff" stop-opacity="0.22" />
+                <stop offset="52%" stop-color="#5d8bff" stop-opacity="0.82" />
+                <stop offset="100%" stop-color="#6fe7ff" stop-opacity="1" />
+              </linearGradient>
+              <linearGradient id="spark-fill-efficiency" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#9d82ff" stop-opacity="0.22" />
+                <stop offset="100%" stop-color="#9d82ff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path class="spark-area" id="spark-area-efficiency" fill="url(#spark-fill-efficiency)"></path>
+            <path class="spark-line" id="spark-line-efficiency" stroke="url(#spark-grad-efficiency)"></path>
+            </svg>
+          </div>
+          <div class="accent"></div>
+        </article>
+      </section>
+
+      <section class="content">
+        <article class="panel">
+          <div class="panel-inner">
+            <div class="panel-header">
+              <div>
+                <div class="eyebrow">Realtime analytics</div>
+                <h2 class="panel-title">Performance overview</h2>
+                <p class="panel-subtitle">A polished standalone loop for a premium website hero.</p>
+              </div>
+              <div class="live-pill"><span class="pulse"></span><span id="blend-label">Live blend</span></div>
+            </div>
+
+            <div class="chart-body">
+              <div class="chart-topline">
+                <div class="stat-pair">
+                  <div class="stat-block">
+                    <span>Week high</span>
+                    <strong id="week-high">+18.4%</strong>
+                  </div>
+                  <div class="stat-block">
+                    <span>Trend strength</span>
+                    <strong id="trend-strength">92 / 100</strong>
+                  </div>
+                </div>
+                <div class="mini-pill" id="signal-pill">Signal depth 84</div>
+              </div>
+
+              <svg id="line-svg" viewBox="0 0 820 420" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <linearGradient id="chart-line-gradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#6fe7ff" />
+                    <stop offset="54%" stop-color="#5d8bff" />
+                    <stop offset="100%" stop-color="#9d82ff" />
+                  </linearGradient>
+                  <linearGradient id="chart-area-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#6fe7ff" stop-opacity="0.28" />
+                    <stop offset="40%" stop-color="#5d8bff" stop-opacity="0.16" />
+                    <stop offset="100%" stop-color="#5d8bff" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+
+                <g id="grid"></g>
+                <path id="line-area"></path>
+                <path id="line-glow"></path>
+                <path id="line-path"></path>
+                <g id="point-layer"></g>
+                <line id="scan-line" x1="0" x2="0" y1="58" y2="336"></line>
+                <g id="marker">
+                  <circle id="marker-ring" cx="0" cy="0" r="12"></circle>
+                  <circle id="marker-core" cx="0" cy="0" r="5.5"></circle>
+                </g>
+                <g id="tooltip" transform="translate(0 0)">
+                  <rect x="0" y="0" width="118" height="54" rx="14"></rect>
+                  <text class="label" x="16" y="20">Active segment</text>
+                  <text class="value" x="16" y="39" id="tooltip-value">+16.2%</text>
+                </g>
+              </svg>
+
+              <div class="axis-x" id="axis-x"></div>
+            </div>
+          </div>
+          <div class="corner-chip"><span class="chip-dot"></span><span>Original analytics loop</span></div>
+        </article>
+
+        <div class="right-col">
+          <article class="panel">
+            <div class="panel-inner">
+              <div class="panel-header">
+                <div>
+                  <div class="eyebrow">Channel mix</div>
+                  <h3 class="panel-title">Acquisition balance</h3>
+                </div>
+                <div class="mini-pill" id="mix-pill">Organic lead</div>
+              </div>
+
+              <div class="mix-layout">
+                <div class="donut-wrap">
+                  <svg id="donut-svg" viewBox="0 0 260 260" aria-hidden="true">
+                    <g id="donut-group">
+                      <circle class="donut-track" cx="130" cy="130" r="92"></circle>
+                      <circle class="donut-glow organic" cx="130" cy="130" r="92"></circle>
+                      <circle class="donut-glow paid" cx="130" cy="130" r="92"></circle>
+                      <circle class="donut-glow email" cx="130" cy="130" r="92"></circle>
+                      <circle class="donut-glow direct" cx="130" cy="130" r="92"></circle>
+                      <circle class="donut-seg organic" cx="130" cy="130" r="92"></circle>
+                      <circle class="donut-seg paid" cx="130" cy="130" r="92"></circle>
+                      <circle class="donut-seg email" cx="130" cy="130" r="92"></circle>
+                      <circle class="donut-seg direct" cx="130" cy="130" r="92"></circle>
+                    </g>
+                  </svg>
+                  <div class="donut-center">
+                    <span>Top source</span>
+                    <strong id="top-source">Organic</strong>
+                    <em id="top-share">34%</em>
+                  </div>
+                </div>
+
+                <div class="legend" id="legend">
+                  <div class="legend-row">
+                    <span class="swatch organic"></span>
+                    <span class="legend-name">Organic</span>
+                    <span class="legend-val" id="leg-organic">34%</span>
+                    <div class="legend-track"><div class="legend-fill organic" id="fill-organic"></div></div>
+                  </div>
+                  <div class="legend-row">
+                    <span class="swatch paid"></span>
+                    <span class="legend-name">Paid</span>
+                    <span class="legend-val" id="leg-paid">26%</span>
+                    <div class="legend-track"><div class="legend-fill paid" id="fill-paid"></div></div>
+                  </div>
+                  <div class="legend-row">
+                    <span class="swatch email"></span>
+                    <span class="legend-name">Email</span>
+                    <span class="legend-val" id="leg-email">18%</span>
+                    <div class="legend-track"><div class="legend-fill email" id="fill-email"></div></div>
+                  </div>
+                  <div class="legend-row">
+                    <span class="swatch direct"></span>
+                    <span class="legend-name">Direct</span>
+                    <span class="legend-val" id="leg-direct">22%</span>
+                    <div class="legend-track"><div class="legend-fill direct" id="fill-direct"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-inner">
+              <div class="panel-header">
+                <div>
+                  <div class="eyebrow">Breakout</div>
+                  <h3 class="panel-title">Audience response</h3>
+                </div>
+                <div class="mini-pill" id="burst-pill">12 active signals</div>
+              </div>
+
+              <div class="bars-card">
+                <div class="bars-area">
+                  <div class="bars-topline">
+                    <div class="stat-pair">
+                      <div class="stat-block">
+                        <span>Depth score</span>
+                        <strong id="depth-score">84 / 100</strong>
+                      </div>
+                      <div class="stat-block">
+                        <span>Session lift</span>
+                        <strong id="session-lift">+22%</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bars-grid" id="bars-grid">
+                    <div class="bar cap-a"><div class="bar-track"><div class="bar-fill" id="bar-0"></div></div><div class="bar-label">Mon</div></div>
+                    <div class="bar cap-b"><div class="bar-track"><div class="bar-fill" id="bar-1"></div></div><div class="bar-label">Tue</div></div>
+                    <div class="bar cap-c"><div class="bar-track"><div class="bar-fill" id="bar-2"></div></div><div class="bar-label">Wed</div></div>
+                    <div class="bar cap-a"><div class="bar-track"><div class="bar-fill" id="bar-3"></div></div><div class="bar-label">Thu</div></div>
+                    <div class="bar cap-d"><div class="bar-track"><div class="bar-fill" id="bar-4"></div></div><div class="bar-label">Fri</div></div>
+                    <div class="bar cap-b"><div class="bar-track"><div class="bar-fill" id="bar-5"></div></div><div class="bar-label">Sat</div></div>
+                    <div class="bar cap-c"><div class="bar-track"><div class="bar-fill" id="bar-6"></div></div><div class="bar-label">Sun</div></div>
+                  </div>
+
+                  <div class="bars-footer">
+                    <div class="footer-metric">
+                      <span>Returning users</span>
+                      <strong id="returning-users">42.8%</strong>
+                    </div>
+                    <div class="footer-tags">
+                      <span class="tag" id="tag-one">High intent</span>
+                      <span class="tag" id="tag-two">Fast checkout</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const TAU = Math.PI * 2;
+    const LOOP_SECONDS = 10;
+
+    const axisLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const axis = document.getElementById('axis-x');
+    axis.innerHTML = axisLabels.map(label => `<span>${label}</span>`).join('');
+
+    const lineSets = [
+      [38, 44, 42, 55, 59, 63, 61, 72, 76, 81, 86, 91],
+      [35, 41, 49, 53, 60, 67, 65, 73, 79, 77, 88, 94],
+      [37, 46, 51, 49, 62, 70, 72, 69, 77, 84, 87, 92],
+      [40, 43, 48, 58, 61, 65, 71, 74, 72, 83, 89, 95]
+    ];
+
+    const sparkSeeds = {
+      revenue: [
+        [28, 32, 30, 38, 44, 47, 46, 52, 57, 60],
+        [26, 29, 35, 38, 41, 49, 47, 55, 58, 62],
+        [27, 33, 37, 35, 43, 51, 53, 50, 58, 64],
+        [30, 31, 36, 42, 45, 49, 54, 57, 60, 66]
+      ],
+      conversion: [
+        [14, 17, 18, 19, 21, 22, 24, 23, 26, 28],
+        [13, 15, 17, 20, 22, 24, 23, 25, 27, 29],
+        [14, 16, 19, 18, 22, 25, 26, 24, 28, 30],
+        [15, 16, 18, 21, 23, 24, 26, 27, 29, 31]
+      ],
+      efficiency: [
+        [22, 25, 24, 29, 31, 33, 35, 36, 40, 42],
+        [21, 23, 27, 30, 33, 35, 34, 39, 41, 44],
+        [22, 26, 29, 28, 34, 37, 39, 38, 42, 45],
+        [24, 25, 28, 32, 34, 36, 39, 41, 43, 46]
+      ]
+    };
+
+    const channelSets = [
+      [34, 26, 18, 22],
+      [31, 29, 17, 23],
+      [36, 24, 16, 24],
+      [33, 27, 19, 21]
+    ];
+
+    const barSets = [
+      [42, 58, 51, 75, 67, 82, 64],
+      [46, 63, 54, 71, 74, 86, 68],
+      [41, 56, 60, 79, 66, 89, 72],
+      [44, 60, 56, 77, 71, 84, 69]
+    ];
+
+    const scalarSets = {
+      revenue: [2.48, 2.84, 2.66, 2.91],
+      conversion: [4.72, 5.13, 4.96, 5.21],
+      efficiency: [4.31, 4.88, 4.58, 4.94],
+      deltaRevenue: [11.8, 14.6, 12.9, 15.2],
+      deltaConversion: [0.6, 0.9, 0.7, 1.0],
+      deltaEfficiency: [0.3, 0.6, 0.4, 0.7],
+      weekHigh: [16.2, 18.8, 17.4, 19.1],
+      trendStrength: [87, 93, 90, 95],
+      signalDepth: [82, 88, 84, 91],
+      depthScore: [81, 86, 83, 89],
+      sessionLift: [18, 23, 21, 24],
+      returningUsers: [41.8, 44.6, 42.9, 45.3]
+    };
+
+    const labelPhases = [
+      "Realtime blend",
+      "Signal pulse",
+      "Performance cloud",
+      "Adaptive mix"
+    ];
+
+    const tagPhases = [
+      ["High intent", "Fast checkout"],
+      ["Strong loyalty", "Premium audience"],
+      ["Low friction", "Clean funnel"],
+      ["Warm leads", "Efficient spend"]
+    ];
+
+    const chartPadding = { left: 82, right: 28, top: 58, bottom: 58 };
+    const chartW = 820;
+    const chartH = 420;
+    const sparkW = 180;
+    const sparkH = 66;
+    const sparkPad = { left: 2, right: 2, top: 8, bottom: 8 };
+
+    const grid = document.getElementById('grid');
+    const lineArea = document.getElementById('line-area');
+    const lineGlow = document.getElementById('line-glow');
+    const linePath = document.getElementById('line-path');
+    const pointLayer = document.getElementById('point-layer');
+    const scanLine = document.getElementById('scan-line');
+    const markerCore = document.getElementById('marker-core');
+    const markerRing = document.getElementById('marker-ring');
+    const tooltip = document.getElementById('tooltip');
+    const tooltipValue = document.getElementById('tooltip-value');
+
+    const valueRevenue = document.getElementById('value-revenue');
+    const valueConversion = document.getElementById('value-conversion');
+    const valueEfficiency = document.getElementById('value-efficiency');
+
+    const deltaRevenue = document.getElementById('delta-revenue');
+    const deltaConversion = document.getElementById('delta-conversion');
+    const deltaEfficiency = document.getElementById('delta-efficiency');
+
+    const blendLabel = document.getElementById('blend-label');
+    const weekHighEl = document.getElementById('week-high');
+    const trendStrengthEl = document.getElementById('trend-strength');
+    const signalPill = document.getElementById('signal-pill');
+
+    const topSource = document.getElementById('top-source');
+    const topShare = document.getElementById('top-share');
+    const mixPill = document.getElementById('mix-pill');
+    const donutGroup = document.getElementById('donut-group');
+
+    const donutSegs = {
+      organic: document.querySelector('.donut-seg.organic'),
+      paid: document.querySelector('.donut-seg.paid'),
+      email: document.querySelector('.donut-seg.email'),
+      direct: document.querySelector('.donut-seg.direct')
+    };
+
+    const donutGlows = {
+      organic: document.querySelector('.donut-glow.organic'),
+      paid: document.querySelector('.donut-glow.paid'),
+      email: document.querySelector('.donut-glow.email'),
+      direct: document.querySelector('.donut-glow.direct')
+    };
+
+    const legendEls = {
+      organic: document.getElementById('leg-organic'),
+      paid: document.getElementById('leg-paid'),
+      email: document.getElementById('leg-email'),
+      direct: document.getElementById('leg-direct')
+    };
+
+    const fillEls = {
+      organic: document.getElementById('fill-organic'),
+      paid: document.getElementById('fill-paid'),
+      email: document.getElementById('fill-email'),
+      direct: document.getElementById('fill-direct')
+    };
+
+    const depthScoreEl = document.getElementById('depth-score');
+    const sessionLiftEl = document.getElementById('session-lift');
+    const burstPill = document.getElementById('burst-pill');
+    const returningUsersEl = document.getElementById('returning-users');
+    const tagOne = document.getElementById('tag-one');
+    const tagTwo = document.getElementById('tag-two');
+    const bars = Array.from({ length: 7 }, (_, i) => document.getElementById(`bar-${i}`));
+
+    const sparkEls = {
+      revenue: {
+        line: document.getElementById('spark-line-revenue'),
+        area: document.getElementById('spark-area-revenue')
+      },
+      conversion: {
+        line: document.getElementById('spark-line-conversion'),
+        area: document.getElementById('spark-area-conversion')
+      },
+      efficiency: {
+        line: document.getElementById('spark-line-efficiency'),
+        area: document.getElementById('spark-area-efficiency')
+      }
+    };
+
+    const appRoot = document.getElementById('app');
+    const dashboard = document.getElementById('dashboard');
+    const DASHBOARD_BASE_WIDTH = 1240;
+    const DASHBOARD_BASE_HEIGHT = 760;
+    let dashboardScale = 1;
+    let dashboardFloatY = 0;
+
+    function applyDashboardTransform() {
+      dashboard.style.transform = `translate(-50%, calc(-50% + ${dashboardFloatY.toFixed(2)}px)) scale(${dashboardScale.toFixed(4)})`;
+    }
+
+    function updateDashboardScale() {
+      if (!appRoot) return;
+      const scaleX = appRoot.clientWidth / DASHBOARD_BASE_WIDTH;
+      const scaleY = appRoot.clientHeight / DASHBOARD_BASE_HEIGHT;
+      dashboardScale = Math.min(scaleX, scaleY);
+      applyDashboardTransform();
+    }
+
+    function mix(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    function smooth(t) {
+      return t * t * (3 - 2 * t);
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function cycleScalar(values, t) {
+      const count = values.length;
+      const seg = t * count;
+      const i = Math.floor(seg) % count;
+      const j = (i + 1) % count;
+      const local = smooth(seg - Math.floor(seg));
+      return mix(values[i], values[j], local);
+    }
+
+    function cycleArray(values, t) {
+      const count = values.length;
+      const seg = t * count;
+      const i = Math.floor(seg) % count;
+      const j = (i + 1) % count;
+      const local = smooth(seg - Math.floor(seg));
+      return values[i].map((val, idx) => mix(val, values[j][idx], local));
+    }
+
+    function getPhaseIndex(values, t) {
+      const count = values.length;
+      const seg = t * count;
+      return Math.floor(seg) % count;
+    }
+
+    function pointsToSmoothPath(points) {
+      if (!points.length) return '';
+      if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
+      let d = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+      for (let i = 0; i < points.length - 1; i++) {
+        const p0 = points[i - 1] || points[i];
+        const p1 = points[i];
+        const p2 = points[i + 1];
+        const p3 = points[i + 2] || p2;
+        const cp1x = p1.x + (p2.x - p0.x) / 6;
+        const cp1y = p1.y + (p2.y - p0.y) / 6;
+        const cp2x = p2.x - (p3.x - p1.x) / 6;
+        const cp2y = p2.y - (p3.y - p1.y) / 6;
+        d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`;
+      }
+      return d;
+    }
+
+    function buildPlotPoints(values, width, height, pad, minVal, maxVal) {
+      const usableW = width - pad.left - pad.right;
+      const usableH = height - pad.top - pad.bottom;
+      const span = maxVal - minVal || 1;
+      return values.map((value, index) => {
+        const x = pad.left + (usableW * index) / (values.length - 1);
+        const y = pad.top + usableH - ((value - minVal) / span) * usableH;
+        return { x, y, value };
+      });
+    }
+
+    function updateGrid() {
+      const lines = [];
+      const yStops = [58, 126, 194, 262, 330];
+      yStops.forEach((y, idx) => {
+        lines.push(`<line class="grid-line ${idx % 2 ? 'soft' : ''}" x1="82" y1="${y}" x2="792" y2="${y}"></line>`);
+      });
+      const labels = ['0', '25', '50', '75', '100'];
+      yStops.forEach((y, idx) => {
+        lines.push(`<text class="y-label" x="34" y="${y + 4}">${labels[4 - idx]}</text>`);
+      });
+      for (let i = 0; i < 12; i++) {
+        const x = 82 + ((820 - 82 - 28) * i) / 11;
+        lines.push(`<line class="grid-line soft" x1="${x.toFixed(2)}" y1="58" x2="${x.toFixed(2)}" y2="336"></line>`);
+      }
+      grid.innerHTML = lines.join('');
+    }
+
+    function areaPath(points) {
+      const line = pointsToSmoothPath(points);
+      const last = points[points.length - 1];
+      const first = points[0];
+      return `${line} L ${last.x.toFixed(2)} ${(chartH - chartPadding.bottom).toFixed(2)} L ${first.x.toFixed(2)} ${(chartH - chartPadding.bottom).toFixed(2)} Z`;
+    }
+
+    function updateLineChart(t) {
+      const data = cycleArray(lineSets, t);
+      const points = buildPlotPoints(data, chartW, chartH, chartPadding, 0, 100);
+      const d = pointsToSmoothPath(points);
+      linePath.setAttribute('d', d);
+      lineGlow.setAttribute('d', d);
+      lineArea.setAttribute('d', areaPath(points));
+
+      const plottedPoints = points.map((p, i) => {
+        const cls = i === 2 || i === 5 || i === 8 || i === 10 ? 'point' : 'point soft';
+        const r = cls === 'point' ? 4.5 : 3;
+        return `<circle class="${cls}" cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="${r}"></circle>`;
+      });
+      pointLayer.innerHTML = plottedPoints.join('');
+
+      const pathLength = linePath.getTotalLength();
+      const progress = 0.5 - 0.5 * Math.cos(TAU * t);
+      const markerPoint = linePath.getPointAtLength(pathLength * progress);
+      markerCore.setAttribute('cx', markerPoint.x.toFixed(2));
+      markerCore.setAttribute('cy', markerPoint.y.toFixed(2));
+      markerRing.setAttribute('cx', markerPoint.x.toFixed(2));
+      markerRing.setAttribute('cy', markerPoint.y.toFixed(2));
+      scanLine.setAttribute('x1', markerPoint.x.toFixed(2));
+      scanLine.setAttribute('x2', markerPoint.x.toFixed(2));
+
+      const activeVal = 100 - ((markerPoint.y - chartPadding.top) / (chartH - chartPadding.top - chartPadding.bottom)) * 100;
+      tooltipValue.textContent = `+${activeVal.toFixed(1)}%`;
+      let tipX = markerPoint.x + 16;
+      let tipY = markerPoint.y - 66;
+      if (tipX > chartW - 134) tipX = markerPoint.x - 134;
+      if (tipY < 20) tipY = markerPoint.y + 18;
+      tooltip.setAttribute('transform', `translate(${tipX.toFixed(2)} ${tipY.toFixed(2)})`);
+    }
+
+    function updateMetricCard(name, t) {
+      const values = cycleArray(sparkSeeds[name], t);
+      const points = buildPlotPoints(values, sparkW, sparkH, sparkPad, 0, 70);
+      const line = pointsToSmoothPath(points);
+      const area = `${line} L ${points[points.length - 1].x.toFixed(2)} ${(sparkH - sparkPad.bottom).toFixed(2)} L ${points[0].x.toFixed(2)} ${(sparkH - sparkPad.bottom).toFixed(2)} Z`;
+      sparkEls[name].line.setAttribute('d', line);
+      sparkEls[name].area.setAttribute('d', area);
+    }
+
+    function formatMillion(value) {
+      return `$${value.toFixed(2)}M`;
+    }
+
+    function formatPct(value) {
+      return `${value.toFixed(2)}%`;
+    }
+
+    function updateMetrics(t) {
+      const revenue = cycleScalar(scalarSets.revenue, t);
+      const conversion = cycleScalar(scalarSets.conversion, t);
+      const efficiency = cycleScalar(scalarSets.efficiency, t);
+      const dRevenue = cycleScalar(scalarSets.deltaRevenue, t);
+      const dConversion = cycleScalar(scalarSets.deltaConversion, t);
+      const dEfficiency = cycleScalar(scalarSets.deltaEfficiency, t);
+      const weekHigh = cycleScalar(scalarSets.weekHigh, t);
+      const trendStrength = cycleScalar(scalarSets.trendStrength, t);
+      const signalDepth = cycleScalar(scalarSets.signalDepth, t);
+
+      valueRevenue.textContent = formatMillion(revenue);
+      valueConversion.textContent = formatPct(conversion);
+      valueEfficiency.textContent = `${efficiency.toFixed(2)}x`;
+
+      deltaRevenue.textContent = `+${dRevenue.toFixed(1)}%`;
+      deltaConversion.textContent = `+${dConversion.toFixed(1)} pts`;
+      deltaEfficiency.textContent = `+${dEfficiency.toFixed(1)}x`;
+
+      weekHighEl.textContent = `+${weekHigh.toFixed(1)}%`;
+      trendStrengthEl.textContent = `${Math.round(trendStrength)} / 100`;
+      signalPill.textContent = `Signal depth ${Math.round(signalDepth)}`;
+
+      const idx = getPhaseIndex(labelPhases, t);
+      blendLabel.textContent = labelPhases[idx];
+    }
+
+    function updateDonut(t) {
+      const values = cycleArray(channelSets, t);
+      const names = ['organic', 'paid', 'email', 'direct'];
+      const displayNames = { organic: 'Organic', paid: 'Paid', email: 'Email', direct: 'Direct' };
+      const circumference = 2 * Math.PI * 92;
+      const gap = 10;
+      let offset = 0;
+
+      names.forEach((name, idx) => {
+        const portion = clamp(values[idx], 0, 100);
+        const length = (circumference * portion) / 100;
+        const draw = Math.max(0, length - gap);
+        const dash = `${draw.toFixed(2)} ${(circumference - draw).toFixed(2)}`;
+        const dashOffset = (-offset - gap / 2).toFixed(2);
+        donutSegs[name].setAttribute('stroke-dasharray', dash);
+        donutSegs[name].setAttribute('stroke-dashoffset', dashOffset);
+        donutGlows[name].setAttribute('stroke-dasharray', dash);
+        donutGlows[name].setAttribute('stroke-dashoffset', dashOffset);
+        legendEls[name].textContent = `${portion.toFixed(0)}%`;
+        fillEls[name].style.width = `${portion}%`;
+        offset += length;
+      });
+
+      const pairs = names.map((name, idx) => ({ name, value: values[idx] })).sort((a, b) => b.value - a.value);
+      topSource.textContent = displayNames[pairs[0].name];
+      topShare.textContent = `${pairs[0].value.toFixed(0)}%`;
+      mixPill.textContent = `${displayNames[pairs[0].name]} lead`;
+      donutGroup.style.transform = `rotate(${(-3 + Math.sin(TAU * t) * 5).toFixed(2)}deg)`;
+    }
+
+    function updateBars(t) {
+      const values = cycleArray(barSets, t).map((val, idx) => val + Math.sin(TAU * (t + idx * 0.08)) * 3.2);
+      values.forEach((value, idx) => {
+        bars[idx].style.height = `${clamp(value, 22, 92)}%`;
+        bars[idx].style.opacity = `${0.88 + 0.12 * Math.sin(TAU * (t + idx * 0.06))}`;
+      });
+
+      const depthScore = cycleScalar(scalarSets.depthScore, t);
+      const sessionLift = cycleScalar(scalarSets.sessionLift, t);
+      const returningUsers = cycleScalar(scalarSets.returningUsers, t);
+      depthScoreEl.textContent = `${Math.round(depthScore)} / 100`;
+      sessionLiftEl.textContent = `+${Math.round(sessionLift)}%`;
+      returningUsersEl.textContent = `${returningUsers.toFixed(1)}%`;
+      burstPill.textContent = `${Math.round(10 + (depthScore - 76) / 2)} active signals`;
+
+      const idx = getPhaseIndex(tagPhases, t);
+      tagOne.textContent = tagPhases[idx][0];
+      tagTwo.textContent = tagPhases[idx][1];
+    }
+
+    function renderAt(t) {
+      const normalized = ((t % 1) + 1) % 1;
+      updateMetrics(normalized);
+      updateMetricCard('revenue', normalized + 0.02);
+      updateMetricCard('conversion', normalized + 0.12);
+      updateMetricCard('efficiency', normalized + 0.21);
+      updateLineChart(normalized);
+      updateDonut(normalized + 0.04);
+      updateBars(normalized + 0.08);
+      dashboardFloatY = Math.sin(TAU * normalized) * 6;
+      applyDashboardTransform();
+    }
+
+    updateDashboardScale();
+    window.addEventListener('resize', updateDashboardScale, { passive: true });
+    updateGrid();
+    window.renderAt = renderAt;
+
+    const params = new URLSearchParams(window.location.search);
+    const frame = params.get('frame');
+    const staticFrame = window.__STATIC_FRAME__ != null && !Number.isNaN(Number(window.__STATIC_FRAME__)) ? Number(window.__STATIC_FRAME__) : null;
+
+    if (frame !== null && !Number.isNaN(Number(frame))) {
+      renderAt(Number(frame));
+    } else if (staticFrame !== null) {
+      renderAt(staticFrame);
+    } else {
+      let start = null;
+      function tick(ts) {
+        if (start === null) start = ts;
+        const elapsed = (ts - start) / 1000;
+        const t = (elapsed % LOOP_SECONDS) / LOOP_SECONDS;
+        renderAt(t);
+        window.requestAnimationFrame(tick);
+      }
+      window.requestAnimationFrame(tick);
+    }
+  </script>
+</body>
+</html>

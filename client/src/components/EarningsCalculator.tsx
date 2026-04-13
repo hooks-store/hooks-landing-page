@@ -34,7 +34,7 @@ export default function EarningsCalculator() {
   const salesPercent = ((dailySales - 1) / 199) * 100;
 
   return (
-    <div ref={ref} className="card-navy-teal overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(0,0,0,0.3)] transition-all duration-300">
+    <div ref={ref} className="card-navy-teal overflow-hidden transition-all duration-300">
       <div className="flex flex-col lg:flex-row">
         {/* Left: Product image */}
         <div className="lg:w-[40%] h-64 lg:h-auto relative overflow-hidden">
@@ -118,7 +118,7 @@ export default function EarningsCalculator() {
 
           <div className="border-t border-white/10 pt-6">
             <p className="text-[#8A8F98] text-sm mb-2">Your monthly sales*:</p>
-            <p className="text-white text-[48px] md:text-[56px] lg:text-[64px] font-bold tracking-tight leading-none">
+            <p className="text-white text-[40px] sm:text-[48px] md:text-[56px] lg:text-[64px] font-bold tracking-tight leading-none break-all sm:break-normal">
               ${displayRevenue}
             </p>
             <button className="mt-6 bg-white/5 border border-white/20 text-white font-semibold px-8 py-3 rounded-full hover:bg-white/10 hover:border-white/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
