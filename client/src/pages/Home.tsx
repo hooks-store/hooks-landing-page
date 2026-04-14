@@ -1,5 +1,5 @@
 /*
- * Linkme Landing Page — "Midnight Editorial" Design
+ * Hooks Landing Page — "Midnight Editorial" Design
  * Dark-mode only, near-black (#0A0A0A) bg, navy-teal cards (#0B1926-#0F2840),
  * orange accent (#E8930C), Inter font, magazine-scale typography.
  */
@@ -12,7 +12,7 @@ import UrlInputBar from '@/components/UrlInputBar';
 import CreatorCarousel from '@/components/CreatorCarousel';
 import WorldMap from '@/components/WorldMap';
 import AppIconGrid from '@/components/AppIconGrid';
-import { LinkmeIcon } from '@/components/LinkmeIcon';
+import { HooksIcon } from '@/components/HooksIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Eye, Globe, ShoppingBag, Lock,
@@ -128,13 +128,13 @@ const HOME_COPY = {
       cta: 'Get this now',
     },
   },
-  es: {
-    hero: {
-      rotatingWords: ['marca', 'tienda', 'página'],
-      titleStart: 'Construye tu',
-      titleEnd: 'y vende desde un solo link',
-      subheadline: 'Productos digitales, cursos, consultorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.',
-    },
+    es: {
+      hero: {
+        rotatingWords: ['marca', 'tienda', 'página'],
+        titleStart: 'Construye tu',
+        titleEnd: 'y vende desde un solo link',
+        subheadline: 'Productos digitales, cursos, asesorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.',
+      },
     manifesto: {
       intro: 'La plataforma para la nueva economía de creadores. ',
       line1: 'Haz crecer tu audiencia. ',
@@ -153,14 +153,14 @@ const HOME_COPY = {
           metricValue: '$6,467',
         },
         courses: {
-          title: 'Cursos online',
+          title: 'Cursos en línea',
           desc: 'Organiza módulos, contenidos y acceso para tus estudiantes.',
           metricLabel: 'Estudiantes inscritos',
           metricValue: '1,204',
         },
         coaching: {
-          title: 'Consultorías y sesiones',
-          desc: 'Reserva llamadas, mentorías o servicios 1 a 1 desde tu perfil.',
+          title: 'Asesorías y sesiones',
+          desc: 'Agenda llamadas, mentorías o servicios 1 a 1 desde tu perfil.',
           metricLabel: 'Sesiones reservadas',
           metricValue: '34 esta semana',
         },
@@ -171,22 +171,22 @@ const HOME_COPY = {
           metricValue: '892',
         },
         analytics: {
-          title: 'Analítica',
+          title: 'Estadísticas',
           desc: 'Mide clics, ingresos y actividad en tiempo real desde un único panel.',
           metricLabel: 'Visitas del perfil',
           metricValue: '1.2M',
         },
         designSite: {
-          title: 'Diseña tu sitio link-in-bio',
+          title: 'Diseña tu sitio de link en bio',
           desc: 'Crea una experiencia de perfil y sitio totalmente personalizable para reflejar tu estilo, voz y negocio.',
-          imageAlt: 'Vista previa del sitio link-in-bio',
+          imageAlt: 'Vista previa del sitio de link en bio',
           metricLabel: 'Sitios publicados',
           metricValue: '3,912',
         },
       },
     },
     analytics: {
-      eyebrow: 'Analítica en tiempo real',
+      eyebrow: 'Estadísticas en tiempo real',
       headline: 'Entiende tu crecimiento con claridad',
       profileViews: 'Visitas del perfil',
       linkClicks: 'Clics en el link',
@@ -195,11 +195,11 @@ const HOME_COPY = {
         { flag: '🇺🇸', country: 'EE. UU.', views: '96k vistas', rank: 2 },
         { flag: '🇵🇹', country: 'Portugal', views: '117k vistas', rank: 3 },
       ],
-      cardOneTitle: 'Analítica global en tiempo real, gratis.',
-      cardOneBody: 'Hooks mantiene tu perfil accesible en todo el mundo, recibas cientos o millones de clics. Todo funciona de forma estable y puedes ver claramente desde dónde llega tu actividad.',
-      cardTwoTitle: 'Loop premium de analítica.',
-      cardTwoBody: 'Un canvas de analítica en vivo que complementa tus métricas globales con una narrativa visual más sólida.',
-      frameTitle: 'Animación premium de analítica',
+      cardOneTitle: 'Estadísticas globales en tiempo real, gratis.',
+      cardOneBody: 'Hooks mantiene tu perfil disponible en todo el mundo, ya recibas cientos o millones de clics. Todo funciona de forma estable y puedes ver con claridad de dónde viene tu actividad.',
+      cardTwoTitle: 'Visualización premium de estadísticas.',
+      cardTwoBody: 'Un panel de estadísticas en vivo que complementa tus métricas globales con una narrativa visual más sólida.',
+      frameTitle: 'Visualización premium de estadísticas',
     },
     finalCta: {
       line1: 'Construye tu tienda.',
@@ -207,7 +207,7 @@ const HOME_COPY = {
       line3: 'Empieza a cobrar.',
       primaryCta: 'Crear gratis',
       trust1: 'Sin tarjeta de crédito',
-      trust2: 'Activo en minutos',
+      trust2: 'Listo en minutos',
       trust3: 'Hecho para creadores',
     },
     phone: {
@@ -216,7 +216,7 @@ const HOME_COPY = {
       youtube: 'YouTube',
     },
     memberships: {
-      title: 'Membresía Creator Circle',
+      title: 'Membresía Círculo de Creadores',
       perMonth: '/ mes',
       cta: 'Consíguelo ahora',
     },
@@ -605,7 +605,7 @@ function PhoneMockup() {
                   <Facebook key="fb" className="w-3.5 h-3.5 text-[#2563EB]" />,
                   <span key="x" className="text-[10px] font-semibold text-[#111827]">X</span>,
                   <Music2 key="tt" className="w-3.5 h-3.5 text-[#0F172A]" />,
-                  <LinkmeIcon key="hooks" size={11} />,
+                  <HooksIcon key="hooks" size={11} />,
                 ].map((icon, i) => (
                   <div
                     key={i}

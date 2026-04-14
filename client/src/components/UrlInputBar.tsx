@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LinkmeIcon } from './LinkmeIcon';
+import { HooksIcon } from './HooksIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function UrlInputBar() {
@@ -23,7 +23,7 @@ export default function UrlInputBar() {
 
   return (
     <div className="flex items-center bg-white rounded-full h-14 max-w-[480px] w-full pl-4 pr-1.5 gap-3 shadow-[0_0_30px_rgba(255,255,255,0.08)] hover:shadow-[0_0_40px_rgba(255,255,255,0.12)] transition-shadow duration-500">
-      <LinkmeIcon size={24} />
+      <HooksIcon size={24} />
       <div className="flex items-center flex-1 min-w-0">
         <span className="text-gray-400 text-base select-none shrink-0">hooks.store/</span>
         <input

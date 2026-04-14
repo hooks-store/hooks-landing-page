@@ -92,7 +92,7 @@ const creators = [
     followers: '3.5M',
     bio: {
       en: 'Lifestyle shoots and travel diaries',
-      es: 'Lifestyle, sesiones y diarios de viaje',
+      es: 'Estilo de vida, sesiones y diarios de viaje',
     },
     image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80',
     imagePosition: 'center 22%',

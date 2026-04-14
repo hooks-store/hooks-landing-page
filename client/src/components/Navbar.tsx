@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { LinkmeIcon } from './LinkmeIcon';
+import { HooksIcon } from './HooksIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Navbar() {
@@ -45,7 +45,7 @@ export default function Navbar() {
       >
         <div className="container h-full flex items-center justify-between md:justify-start md:gap-14 lg:gap-20">
           <div className="flex items-center gap-3">
-            <LinkmeIcon size={40} />
+            <HooksIcon size={40} />
             <span className="text-white text-[28px] font-bold tracking-[-0.02em] leading-none">Hooks</span>
           </div>
 

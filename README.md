@@ -1,4 +1,4 @@
-# Linkme Landing Page
+# Hooks Landing Page
 
 A high-fidelity Hooks landing page — a premium, dark-themed SaaS marketing site for a creator-focused link-in-bio platform. Built with React 19, TypeScript, Tailwind CSS 4, and Vite 7.
 
@@ -10,7 +10,7 @@ A high-fidelity Hooks landing page — a premium, dark-themed SaaS marketing sit
 
 | Tool | Version |
 |------|---------|
-| Node.js | 22.x or later |
+| Node.js | 20.x |
 | pnpm | 10.x (bundled via `packageManager` field) |
 
 ### Installation and Development
@@ -19,6 +19,9 @@ A high-fidelity Hooks landing page — a premium, dark-themed SaaS marketing sit
 # Clone the repository
 git clone git@github.com:Julianahlk/hooks-landing-page.git
 cd hooks-landing-page
+
+# Use the project Node version
+source ~/.nvm/nvm.sh && nvm use 20
 
 # Install dependencies
 pnpm install
@@ -89,7 +92,7 @@ hooks-landing-page/
 │       │   ├── Navbar.tsx          # Fixed navbar — backdrop-blur, scroll-aware, mobile drawer
 │       │   ├── Footer.tsx          # Multi-column footer with social links
 │       │   ├── UrlInputBar.tsx     # Pill-shaped "hooks.store/yourname" CTA input
-│       │   ├── LinkmeIcon.tsx      # Logo icon (pink→orange gradient) + wordmark
+│       │   ├── HooksIcon.tsx       # Logo icon (pink→orange gradient) + wordmark
 │       │   ├── SectionWrapper.tsx  # Scroll-triggered fade-up animation wrapper
 │       │   ├── CreatorCarousel.tsx # Auto-scrolling, draggable creator card carousel
 │       │   ├── EarningsCalculator.tsx # Interactive calculator with sliders and live math
@@ -144,7 +147,7 @@ The landing page is a single route (`/`) rendered by `Home.tsx`. It contains **1
 | 10 | **Integrations Grid** | Perspective-tilted grid of app icons (Spotify, Discord, TikTok, etc.) with edge fade masks and hover glow effects. |
 | 11 | **Social Proof / Stats** | Split layout: animated stat counters (39% conversions, 180+ countries) on the left, hoodie product mockup with order summary overlay on the right. |
 | 12 | **Blazingly Fast** | Split layout: creator lifestyle photo with floating stat badges on the left, performance copy on the right. |
-| 13 | **Final CTA** | Full-width card with background image, headline "Global Icons Choose Linkme", description, URL input bar, and phone mockup. |
+| 13 | **Final CTA** | Full-width card with background image, three-line conversion headline, description, URL input bar, and phone mockup. |
 | 14 | **Footer** | Multi-column layout: logo, People, Company, Resources, Legal link columns with social media icons. |
 
 ### Design System

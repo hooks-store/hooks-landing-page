@@ -1,4 +1,4 @@
-import { LinkmeLogo } from './LinkmeIcon';
+import { HooksLogo } from './HooksIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const socialLinks = [
@@ -24,11 +24,11 @@ export default function Footer() {
           },
           {
             title: 'Empresa',
-            links: ['Nosotros', 'Carreras', 'Prensa', 'Blog', 'Contacto'],
+            links: ['Quiénes somos', 'Empleos', 'Prensa', 'Blog', 'Contacto'],
           },
           {
             title: 'Recursos',
-            links: ['Centro de ayuda', 'Comunidad', 'Tutoriales', 'Docs API', 'Estado'],
+            links: ['Centro de ayuda', 'Comunidad', 'Tutoriales', 'Documentación API', 'Estado'],
           },
           {
             title: 'Legal',
@@ -62,7 +62,7 @@ export default function Footer() {
       <div className="container">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-12">
           <div className="col-span-2 md:col-span-1">
-            <LinkmeLogo />
+            <HooksLogo />
             <p className="text-[#8A8F98] text-sm mt-4 max-w-[200px] leading-relaxed">
               {copy.brandSentence}
             </p>

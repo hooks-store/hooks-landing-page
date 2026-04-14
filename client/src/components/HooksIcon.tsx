@@ -1,6 +1,6 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 
-export function LinkmeIcon({ size = 32 }: { size?: number }) {
+export function HooksIcon({ size = 32 }: { size?: number }) {
   const { locale } = useLanguage();
 
   return (
@@ -14,10 +14,10 @@ export function LinkmeIcon({ size = 32 }: { size?: number }) {
   );
 }
 
-export function LinkmeLogo() {
+export function HooksLogo() {
   return (
     <div className="flex items-center gap-2">
-      <LinkmeIcon size={32} />
+      <HooksIcon size={32} />
       <span className="text-white text-[22px] font-bold tracking-tight">Hooks</span>
     </div>
   );
