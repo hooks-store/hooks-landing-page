@@ -4,7 +4,7 @@
  * orange accent (#E8930C), Inter font, magazine-scale typography.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SectionWrapper from '@/components/SectionWrapper';
@@ -13,6 +13,7 @@ import CreatorCarousel from '@/components/CreatorCarousel';
 import WorldMap from '@/components/WorldMap';
 import AppIconGrid from '@/components/AppIconGrid';
 import { HooksIcon } from '@/components/HooksIcon';
+import PhoneMockup from '@/components/iphone-mockup/PhoneMockup';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Eye, Globe, ShoppingBag, Lock,
@@ -21,10 +22,17 @@ import {
 } from 'lucide-react';
 
 // Image URLs
-const HERO_BG = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/hero-bg-UR5rzfvPVvMwDzTyCqzw6u.webp';
 const PHONE_GUY_FOR_LATER = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-lifestyle-eAePL9YnBxbQUubnYhm3fa.webp';
 const FEMALE_CREATOR = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/female-creator-KoNNQiTsKfMVtWm8xvoSep.webp';
 const CREATOR_CTA_BG = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-cta-bg-C9mdqCe3aNkVQnH8bbSzUM.webp';
+const HERO_BG_VIDEO_SOURCES = [
+  '/videos/hero/chef-4secs.mp4',
+  '/videos/hero/nba-player.mov',
+  '/videos/hero/podcast-short.mp4',
+  '/videos/hero/travel-girl.mp4',
+];
+const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
+const HERO_BG_VIDEO_CROSSFADE_MS = 550;
 const FEATURE_VIDEO_DIGITAL_PRODUCT = '/videos/features/digital-product-builder.mov';
 const FEATURE_VIDEO_COURSE_BUILDER = '/videos/features/course-builder.mov';
 const COACHING_FRAMES = [
@@ -130,7 +138,7 @@ const HOME_COPY = {
   },
     es: {
       hero: {
-        rotatingWords: ['marca', 'tienda', 'página'],
+        rotatingWords: ['marca', 'perfil', 'página'],
         titleStart: 'Construye tu',
         titleEnd: 'y vende desde un solo link',
         subheadline: 'Productos digitales, cursos, asesorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.',
@@ -202,7 +210,7 @@ const HOME_COPY = {
       frameTitle: 'Visualización premium de estadísticas',
     },
     finalCta: {
-      line1: 'Construye tu tienda.',
+      line1: 'Construye tu perfil.',
       line2: 'Comparte tu link.',
       line3: 'Empieza a cobrar.',
       primaryCta: 'Crear gratis',
@@ -321,19 +329,7 @@ export default function Home() {
       {/* ===== 1. HERO SECTION ===== */}
       <section className="relative min-h-screen flex items-center pt-16">
         <div className="absolute inset-0 overflow-hidden">
-          <img
-            src={HERO_BG}
-            alt=""
-            className="w-full h-full object-cover animate-ken-burns"
-          />
-          <div
-            className="absolute left-0 top-0 h-full w-[56%]"
-            style={{
-              background:
-                'radial-gradient(80% 58% at 24% 24%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.97) 52%, rgba(0,0,0,0.74) 78%, rgba(0,0,0,0) 100%)',
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/45 to-black/20" />
+          <HeroBackgroundVideoLoop />
         </div>
 
         <div className="container relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-8 py-20">
@@ -374,7 +370,7 @@ export default function Home() {
           </div>
 
           <div
-            className="lg:w-[45%] flex justify-center lg:justify-end lg:pr-2 xl:pr-4"
+            className="lg:w-[45%] flex justify-center lg:justify-end lg:pr-12 xl:pr-16"
             style={{
               opacity: heroLoaded ? 1 : 0,
               transform: heroLoaded ? 'translateY(0)' : 'translateY(30px)',
@@ -436,13 +432,6 @@ export default function Home() {
                       <div className="w-full h-full">{card.preview}</div>
                     )}
                     <div className={`absolute inset-0 bg-gradient-to-t ${card.overlayClass ?? 'from-[#0B1926] via-[#0B1926]/75 to-black/20'}`} />
-                    <div className="absolute bottom-5 left-5 right-5 bg-white/95 rounded-xl p-3 shadow-xl z-10">
-                      <div className="flex items-center gap-2 text-gray-500 text-[10px] font-medium">
-                        <span className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">{card.icon}</span>
-                        {card.metricLabel}
-                      </div>
-                      <div className="text-black font-bold text-lg mt-1 leading-tight">{card.metricValue}</div>
-                    </div>
                   </div>
                   <div className="bg-[#0A0A0A] p-7 pt-6">
                     <h3 className="text-white text-[24px] font-semibold mb-2">{card.title}</h3>
@@ -576,83 +565,191 @@ export default function Home() {
 
 // ===== SUB-COMPONENTS =====
 
-function PhoneMockup() {
-  const { locale } = useLanguage();
-  const copy = HOME_COPY[locale].phone;
+function HeroBackgroundVideoLoop() {
+  const [frontSlot, setFrontSlot] = useState<0 | 1>(0);
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const [slotVideoIndices, setSlotVideoIndices] = useState<[number, number]>([
+    0,
+    HERO_BG_VIDEO_SOURCES.length > 1 ? 1 : 0,
+  ]);
+  const [isCrossfading, setIsCrossfading] = useState(false);
+  const videoARef = useRef<HTMLVideoElement | null>(null);
+  const videoBRef = useRef<HTMLVideoElement | null>(null);
+  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const crossfadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const getBackSlot = (slot: 0 | 1): 0 | 1 => (slot === 0 ? 1 : 0);
+  const getVideoBySlot = (slot: 0 | 1) => (slot === 0 ? videoARef.current : videoBRef.current);
+
+  const clearAdvanceTimer = () => {
+    if (advanceTimerRef.current) {
+      clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+  };
+
+  const clearCrossfadeTimer = () => {
+    if (crossfadeTimerRef.current) {
+      clearTimeout(crossfadeTimerRef.current);
+      crossfadeTimerRef.current = null;
+    }
+  };
+
+  const safePlay = (videoEl: HTMLVideoElement) => {
+    const playPromise = videoEl.play();
+    if (playPromise) {
+      void playPromise.catch(() => undefined);
+    }
+  };
+
+  const advanceToNextVideo = () => {
+    if (isCrossfading || HERO_BG_VIDEO_SOURCES.length <= 1) {
+      return;
+    }
+
+    clearAdvanceTimer();
+    clearCrossfadeTimer();
+
+    const nextVideoIndex = (activeVideoIndex + 1) % HERO_BG_VIDEO_SOURCES.length;
+    const nextFrontSlot = getBackSlot(frontSlot);
+    const nextFrontVideoEl = getVideoBySlot(nextFrontSlot);
+
+    if (!nextFrontVideoEl) {
+      return;
+    }
+
+    const beginCrossfade = () => {
+      nextFrontVideoEl.currentTime = 0;
+      safePlay(nextFrontVideoEl);
+      setIsCrossfading(true);
+      setFrontSlot(nextFrontSlot);
+
+      crossfadeTimerRef.current = setTimeout(() => {
+        const previousFrontSlot = getBackSlot(nextFrontSlot);
+        const previousFrontVideoEl = getVideoBySlot(previousFrontSlot);
+        if (previousFrontVideoEl) {
+          previousFrontVideoEl.pause();
+          previousFrontVideoEl.currentTime = 0;
+        }
+
+        setActiveVideoIndex(nextVideoIndex);
+        setIsCrossfading(false);
+
+        const preloadIndex = (nextVideoIndex + 1) % HERO_BG_VIDEO_SOURCES.length;
+        setSlotVideoIndices((current) => {
+          const updated: [number, number] = [current[0], current[1]];
+          updated[previousFrontSlot] = preloadIndex;
+          return updated;
+        });
+
+        clearCrossfadeTimer();
+      }, HERO_BG_VIDEO_CROSSFADE_MS);
+    };
+
+    if (nextFrontVideoEl.readyState >= 2) {
+      beginCrossfade();
+      return;
+    }
+
+    const onCanPlay = () => {
+      nextFrontVideoEl.removeEventListener('canplay', onCanPlay);
+      beginCrossfade();
+    };
+
+    nextFrontVideoEl.addEventListener('canplay', onCanPlay);
+    nextFrontVideoEl.load();
+  };
+
+  useEffect(() => {
+    const activeVideoEl = getVideoBySlot(frontSlot);
+    if (!activeVideoEl) {
+      return;
+    }
+
+    safePlay(activeVideoEl);
+
+    if (isCrossfading || HERO_BG_VIDEO_SOURCES.length <= 1) {
+      return;
+    }
+
+    clearAdvanceTimer();
+    advanceTimerRef.current = setTimeout(() => {
+      advanceToNextVideo();
+    }, HERO_BG_VIDEO_MAX_DURATION_MS);
+
+    return () => {
+      clearAdvanceTimer();
+    };
+  }, [frontSlot, activeVideoIndex, isCrossfading]);
+
+  useEffect(() => {
+    if (isCrossfading) {
+      return;
+    }
+
+    const backSlot = getBackSlot(frontSlot);
+    const backVideoEl = getVideoBySlot(backSlot);
+    if (!backVideoEl) {
+      return;
+    }
+
+    backVideoEl.pause();
+    backVideoEl.currentTime = 0;
+    backVideoEl.load();
+  }, [slotVideoIndices, frontSlot, isCrossfading]);
+
+  useEffect(() => {
+    const activeVideoEl = getVideoBySlot(frontSlot);
+    if (!activeVideoEl) {
+      return;
+    }
+
+    const onEnded = () => {
+      advanceToNextVideo();
+    };
+
+    activeVideoEl.addEventListener('ended', onEnded);
+    return () => {
+      activeVideoEl.removeEventListener('ended', onEnded);
+    };
+  }, [frontSlot, activeVideoIndex, isCrossfading]);
+
+  useEffect(() => {
+    return () => {
+      clearAdvanceTimer();
+      clearCrossfadeTimer();
+    };
+  }, []);
 
   return (
-    <div className="relative w-64 sm:w-72 md:w-[19rem] lg:w-[22.5rem] xl:w-[24rem] aspect-[9/16]">
-      <div className="w-full h-full">
-        <div className="h-full rounded-[2rem] overflow-hidden bg-[#060A10]">
-          <div className="relative h-full rounded-[2rem] overflow-hidden border border-white/12">
-            <img src={FEMALE_CREATOR} alt="" className="absolute inset-x-0 -top-[24%] h-[150%] w-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-transparent" />
+    <div className="relative w-full h-full">
+      <video
+        ref={videoARef}
+        src={HERO_BG_VIDEO_SOURCES[slotVideoIndices[0]]}
+        className="absolute inset-0 w-full h-full object-cover transition-opacity ease-out"
+        style={{
+          opacity: frontSlot === 0 ? 1 : 0,
+          transitionDuration: `${HERO_BG_VIDEO_CROSSFADE_MS}ms`,
+        }}
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
 
-            <div className="absolute left-2.5 right-2.5 bottom-[31%]">
-              <div className="flex items-center justify-center gap-1.5">
-                <h3 className="text-white text-[20px] leading-none font-bold">IShowSpeed</h3>
-                <span className="w-[18px] h-[18px] rounded-full bg-[#3B82F6] border border-blue-200/45 flex items-center justify-center shrink-0">
-                  <Check className="w-3 h-3 text-white" />
-                </span>
-              </div>
-              <p className="text-white/70 text-[10px] text-center mt-0.5">@ishowspeed</p>
-
-              <div className="mt-2 flex items-center justify-center gap-1.5">
-                {[
-                  <Youtube key="yt" className="w-3.5 h-3.5 text-[#EF4444]" />,
-                  <Instagram key="ig" className="w-3.5 h-3.5 text-[#D946EF]" />,
-                  <span key="snap" className="text-[9px] font-bold text-black">S</span>,
-                  <Facebook key="fb" className="w-3.5 h-3.5 text-[#2563EB]" />,
-                  <span key="x" className="text-[10px] font-semibold text-[#111827]">X</span>,
-                  <Music2 key="tt" className="w-3.5 h-3.5 text-[#0F172A]" />,
-                  <HooksIcon key="hooks" size={11} />,
-                ].map((icon, i) => (
-                  <div
-                    key={i}
-                    className="w-7 h-7 rounded-full bg-white border border-black/10 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
-                  >
-                    {icon}
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-white text-[10px] font-semibold text-center mt-2">
-                132.4M {copy.totalFollowers} <ChevronDown className="w-3 h-3 inline -mt-0.5" />
-              </p>
-              <p className="text-white/95 text-[10px] tracking-[0.12em] font-semibold text-center mt-1">{copy.allLinks}</p>
-            </div>
-
-            <div className="absolute left-2.5 right-2.5 bottom-2.5 grid grid-rows-[1fr_auto] gap-2">
-              <div className="relative h-28 sm:h-32 rounded-[1rem] overflow-hidden border border-white/12">
-                <img src={HERO_BG} alt="" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Youtube className="w-3.5 h-3.5 text-[#EF4444]" />
-                </div>
-                <p className="absolute bottom-2 left-0 right-0 text-center text-white text-[11px] font-semibold">{copy.youtube}</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 h-16 sm:h-20">
-                <div className="relative rounded-[0.95rem] overflow-hidden border border-white/10">
-                  <img src={HERO_BG} alt="" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
-                  <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-white/90 border border-black/10 flex items-center justify-center">
-                    <span className="text-[7px] font-bold text-black">S</span>
-                  </div>
-                </div>
-
-                <div className="relative rounded-[0.95rem] overflow-hidden border border-white/10">
-                  <img src={CREATOR_CTA_BG} alt="" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
-                  <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-white/90 border border-black/10 flex items-center justify-center">
-                    <span className="text-[10px] leading-none text-black">x</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <video
+        ref={videoBRef}
+        src={HERO_BG_VIDEO_SOURCES[slotVideoIndices[1]]}
+        className="absolute inset-0 w-full h-full object-cover transition-opacity ease-out"
+        style={{
+          opacity: frontSlot === 1 ? 1 : 0,
+          transitionDuration: `${HERO_BG_VIDEO_CROSSFADE_MS}ms`,
+        }}
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
     </div>
   );
 }

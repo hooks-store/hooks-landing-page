@@ -1,0 +1,417 @@
+export interface CreatorLink {
+  title: string;
+  icon: string;
+  url: string;
+  image?: string;
+}
+
+export interface CreatorSocial {
+  icon: string;
+  url: string;
+}
+
+export interface Creator {
+  id: string;
+  name: string;
+  color: string;
+  accentColor: string;
+  image: string;
+  title: string;
+  followers: string;
+  gridStyle:
+    | 'single-wide'
+    | 'mixed-stack'
+    | '1x2-featured'
+    | 'balanced'
+    | 'quad'
+    | 'mixed-media'
+    | 'lead-gen'
+    | 'carousel';
+  socials: CreatorSocial[];
+  links: CreatorLink[];
+}
+
+export const CREATORS: Creator[] = [
+  {
+    id: 'anyajensen',
+    name: 'Anya Jensen',
+    color: '#007FFF',
+    accentColor: '#FFFFFF',
+    image:
+      'https://images.unsplash.com/photo-1600638270210-1fb2dc4ab48a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMHRyYXZlbCUyMGNyZWF0b3IlMjBleHBsb3JlJTIwb3V0ZG9vcnN8ZW58MXx8fHwxNzc2NzYwOTIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    title: 'Exploring the 7 Wonders.',
+    followers: '1.1M',
+    gridStyle: 'single-wide',
+    socials: [
+      { icon: 'instagram', url: '#' },
+      { icon: 'youtube', url: '#' },
+      { icon: 'tiktok', url: '#' },
+    ],
+    links: [
+      {
+        title: 'My Latest Vlog',
+        icon: 'youtube',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmF2ZWwlMjBsYW5kc2NhcGV8ZW58MXx8fHwxNzc2NzYxMjIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Travel Guide 2026',
+        icon: 'globe',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWFjaCUyMHRyYXZlbHxlbnwxfHx8fDE3NzY3NjEyMjB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Packing Essentials',
+        icon: 'merch',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdWdnYWdlJTIwdHJhdmVsfGVufDF8fHx8MTc3Njc2MTIyMHww&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+    ],
+  },
+  {
+    id: 'quinnbrax',
+    name: 'Quinn Brax',
+    color: '#BF00FF',
+    accentColor: '#7DF9FF',
+    image:
+      'https://images.unsplash.com/photo-1695277578924-effbf2f02440?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkaiUyMHNpbmdlciUyMHBlcmZvcm1pbmclMjBzdGFnZSUyMGNvbmNlcnQlMjBsaWdodHN8ZW58MXx8fHwxNzc2NzYwOTIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    title: 'Future Anthems Now. New single.',
+    followers: '530K',
+    gridStyle: 'mixed-stack',
+    socials: [
+      { icon: 'spotify', url: '#' },
+      { icon: 'instagram', url: '#' },
+      { icon: 'twitter', url: '#' },
+    ],
+    links: [
+      {
+        title: 'Stream New Single',
+        icon: 'music',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb25jZXJ0JTIwY3Jvd2R8ZW58MXx8fHwxNzc2NzYxMjIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Tour Tickets',
+        icon: 'ticket',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsaXZlJTIwbXVzaWN8ZW58MXx8fHwxNzc2NzYxMjIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Merch',
+        icon: 'merch',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcHBhcmVsfGVufDF8fHx8MTc3Njc2MTIyMXww&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Behind the Scenes',
+        icon: 'youtube',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWNvcmRpbmclMjBzdHVkaW98ZW58MXx8fHwxNzc2NzYxMjIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Spotify Playlist',
+        icon: 'spotify',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMHBsYXllcnxlbnwxfHx8fDE3NzY3NjEyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Fan Club',
+        icon: 'heart',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxldmVudCUyMHBhcnR5fGVufDF8fHx8MTc3Njc2MTIyMnww&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+    ],
+  },
+  {
+    id: 'malikswift',
+    name: "Malik 'Swift' Davies",
+    color: '#002147',
+    accentColor: '#FF8200',
+    image:
+      'https://images.unsplash.com/photo-1749743823062-df9d9de55e94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYXNrZXRiYWxsJTIwcGxheWVyJTIwYXRobGV0ZSUyMHNwb3J0JTIwYXJlbmF8ZW58MXx8fHwxNzc2NzYwOTIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    title: 'Ball. Business. Building a legacy.',
+    followers: '4.3M',
+    gridStyle: '1x2-featured',
+    socials: [
+      { icon: 'twitter', url: '#' },
+      { icon: 'instagram', url: '#' },
+      { icon: 'youtube', url: '#' },
+    ],
+    links: [
+      {
+        title: 'Highlight Reel',
+        icon: 'youtube',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1546519638-68e109498ffc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYXNrZXRiYWxsJTIwY291cnR8ZW58MXx8fHwxNzc2NzYxMjIyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Signature Shoes',
+        icon: 'merch',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbmVha2Vyc3xlbnwxfHx8fDE3NzY3NjEyMjJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Foundation',
+        icon: 'heart',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGFyaXR5JTIwa2lkc3xlbnwxfHx8fDE3NzY3NjEyMjN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+    ],
+  },
+  {
+    id: 'mindsetpod',
+    name: 'The Mindset Podcast',
+    color: '#1A1A1A',
+    accentColor: '#F3E5DC',
+    image:
+      'https://images.unsplash.com/photo-1655947717064-d856af599bd1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb2RjYXN0JTIwc3R1ZGlvJTIwbWljcm9waG9uZSUyMGhlYWRwaG9uZXMlMjBicm9hZGNhc3R8ZW58MXx8fHwxNzc2NzYwOTIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    title: 'Deep dives into performance. All my links down below.',
+    followers: '100K',
+    gridStyle: 'balanced',
+    socials: [
+      { icon: 'podcast', url: '#' },
+      { icon: 'spotify', url: '#' },
+      { icon: 'youtube', url: '#' },
+      { icon: 'twitter', url: '#' },
+    ],
+    links: [
+      {
+        title: 'Ep 142: Focus',
+        icon: 'podcast',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1583531172005-814191b8b6c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb2RjYXN0JTIwZXBpc29kZXxlbnwxfHx8fDE3NzY3NjEyMjN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Ep 141: Habits',
+        icon: 'podcast',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1589903308904-1010c2294adc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkaW8lMjBtaWN8ZW58MXx8fHwxNzc2NzYxMjIzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Ep 140: Sleep',
+        icon: 'podcast',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhdWRpbyUyMHJlY29yZGluZ3xlbnwxfHx8fDE3NzY3NjEyMjR8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Ep 139: Routine',
+        icon: 'podcast',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiY2tncm91bmQlMjBhdWRpb3xlbnwxfHx8fDE3NzY3NjEyMjR8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Newsletter',
+        icon: 'mail',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbWFpbCUyMG5ld3NsZXR0ZXJ8ZW58MXx8fHwxNzc2NzYxMjI0fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Join Patreon',
+        icon: 'patreon',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1556761175-5973dc0f32d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBzdXBwb3J0fGVufDF8fHx8MTc3Njc2MTIyNXww&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+    ],
+  },
+  {
+    id: 'eliasthorne',
+    name: 'Elias Thorne',
+    color: '#E2725B',
+    accentColor: '#B2AC88',
+    image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=1080',
+    title: 'Gourmet, accessible recipes. Links down below.',
+    followers: '12.4M',
+    gridStyle: 'quad',
+    socials: [
+      { icon: 'instagram', url: '#' },
+      { icon: 'tiktok', url: '#' },
+      { icon: 'youtube', url: '#' },
+    ],
+    links: [
+      {
+        title: 'New Cookbook',
+        icon: 'merch',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb29rYm9va3xlbnwxfHx8fDE3NzY3NjEyMjV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Masterclass',
+        icon: 'youtube',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1556910103-1c02745aae4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxraXRjaGVuJTIwY29va2luZ3xlbnwxfHx8fDE3NzY3NjEyMjV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Kitchen Gear',
+        icon: 'merch',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1581622558667-3419a8dc5f83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxraXRjaGVuJTIwZXF1aXBtZW50fGVufDF8fHx8MTc3Njc2MTIyNnww&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Secret Recipes',
+        icon: 'mail',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1504674900247-0877df9cc836?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmb29kJTIwcGxhdGluZ3xlbnwxfHx8fDE3NzY3NjEyMjZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+    ],
+  },
+  {
+    id: 'kunalvarez',
+    name: 'Kun Alvarez (Legacy)',
+    color: '#75AADB',
+    accentColor: '#FFFFFF',
+    image:
+      'https://images.unsplash.com/photo-1699519638135-a6734c58b361?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2NjZXIlMjBmb290YmFsbCUyMHBsYXllciUyMGZpZWxkJTIwc3RhZGl1bXxlbnwxfHx8fDE3NzY3NjA5MjF8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    title: 'Soccer is life. All my links down below.',
+    followers: '280K',
+    gridStyle: 'mixed-media',
+    socials: [
+      { icon: 'instagram', url: '#' },
+      { icon: 'twitter', url: '#' },
+      { icon: 'twitch', url: '#' },
+    ],
+    links: [
+      {
+        title: 'Twitch Streams',
+        icon: 'twitch',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjBzdHJlYW18ZW58MXx8fHwxNzc2NzYxMjI2fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'E-Sports Team',
+        icon: 'gamepad',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1511512578047-dfb367046420?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHhlc3BvcnRzfGVufDF8fHx8MTc3Njc2MTIyN3ww&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'My Club',
+        icon: 'globe',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1775725181800-f55689a25857?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2NjZXIlMjB0ZWFtJTIwY2x1YiUyMHN0YWRpdW18ZW58MXx8fHwxNzc2Nzc4MTYxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Highlights',
+        icon: 'youtube',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1553778263-73a83bab9b0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmb290YmFsbCUyMGdvYWx8ZW58MXx8fHwxNzc2NzYxMjI4fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+    ],
+  },
+  {
+    id: 'techreviewhq',
+    name: 'TechReview HQ',
+    color: '#708090',
+    accentColor: '#008080',
+    image:
+      'https://images.unsplash.com/photo-1758523670550-223a01cd7764?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW4lMjB2aXJ0dWFsJTIwcmVhbGl0eSUyMGhlYWRzZXR8ZW58MXx8fHwxNzc2Nzc2MjYyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    title: 'Honest data. No bias. Your email below.',
+    followers: '21.3M',
+    gridStyle: 'lead-gen',
+    socials: [
+      { icon: 'youtube', url: '#' },
+      { icon: 'twitter', url: '#' },
+      { icon: 'discord', url: '#' },
+    ],
+    links: [
+      {
+        title: 'My Gear List',
+        icon: 'merch',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1498049794561-7780e7231661?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNoJTIwZ2VhcnxlbnwxfHx8fDE3NzY3NjEyMjh8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'PC Builds',
+        icon: 'gamepad',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwYyUyMGJ1aWxkfGVufDF8fHx8MTc3Njc2MTIyOHww&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Discord Server',
+        icon: 'discord',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1614680376408-81e91ffe3db7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkaXNjb3JkJTJMJTIwdGVjaHxlbnwxfHx8fDE3NzY3NjEyMjl8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Sponsors',
+        icon: 'mail',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1556761175-5973dc0f32d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzc3xlbnwxfHx8fDE3NzY3NjEyMjl8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+    ],
+  },
+  {
+    id: 'kaylaharris',
+    name: 'Kayla "The Cage" Harris',
+    color: '#36454F',
+    accentColor: '#EA4335',
+    image:
+      'https://images.unsplash.com/photo-1636581563711-cd454f1bf99a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMGJveGVyJTIwZmlnaHRlciUyMHJpbmclMjB0cmFpbmluZyUyMGdsb3Zlc3xlbnwxfHx8fDE3NzY3NjA5MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    title: 'Fighter. Champion. Legend. Links down below.',
+    followers: '190K',
+    gridStyle: 'carousel',
+    socials: [
+      { icon: 'instagram', url: '#' },
+      { icon: 'twitter', url: '#' },
+      { icon: 'youtube', url: '#' },
+    ],
+    links: [
+      {
+        title: 'Fight Camp Merch',
+        icon: 'merch',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3hpbmclMjBnbG92ZXN8ZW58MXx8fHwxNzc2NzU0MjMzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Workout Plan',
+        icon: 'activity',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1647482272246-cd545777ad0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxNTUElMjBmaWdodGVyJTIwd29ya291dCUyMHRyYWluaW5nJTIwaW50ZW5zaXR5fGVufDF8fHx8MTc3Njc3Mjg0NHww&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Sponsors',
+        icon: 'mail',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1773682614225-c9b92727ce1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcG9ydHMlMjBicmFuZCUyMHNwb25zb3JzaGlwJTIwZGVhbCUyMGF0aGxldGV8ZW58MXx8fHwxNzc2NzcyODQ0fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+      {
+        title: 'Next Fight PPV',
+        icon: 'ticket',
+        url: '#',
+        image:
+          'https://images.unsplash.com/photo-1518459031867-a89b944bffe4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaWdodCUyMGFyZW5hfGVufDF8fHx8MTc3Njc2MTIzMHww&ixlib=rb-4.1.0&q=80&w=1080',
+      },
+    ],
+  },
+];
