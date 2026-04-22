@@ -44,9 +44,9 @@ export default function Navbar() {
         }}
       >
         <div className="container h-full flex items-center justify-between md:justify-start md:gap-14 lg:gap-20">
-          <div className="flex items-center gap-3">
-            <HooksIcon size={40} />
-            <span className="text-white text-[28px] font-bold tracking-[-0.02em] leading-none">Hooks</span>
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <HooksIcon size={36} />
+            <span className="text-white text-[24px] sm:text-[28px] font-bold tracking-[-0.02em] leading-none">Hooks</span>
           </div>
 
           {/* Desktop nav */}
@@ -71,7 +71,7 @@ export default function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden text-white p-1"
+            className="md:hidden text-white p-1.5"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={copy.toggleMenuAria}
           >
@@ -88,7 +88,7 @@ export default function Navbar() {
         onClick={() => setMobileOpen(false)}
       >
         <div
-          className={`absolute right-0 top-16 w-72 h-[calc(100vh-64px)] bg-[#0A0A0A]/95 backdrop-blur-xl border-l border-white/[0.06] p-8 flex flex-col gap-6 transition-transform duration-300 ease-out ${
+          className={`absolute right-0 top-16 h-[calc(100vh-64px)] w-full max-w-72 bg-[#0A0A0A]/95 backdrop-blur-xl border-l border-white/[0.06] p-8 flex flex-col gap-6 transition-transform duration-300 ease-out ${
             mobileOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -107,6 +107,14 @@ export default function Navbar() {
               {item}
             </a>
           ))}
+          <div className="mt-auto pt-6 border-t border-white/[0.08] flex flex-col gap-3">
+            <a href="#" className="text-white text-[15px] font-medium opacity-85 hover:opacity-100 hover:text-[#D94B78] transition-opacity">
+              {copy.login}
+            </a>
+            <button className="bg-white text-black text-[15px] font-semibold px-6 py-2.5 rounded-full hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+              {copy.primaryCta}
+            </button>
+          </div>
         </div>
       </div>
     </>

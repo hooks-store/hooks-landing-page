@@ -189,12 +189,12 @@ export default function CreatorCarousel() {
   return (
     <div className="relative">
       {/* Edge fades */}
-      <div className="absolute inset-y-0 left-0 w-24 md:w-40 bg-gradient-to-r from-[#0A0A0A] to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-24 md:w-40 bg-gradient-to-l from-[#0A0A0A] to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 left-0 w-16 sm:w-24 md:w-40 bg-gradient-to-r from-[#0A0A0A] to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-16 sm:w-24 md:w-40 bg-gradient-to-l from-[#0A0A0A] to-transparent z-10 pointer-events-none" />
 
       <div
         ref={scrollRef}
-        className="flex gap-5 overflow-x-hidden cursor-grab active:cursor-grabbing select-none px-8"
+        className="flex gap-5 overflow-x-hidden cursor-grab active:cursor-grabbing select-none px-4 sm:px-8"
         onMouseEnter={() => setIsHoverPaused(true)}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -207,7 +207,7 @@ export default function CreatorCarousel() {
         {allCreators.map((creator, index) => (
           <div
             key={index}
-            className="shrink-0 w-[260px] md:w-[280px] rounded-2xl bg-[#141414] overflow-hidden group hover:bg-[#1A1A1A] transition-[background-color,box-shadow] duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+            className="shrink-0 w-[236px] sm:w-[260px] md:w-[280px] rounded-2xl bg-[#141414] overflow-hidden group hover:bg-[#1A1A1A] transition-[background-color,box-shadow] duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
             onClick={() => setIsClickPaused(true)}
           >
             {/* Avatar area */}

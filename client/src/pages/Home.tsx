@@ -332,10 +332,10 @@ export default function Home() {
           <HeroBackgroundVideoLoop />
         </div>
 
-        <div className="container relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-8 py-20">
-          <div className="lg:w-[55%]">
+        <div className="container relative z-10 flex flex-col lg:flex-row items-center gap-10 md:gap-12 lg:gap-8 py-16 sm:py-20">
+          <div className="w-full lg:w-[55%] text-center lg:text-left">
             <h1
-              className="text-[40px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-bold leading-[1.08] tracking-[-0.02em] mb-6"
+              className="text-[34px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-bold leading-[1.08] tracking-[-0.02em] mb-6"
               style={{
                 opacity: heroLoaded ? 1 : 0,
                 transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
@@ -349,7 +349,7 @@ export default function Home() {
               {copy.hero.titleEnd}
             </h1>
             <p
-              className="text-[#C0C0C0] text-base md:text-[17px] max-w-[550px] leading-[1.6] mb-8"
+              className="text-[#C0C0C0] text-base md:text-[17px] max-w-[550px] leading-[1.6] mb-8 mx-auto lg:mx-0"
               style={{
                 opacity: heroLoaded ? 1 : 0,
                 transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
@@ -359,6 +359,7 @@ export default function Home() {
               {copy.hero.subheadline}
             </p>
             <div
+              className="mx-auto w-full max-w-[480px] lg:mx-0"
               style={{
                 opacity: heroLoaded ? 1 : 0,
                 transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
@@ -370,7 +371,7 @@ export default function Home() {
           </div>
 
           <div
-            className="lg:w-[45%] flex justify-center lg:justify-end lg:pr-12 xl:pr-16"
+            className="w-full lg:w-[45%] flex justify-center lg:justify-end lg:pr-12 xl:pr-16"
             style={{
               opacity: heroLoaded ? 1 : 0,
               transform: heroLoaded ? 'translateY(0)' : 'translateY(30px)',
@@ -386,7 +387,7 @@ export default function Home() {
       <section className="pt-20 pb-12 md:pt-32 md:pb-20">
         <div className="container">
           <SectionWrapper>
-            <h2 className="text-[32px] sm:text-[40px] md:text-[52px] lg:text-[60px] font-bold leading-[1.12] tracking-[-0.02em] max-w-[1000px]">
+            <h2 className="text-[28px] sm:text-[40px] md:text-[52px] lg:text-[60px] font-bold leading-[1.12] tracking-[-0.02em] max-w-[1000px]">
               <span className="text-white">{copy.manifesto.intro}</span>
               <span className="text-[#B0B0B0]">{copy.manifesto.line1}</span>
               <span className="text-[#808080]">{copy.manifesto.line2}</span>
@@ -407,16 +408,16 @@ export default function Home() {
         <div className="container">
           <SectionWrapper>
             <p className={SECTION_EYEBROW_CLASS}>{copy.features.eyebrow}</p>
-            <h2 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] max-w-[700px] mb-12 md:mb-16">
+            <h2 className="text-[30px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] max-w-[700px] mb-12 md:mb-16">
               {copy.features.headline}
             </h2>
           </SectionWrapper>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {featureCards.map((card, i) => (
               <SectionWrapper key={card.title} delay={i * 80}>
                 <div className="border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-all duration-300 group">
-                  <div className="h-[390px] relative overflow-hidden">
+                  <div className="h-[320px] sm:h-[390px] relative overflow-hidden">
                     {card.videoSrc ? (
                       <video
                         src={card.videoSrc}
@@ -433,7 +434,7 @@ export default function Home() {
                     )}
                     <div className={`absolute inset-0 bg-gradient-to-t ${card.overlayClass ?? 'from-[#0B1926] via-[#0B1926]/75 to-black/20'}`} />
                   </div>
-                  <div className="bg-[#0A0A0A] p-7 pt-6">
+                  <div className="bg-[#0A0A0A] p-6 sm:p-7 pt-6">
                     <h3 className="text-white text-[24px] font-semibold mb-2">{card.title}</h3>
                     <p className="text-[#8A8F98] text-[15px] leading-[1.6]">{card.desc}</p>
                   </div>
@@ -449,7 +450,7 @@ export default function Home() {
         <div className="container">
           <SectionWrapper>
             <p className={SECTION_EYEBROW_CLASS}>{copy.analytics.eyebrow}</p>
-            <h2 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] mb-12 md:mb-16">
+            <h2 className="text-[30px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] mb-12 md:mb-16">
               {copy.analytics.headline}
             </h2>
           </SectionWrapper>
@@ -457,10 +458,10 @@ export default function Home() {
           <SectionWrapper delay={150}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="card-navy-teal overflow-hidden p-5 md:p-6 transition-all duration-300">
-                <div className="relative h-[260px] md:h-[340px] lg:h-[380px]">
+                <div className="relative h-[230px] sm:h-[260px] md:h-[340px] lg:h-[380px]">
                   <WorldMap />
                   {/* Floating stat cards */}
-                  <div className="absolute top-4 left-4 md:top-6 md:left-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10">
+                  <div className="hidden sm:block absolute top-4 left-4 md:top-6 md:left-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10">
                     <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                         <Eye className="w-4 h-4 text-blue-500" />
@@ -472,7 +473,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="absolute top-20 left-4 md:top-24 md:left-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10" style={{ animationDelay: '0.5s' }}>
+                  <div className="hidden sm:block absolute top-20 left-4 md:top-24 md:left-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10" style={{ animationDelay: '0.5s' }}>
                     <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
                         <Globe className="w-4 h-4 text-green-500" />
@@ -485,7 +486,7 @@ export default function Home() {
                   </div>
 
                   {/* Country breakdown */}
-                  <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10" style={{ animationDelay: '1.5s' }}>
+                  <div className="hidden sm:block absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10" style={{ animationDelay: '1.5s' }}>
                     <div className="space-y-2.5">
                       {copy.analytics.countries.map((item) => (
                         <div key={item.rank} className="flex items-center gap-3">
@@ -534,8 +535,8 @@ export default function Home() {
       <section className="py-20 md:py-28">
         <div className="container">
           <SectionWrapper>
-            <div className="max-w-[750px] mx-auto px-6 md:px-8 text-center">
-              <h2 className="text-5xl md:text-6xl font-bold leading-[1.04] tracking-tight text-[#F1F3F7]">
+            <div className="max-w-[750px] mx-auto px-4 sm:px-6 md:px-8 text-center">
+              <h2 className="text-[38px] sm:text-5xl md:text-6xl font-bold leading-[1.04] tracking-tight text-[#F1F3F7]">
                 {copy.finalCta.line1}<br />
                 {copy.finalCta.line2}<br />
                 {copy.finalCta.line3}
@@ -543,7 +544,7 @@ export default function Home() {
 
               <button
                 type="button"
-                className="mt-12 min-w-[164px] bg-white text-black text-[16px] font-semibold px-8 py-3 rounded-full hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="mt-10 sm:mt-12 w-full sm:w-auto min-w-[164px] bg-white text-black text-[16px] font-semibold px-8 py-3 rounded-full hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 {copy.finalCta.primaryCta}
               </button>

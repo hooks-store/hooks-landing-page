@@ -60,8 +60,8 @@ export default function Footer() {
   return (
     <footer className="bg-[#0A0A0A] border-t border-white/[0.06] pt-20 pb-10">
       <div className="container">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-12">
-          <div className="col-span-2 md:col-span-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 md:gap-12">
+          <div className="col-span-1 sm:col-span-2 md:col-span-1">
             <HooksLogo />
             <p className="text-[#8A8F98] text-sm mt-4 max-w-[200px] leading-relaxed">
               {copy.brandSentence}
@@ -99,7 +99,7 @@ export default function Footer() {
           ))}
         </div>
         <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[#8A8F98] text-sm">&copy; {new Date().getFullYear()} Hooks. {copy.rightsReserved}</p>
+          <p className="text-[#8A8F98] text-sm text-center md:text-left">&copy; {new Date().getFullYear()} Hooks. {copy.rightsReserved}</p>
           <div className="flex gap-6">
             {copy.legalShort.map((item) => (
               <a key={item} href="#" className="text-[#8A8F98] text-xs hover:text-white transition-colors duration-200">
