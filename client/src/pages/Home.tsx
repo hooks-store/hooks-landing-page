@@ -273,7 +273,7 @@ export default function Home() {
       overlayClass: 'from-[#0B1926]/36 via-[#0B1926]/9 to-transparent',
       metricLabel: copy.features.cards.courses.metricLabel,
       metricValue: copy.features.cards.courses.metricValue,
-      icon: <Check className="w-3.5 h-3.5 text-blue-500" />,
+      icon: <Check className="w-4 h-4 text-blue-500" />,
     },
     {
       title: copy.features.cards.coaching.title,

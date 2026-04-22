@@ -2,7 +2,7 @@
 
 ## 1. Environment
 - Use `pnpm` as the package manager.
-- Always run `source ~/.nvm/nvm.sh && nvm use 20` before project commands.
+- Always run `source ~/.nvm/nvm.sh && nvm use 24` before project commands.
 
 ## 2. Development workflow
 - Prefer targeted edits over full rewrites.

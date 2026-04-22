@@ -10,7 +10,7 @@ A high-fidelity Hooks landing page — a premium, dark-themed SaaS marketing sit
 
 | Tool | Version |
 |------|---------|
-| Node.js | 20.x |
+| Node.js | 24.x |
 | pnpm | 10.x (bundled via `packageManager` field) |
 
 ### Installation and Development
@@ -21,7 +21,7 @@ git clone git@github.com:Julianahlk/hooks-landing-page.git
 cd hooks-landing-page
 
 # Use the project Node version
-source ~/.nvm/nvm.sh && nvm use 20
+source ~/.nvm/nvm.sh && nvm use 24
 
 # Install dependencies
 pnpm install
