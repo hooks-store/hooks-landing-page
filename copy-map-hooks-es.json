@@ -68,7 +68,7 @@
       "current_section_guess": "hero",
       "strict_copy": true,
       "section_purpose": "Immediate value proposition and primary conversion point.",
-      "headline": "Construye tu marca y vende desde un solo link",
+      "headline": "Crea tu marca y vende desde un solo link",
       "subheadline": "Productos digitales, cursos, consultorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.",
       "primary_cta": "Crear gratis",
       "input_placeholder": "hooks.store/tu-nombre"
@@ -78,13 +78,12 @@
       "current_section_guess": "large editorial statement section below hero",
       "strict_copy": true,
       "section_purpose": "Broad creator-economy positioning section.",
-      "headline": "La plataforma para la nueva economía de creadores",
+      "headline": "La única plataforma que necesitarás",
       "highlight_lines": [
-        "Haz crecer tu audiencia.",
+        "Crea y crece tu comunidad.",
         "Convierte seguidores en clientes.",
-        "Vende productos.",
-        "Ofrece servicios.",
-        "Monetiza tu contenido."
+        "Vende productos y servicios digitales.",
+        "Monetiza tus redes sociales."
       ]
     },
     {
@@ -177,7 +176,7 @@
   "replace_map": [
     {
       "old": "Tu perfil de productos digitales en minutos",
-      "new": "Construye tu marca y vende desde un solo link"
+      "new": "Crea tu marca y vende desde un solo link"
     },
     {
       "old": "¿Listo para crear tu perfil?",

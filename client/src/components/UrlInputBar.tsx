@@ -25,13 +25,13 @@ export default function UrlInputBar() {
     <div className="flex flex-nowrap items-center bg-white rounded-full h-14 max-w-[480px] w-full pl-2.5 pr-1.5 sm:pl-4 gap-1.5 sm:gap-3 shadow-[0_0_30px_rgba(255,255,255,0.08)] hover:shadow-[0_0_40px_rgba(255,255,255,0.12)] transition-shadow duration-500">
       <div className="flex items-center gap-1.5 sm:gap-2.5 flex-1 basis-0 min-w-0">
         <HooksIcon size={20} />
-        <span className="text-gray-400 text-[13px] sm:text-base select-none shrink-0 whitespace-nowrap">hooks.store/</span>
+        <span className="text-gray-900 text-[13px] sm:text-base font-semibold select-none shrink-0 whitespace-nowrap">hooks.store/</span>
         <input
           type="text"
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
           onFocus={handleFocus}
-          className={`bg-transparent text-[13px] sm:text-base flex-1 min-w-0 outline-none ${slug === defaultSlug ? 'text-gray-400' : 'text-gray-900'}`}
+          className={`bg-transparent text-[13px] sm:text-base font-semibold flex-1 min-w-0 outline-none ${slug === defaultSlug ? 'text-gray-400' : 'text-gray-900'}`}
           aria-label={isSpanish ? 'Tu enlace de Hooks' : 'Your Hooks link'}
           autoComplete="off"
           spellCheck={false}

@@ -4,7 +4,7 @@
  * orange accent (#E8930C), Inter font, magazine-scale typography.
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type CSSProperties } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SectionWrapper from '@/components/SectionWrapper';
@@ -139,16 +139,16 @@ const HOME_COPY = {
     es: {
       hero: {
         rotatingWords: ['marca', 'perfil', 'página'],
-        titleStart: 'Construye tu',
+        titleStart: 'Crea tu',
         titleEnd: 'y vende desde un solo link',
         subheadline: 'Productos digitales, cursos, asesorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.',
       },
     manifesto: {
-      intro: 'La plataforma para la nueva economía de creadores. ',
-      line1: 'Haz crecer tu audiencia. ',
+      intro: 'La única plataforma que necesitarás. ',
+      line1: 'Crea y crece tu comunidad. ',
       line2: 'Convierte seguidores en clientes. ',
-      line3: 'Vende productos. Ofrece servicios. ',
-      line4: 'Monetiza tu contenido.',
+      line3: 'Vende productos y servicios digitales. ',
+      line4: 'Monetiza tus redes sociales.',
     },
     features: {
       eyebrow: 'Monetiza a tu manera',
@@ -210,7 +210,7 @@ const HOME_COPY = {
       frameTitle: 'Visualización premium de estadísticas',
     },
     finalCta: {
-      line1: 'Construye tu perfil.',
+      line1: 'Crea tu perfil.',
       line2: 'Comparte tu link.',
       line3: 'Empieza a cobrar.',
       primaryCta: 'Crear gratis',
@@ -237,6 +237,8 @@ export default function Home() {
   const heroRotatingWords = copy.hero.rotatingWords;
   const [heroLoaded, setHeroLoaded] = useState(false);
   const [heroWordIndex, setHeroWordIndex] = useState(0);
+  const manifestoSectionRef = useRef<HTMLElement | null>(null);
+  const [manifestoScrollProgress, setManifestoScrollProgress] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setHeroLoaded(true), 100);
@@ -254,6 +256,71 @@ export default function Home() {
 
     return () => clearInterval(wordTimer);
   }, [heroRotatingWords.length]);
+
+  useEffect(() => {
+    const sectionElement = manifestoSectionRef.current;
+    if (!sectionElement || typeof window === 'undefined') {
+      return undefined;
+    }
+
+    let animationFrameId: number | null = null;
+
+    const updateProgress = () => {
+      animationFrameId = null;
+
+      const rect = sectionElement.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || 1;
+      const start = viewportHeight * 2;
+      const end = viewportHeight * 0.2;
+      const scrollDistance = rect.height + (start - end);
+      const traveled = start - rect.top * 3;
+      const nextProgress = Math.min(1, Math.max(0, traveled / Math.max(scrollDistance, 1)));
+      setManifestoScrollProgress(nextProgress);
+    };
+
+    const requestProgressUpdate = () => {
+      if (animationFrameId !== null) {
+        return;
+      }
+
+      animationFrameId = window.requestAnimationFrame(updateProgress);
+    };
+
+    updateProgress();
+    window.addEventListener('scroll', requestProgressUpdate, { passive: true });
+    window.addEventListener('resize', requestProgressUpdate);
+
+    return () => {
+      if (animationFrameId !== null) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+      window.removeEventListener('scroll', requestProgressUpdate);
+      window.removeEventListener('resize', requestProgressUpdate);
+    };
+  }, []);
+
+  const manifestoHighlightLines = [
+    copy.manifesto.line1,
+    copy.manifesto.line2,
+    copy.manifesto.line3,
+    copy.manifesto.line4,
+  ];
+  const manifestoLineHighlightStrengths = manifestoHighlightLines.map((_, index) => {
+    const segmentSize = 1 / manifestoHighlightLines.length;
+    const segmentStart = index * segmentSize;
+    const segmentProgress = (manifestoScrollProgress - segmentStart) / segmentSize;
+
+    if (segmentProgress <= 0 || segmentProgress >= 1) {
+      return 0;
+    }
+
+    const triangularProgress = segmentProgress <= 0.5
+      ? segmentProgress * 2
+      : (1 - segmentProgress) * 2;
+
+    // Smooths the highlight in/out while staying locked to scroll progress.
+    return triangularProgress * triangularProgress * (3 - 2 * triangularProgress);
+  });
 
   const featureCards = [
     {
@@ -331,6 +398,7 @@ export default function Home() {
         <div className="absolute inset-0 overflow-hidden">
           <HeroBackgroundVideoLoop />
         </div>
+        <div className="absolute inset-0 bg-black/50 pointer-events-none" />
 
         <div className="container relative z-10 flex flex-col lg:flex-row items-center gap-10 md:gap-12 lg:gap-8 py-16 sm:py-20">
           <div className="w-full lg:w-[55%] text-center lg:text-left">
@@ -349,7 +417,7 @@ export default function Home() {
               {copy.hero.titleEnd}
             </h1>
             <p
-              className="text-[#C0C0C0] text-base md:text-[17px] max-w-[550px] leading-[1.6] mb-8 mx-auto lg:mx-0"
+              className="text-white text-base md:text-[17px] max-w-[550px] leading-[1.6] mb-8 mx-auto lg:mx-0"
               style={{
                 opacity: heroLoaded ? 1 : 0,
                 transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
@@ -384,15 +452,20 @@ export default function Home() {
       </section>
 
       {/* ===== 2. MANIFESTO / CREATOR CAROUSEL ===== */}
-      <section className="pt-20 pb-12 md:pt-32 md:pb-20">
+      <section ref={manifestoSectionRef} className="pt-20 pb-12 md:pt-32 md:pb-20">
         <div className="container">
           <SectionWrapper>
-            <h2 className="text-[28px] sm:text-[40px] md:text-[52px] lg:text-[60px] font-bold leading-[1.12] tracking-[-0.02em] max-w-[1000px]">
+            <h2 className="w-full text-left text-[28px] sm:text-[40px] md:text-[52px] lg:text-[60px] font-bold leading-[1.12] tracking-[-0.02em]">
               <span className="text-white">{copy.manifesto.intro}</span>
-              <span className="text-[#B0B0B0]">{copy.manifesto.line1}</span>
-              <span className="text-[#808080]">{copy.manifesto.line2}</span>
-              <span className="text-[#D94B78]">{copy.manifesto.line3}</span>
-              <span className="text-[#555555]">{copy.manifesto.line4}</span>
+              {manifestoHighlightLines.map((line, index) => (
+                <span
+                  key={`${locale}-manifesto-line-${index}`}
+                  className="manifesto-line-scroll"
+                  style={{ '--line-highlight': manifestoLineHighlightStrengths[index] } as CSSProperties}
+                >
+                  {line}
+                </span>
+              ))}
             </h2>
           </SectionWrapper>
         </div>
