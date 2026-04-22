@@ -173,7 +173,7 @@ export default function PhoneMockup() {
   }, [autoplayStarted, activeIndex, navigate]);
 
   return (
-    <div className="relative w-[300px] h-[618px] sm:w-[330px] sm:h-[678px] md:w-[360px] md:h-[740px]" style={{ perspective: 1200 }}>
+    <div className="relative w-[255px] h-[525.3px] sm:w-[280.5px] sm:h-[576.3px] md:w-[306px] md:h-[629px]" style={{ perspective: 1200 }}>
       <motion.div
         className="absolute inset-8 rounded-full blur-[60px] opacity-30 pointer-events-none"
         animate={{ backgroundColor: activeCreator.color }}
