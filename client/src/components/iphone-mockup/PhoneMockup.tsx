@@ -30,6 +30,13 @@ interface IconRendererProps {
   className?: string;
 }
 
+const INSTAGRAM_GLYPH_WHITE_SRC = '/images/icons/instagram-glyph-white.svg';
+const TIKTOK_SOCIAL_ICON_CIRCLE_BLACK_SRC = '/images/icons/tiktok-social-icon-circle-black.svg';
+const YOUTUBE_ICON_WHITE_DIGITAL_SRC = '/images/icons/youtube-icon-white-digital.png';
+const X_LOGO_SRC = '/images/icons/x-logo.svg';
+const FACEBOOK_LOGO_PRIMARY_SRC = '/images/icons/facebook-logo-primary.png';
+const SPOTIFY_PRIMARY_LOGO_RGB_BLACK_SRC = '/images/icons/spotify-primary-logo-rgb-green.png';
+
 function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
   switch (name) {
     case 'badge-check':
@@ -55,8 +62,86 @@ function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
       );
     case 'youtube':
       return <Youtube size={size} className={className} />;
+    case 'youtube-official':
+      return (
+        <img
+          src={YOUTUBE_ICON_WHITE_DIGITAL_SRC}
+          alt=""
+          width={size}
+          height={size}
+          className={className}
+          loading="lazy"
+          decoding="async"
+          aria-hidden="true"
+        />
+      );
     case 'discord':
       return <Disc size={size} className={className} />;
+    case 'instagram-official':
+      return (
+        <img
+          src={INSTAGRAM_GLYPH_WHITE_SRC}
+          alt=""
+          width={size}
+          height={size}
+          className={className}
+          loading="lazy"
+          decoding="async"
+          aria-hidden="true"
+        />
+      );
+    case 'tiktok-official':
+      return (
+        <img
+          src={TIKTOK_SOCIAL_ICON_CIRCLE_BLACK_SRC}
+          alt=""
+          width={size}
+          height={size}
+          className={className}
+          loading="lazy"
+          decoding="async"
+          aria-hidden="true"
+        />
+      );
+    case 'x-official':
+      return (
+        <img
+          src={X_LOGO_SRC}
+          alt=""
+          width={size}
+          height={size}
+          className={className}
+          loading="lazy"
+          decoding="async"
+          aria-hidden="true"
+        />
+      );
+    case 'facebook-official':
+      return (
+        <img
+          src={FACEBOOK_LOGO_PRIMARY_SRC}
+          alt=""
+          width={size}
+          height={size}
+          className={className}
+          loading="lazy"
+          decoding="async"
+          aria-hidden="true"
+        />
+      );
+    case 'spotify-official':
+      return (
+        <img
+          src={SPOTIFY_PRIMARY_LOGO_RGB_BLACK_SRC}
+          alt=""
+          width={size}
+          height={size}
+          className={className}
+          loading="lazy"
+          decoding="async"
+          aria-hidden="true"
+        />
+      );
     case 'instagram':
       return <Instagram size={size} className={className} />;
     case 'twitter':
@@ -98,6 +183,15 @@ const transition = { duration: 0.9, ease: [0.65, 0, 0.35, 1] as [number, number,
 const AUTOPLAY_INTERVAL_MS = 3500;
 const AUTOPLAY_INITIAL_DELAY_MS = 1500;
 const NAVIGATION_GUARD_MS = 650;
+const PROFILE_SOCIAL_ICON_SIZE = 26;
+const PROFILE_SOCIAL_GLYPH_SIZE = 16;
+const REQUIRED_PROFILE_SOCIALS = ['spotify', 'facebook', 'twitter'] as const;
+const FULL_BADGE_PROFILE_LOGOS = new Set(['tiktok-official', 'facebook-official', 'spotify-official']);
+const PROFILE_SOCIAL_ICON_SIZE_OVERRIDES: Record<string, number> = {
+  'instagram-official': 16,
+  'x-official': 14,
+  'youtube-official': 16,
+};
 
 const cardVariants = {
   center: { x: '0%', scale: 1, opacity: 1, zIndex: 10, y: 0, rotateY: 0 },
@@ -239,26 +333,58 @@ export default function PhoneMockup() {
                   </motion.p>
                 </div>
 
-                <div className="absolute bottom-[50%] pb-4 left-0 right-0 flex gap-4 justify-center w-full z-40">
-                  {creator.socials.map((social, idx) => {
+                <div className="absolute bottom-[50%] pb-2 left-0 right-0 flex gap-2 justify-center w-full z-40">
+                  {[
+                    ...creator.socials,
+                    ...REQUIRED_PROFILE_SOCIALS.filter((icon) => !creator.socials.some((social) => social.icon === icon)).map((icon) => ({
+                      icon,
+                      url: '#',
+                    })),
+                  ].map((social, idx) => {
                     const brandColors: Record<string, string> = {
                       youtube: '#FF0000',
                       instagram: '#E1306C',
                       tiktok: '#111111',
                       discord: '#5865F2',
-                      twitter: '#1DA1F2',
+                      twitter: '#000000',
                       podcast: '#8F00FF',
                       spotify: '#1DB954',
                       twitch: '#9146FF',
                     };
                     const brandColor = brandColors[social.icon] || creator.color;
+                    const iconName =
+                      social.icon === 'instagram'
+                        ? 'instagram-official'
+                        : social.icon === 'youtube'
+                          ? 'youtube-official'
+                        : social.icon === 'tiktok'
+                          ? 'tiktok-official'
+                        : social.icon === 'facebook'
+                          ? 'facebook-official'
+                        : social.icon === 'spotify'
+                          ? 'spotify-official'
+                        : social.icon === 'twitter'
+                          ? 'x-official'
+                          : social.icon;
+                    const isFullBadgeLogo = FULL_BADGE_PROFILE_LOGOS.has(iconName);
+                    const iconSize = isFullBadgeLogo
+                      ? PROFILE_SOCIAL_ICON_SIZE
+                      : PROFILE_SOCIAL_ICON_SIZE_OVERRIDES[iconName] ?? PROFILE_SOCIAL_GLYPH_SIZE;
                     return (
                       <div
                         key={`${social.icon}-${idx}`}
-                        className="w-10 h-10 rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
-                        style={{ backgroundColor: brandColor }}
+                        className="rounded-full overflow-hidden flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
+                        style={{
+                          width: PROFILE_SOCIAL_ICON_SIZE,
+                          height: PROFILE_SOCIAL_ICON_SIZE,
+                          backgroundColor: isFullBadgeLogo ? undefined : brandColor,
+                        }}
                       >
-                        <IconRenderer name={social.icon} size={18} className="text-white" />
+                        <IconRenderer
+                          name={iconName}
+                          size={iconSize}
+                          className="text-white"
+                        />
                       </div>
                     );
                   })}

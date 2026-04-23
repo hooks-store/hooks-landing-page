@@ -84,7 +84,7 @@ export const CREATORS: Creator[] = [
     socials: [
       { icon: 'spotify', url: '#' },
       { icon: 'instagram', url: '#' },
-      { icon: 'twitter', url: '#' },
+      { icon: 'tiktok', url: '#' },
     ],
     links: [
       {
@@ -142,8 +142,8 @@ export const CREATORS: Creator[] = [
     followers: '4.3M',
     gridStyle: '1x2-featured',
     socials: [
-      { icon: 'twitter', url: '#' },
       { icon: 'instagram', url: '#' },
+      { icon: 'tiktok', url: '#' },
       { icon: 'youtube', url: '#' },
     ],
     links: [
@@ -183,8 +183,8 @@ export const CREATORS: Creator[] = [
     socials: [
       { icon: 'podcast', url: '#' },
       { icon: 'spotify', url: '#' },
+      { icon: 'tiktok', url: '#' },
       { icon: 'youtube', url: '#' },
-      { icon: 'twitter', url: '#' },
     ],
     links: [
       {
@@ -288,7 +288,7 @@ export const CREATORS: Creator[] = [
     gridStyle: 'mixed-media',
     socials: [
       { icon: 'instagram', url: '#' },
-      { icon: 'twitter', url: '#' },
+      { icon: 'tiktok', url: '#' },
       { icon: 'twitch', url: '#' },
     ],
     links: [
@@ -334,7 +334,7 @@ export const CREATORS: Creator[] = [
     gridStyle: 'lead-gen',
     socials: [
       { icon: 'youtube', url: '#' },
-      { icon: 'twitter', url: '#' },
+      { icon: 'tiktok', url: '#' },
       { icon: 'discord', url: '#' },
     ],
     links: [
@@ -380,7 +380,7 @@ export const CREATORS: Creator[] = [
     gridStyle: 'carousel',
     socials: [
       { icon: 'instagram', url: '#' },
-      { icon: 'twitter', url: '#' },
+      { icon: 'tiktok', url: '#' },
       { icon: 'youtube', url: '#' },
     ],
     links: [

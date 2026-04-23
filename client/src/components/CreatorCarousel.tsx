@@ -111,17 +111,62 @@ const socialColors: Record<string, string> = {
   TH: '#FF5500',
 };
 
+const socialIconSources: Record<string, string> = {
+  IG: '/images/icons/instagram-glyph-white.svg',
+  X: '/images/icons/x-logo.svg',
+  TT: '/images/icons/tiktok-social-icon-circle-black.svg',
+  FB: '/images/icons/facebook-logo-primary.png',
+  SP: '/images/icons/spotify-primary-logo-rgb-green.png',
+  YT: '/images/icons/youtube-icon-white-digital.png',
+};
+
+const carouselSocials = ['IG', 'X', 'TT', 'FB', 'SP', 'YT'];
+
+const socialLabels: Record<string, string> = {
+  IG: 'Instagram',
+  X: 'X',
+  TT: 'TikTok',
+  FB: 'Facebook',
+  SP: 'Spotify',
+  YT: 'YouTube',
+};
+
+const AUTOSCROLL_PX_PER_SECOND = 48;
+
+function VerifiedBadgeIcon({ size = 16, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#ffffff"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
+        fill="currentColor"
+      />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  );
+}
+
 export default function CreatorCarousel() {
   const { locale } = useLanguage();
   const isSpanish = locale === 'es';
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isHoverPaused, setIsHoverPaused] = useState(false);
-  const [isClickPaused, setIsClickPaused] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const animRef = useRef<number>(0);
-  const isAutoScrollPaused = isDragging || isHoverPaused || isClickPaused;
+  const isAutoScrollPaused = isDragging || isHoverPaused;
 
   // Auto-scroll
   useEffect(() => {
@@ -129,11 +174,15 @@ export default function CreatorCarousel() {
     if (!el || isAutoScrollPaused) return;
 
     let pos = el.scrollLeft;
+    let lastTime = performance.now();
 
-    const animate = () => {
-      pos += 0.6;
-      if (pos >= el.scrollWidth / 2) {
-        pos = 0;
+    const animate = (now: number) => {
+      const deltaMs = Math.min(now - lastTime, 32);
+      lastTime = now;
+      pos += (AUTOSCROLL_PX_PER_SECOND * deltaMs) / 1000;
+      const loopPoint = el.scrollWidth / 2;
+      if (pos >= loopPoint) {
+        pos -= loopPoint;
       }
       el.scrollLeft = pos;
       animRef.current = requestAnimationFrame(animate);
@@ -208,7 +257,6 @@ export default function CreatorCarousel() {
           <div
             key={index}
             className="shrink-0 w-[236px] sm:w-[260px] md:w-[280px] rounded-2xl bg-[#141414] overflow-hidden group hover:bg-[#1A1A1A] transition-[background-color,box-shadow] duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
-            onClick={() => setIsClickPaused(true)}
           >
             {/* Avatar area */}
             <div className="h-52 relative overflow-hidden">
@@ -219,32 +267,43 @@ export default function CreatorCarousel() {
                 style={{ objectPosition: creator.imagePosition }}
                 draggable={false}
                 onDragStart={(e) => e.preventDefault()}
+                loading="lazy"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
             </div>
 
             {/* Info */}
             <div className="p-5">
-              <div className="flex items-center gap-1.5 mb-0.5">
-                <h3 className="text-white text-[17px] font-bold truncate">{creator.name}</h3>
-                <svg className="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="#3B82F6">
-                  <path d="M8 0L10.2 2.5H13.5L12.5 5.8L14.7 8.3L11.8 9.7L11 13L8 11.5L5 13L4.2 9.7L1.3 8.3L3.5 5.8L2.5 2.5H5.8L8 0Z" />
-                  <path d="M6.5 8.5L7.5 9.5L10 6.5" fill="none" stroke="white" strokeWidth="1.2" />
-                </svg>
+              <div className="flex items-center justify-center gap-1.5 mb-0.5">
+                <h3 className="text-white text-[17px] font-bold text-center">{creator.name}</h3>
+                <VerifiedBadgeIcon size={16} className="text-[#38BDF8] shrink-0 drop-shadow-md" />
               </div>
-              <p className="text-[#8A8F98] text-sm mb-3">{creator.handle}</p>
+              <p className="text-[#8A8F98] text-sm mb-3 text-center">{creator.handle}</p>
 
               {/* Social icons */}
-              <div className="flex gap-1.5 mb-3 flex-wrap">
-                {creator.socials.map((s, i) => (
-                  <div
-                    key={i}
-                    className="w-6 h-6 rounded-full flex items-center justify-center text-[7px] font-bold text-white shadow-sm hover:scale-125 transition-transform duration-200"
-                    style={{ background: socialColors[s] || '#666' }}
-                  >
-                    {s}
-                  </div>
-                ))}
+              <div className="flex gap-1.5 mb-3 flex-wrap justify-center items-center">
+                {carouselSocials.map((s, i) => {
+                  const hasStandaloneLogo = s === 'TT' || s === 'FB' || s === 'SP';
+                  const isSpotify = s === 'SP';
+                  return (
+                    <div
+                      key={i}
+                      className={`w-6 h-6 flex items-center justify-center overflow-hidden hover:scale-125 transition-transform duration-200 ${
+                        hasStandaloneLogo ? '' : 'rounded-full shadow-sm'
+                      }`}
+                      style={hasStandaloneLogo ? undefined : { background: socialColors[s] || '#666' }}
+                    >
+                      <img
+                        src={socialIconSources[s]}
+                        alt={isSpanish ? `Logo de ${socialLabels[s]}` : `${socialLabels[s]} logo`}
+                        className={`block object-contain object-center ${isSpotify ? 'w-6 h-6' : hasStandaloneLogo ? 'w-full h-full' : 'w-3.5 h-3.5'}`}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                  );
+                })}
               </div>
 
               <p className="text-white text-sm text-center mb-1.5 font-medium">
