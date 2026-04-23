@@ -39,7 +39,7 @@ export const CREATORS: Creator[] = [
     accentColor: '#FFFFFF',
     image:
       'https://images.unsplash.com/photo-1600638270210-1fb2dc4ab48a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMHRyYXZlbCUyMGNyZWF0b3IlMjBleHBsb3JlJTIwb3V0ZG9vcnN8ZW58MXx8fHwxNzc2NzYwOTIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
-    title: 'Exploring the 7 Wonders.',
+    title: 'Explorando las 7 maravillas.',
     followers: '1.1M',
     gridStyle: 'single-wide',
     socials: [
@@ -49,21 +49,21 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'My Latest Vlog',
+        title: 'Mi vlog más reciente',
         icon: 'youtube',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmF2ZWwlMjBsYW5kc2NhcGV8ZW58MXx8fHwxNzc2NzYxMjIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Travel Guide 2026',
+        title: 'Guía de viaje 2026',
         icon: 'globe',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWFjaCUyMHRyYXZlbHxlbnwxfHx8fDE3NzY3NjEyMjB8MA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Packing Essentials',
+        title: 'Esenciales para empacar',
         icon: 'merch',
         url: '#',
         image:
@@ -78,7 +78,7 @@ export const CREATORS: Creator[] = [
     accentColor: '#7DF9FF',
     image:
       'https://images.unsplash.com/photo-1695277578924-effbf2f02440?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkaiUyMHNpbmdlciUyMHBlcmZvcm1pbmclMjBzdGFnZSUyMGNvbmNlcnQlMjBsaWdodHN8ZW58MXx8fHwxNzc2NzYwOTIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
-    title: 'Future Anthems Now. New single.',
+    title: 'Himnos del futuro, ahora. Nuevo sencillo.',
     followers: '530K',
     gridStyle: 'mixed-stack',
     socials: [
@@ -88,42 +88,42 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Stream New Single',
+        title: 'Escucha el nuevo sencillo',
         icon: 'music',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb25jZXJ0JTIwY3Jvd2R8ZW58MXx8fHwxNzc2NzYxMjIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Tour Tickets',
+        title: 'Entradas de la gira',
         icon: 'ticket',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsaXZlJTIwbXVzaWN8ZW58MXx8fHwxNzc2NzYxMjIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Merch',
+        title: 'Merch oficial',
         icon: 'merch',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcHBhcmVsfGVufDF8fHx8MTc3Njc2MTIyMXww&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Behind the Scenes',
+        title: 'Detrás de cámaras',
         icon: 'youtube',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWNvcmRpbmclMjBzdHVkaW98ZW58MXx8fHwxNzc2NzYxMjIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Spotify Playlist',
+        title: 'Playlist de Spotify',
         icon: 'spotify',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMHBsYXllcnxlbnwxfHx8fDE3NzY3NjEyMjF8MA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Fan Club',
+        title: 'Club de fans',
         icon: 'heart',
         url: '#',
         image:
@@ -138,7 +138,7 @@ export const CREATORS: Creator[] = [
     accentColor: '#FF8200',
     image:
       'https://images.unsplash.com/photo-1749743823062-df9d9de55e94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYXNrZXRiYWxsJTIwcGxheWVyJTIwYXRobGV0ZSUyMHNwb3J0JTIwYXJlbmF8ZW58MXx8fHwxNzc2NzYwOTIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
-    title: 'Ball. Business. Building a legacy.',
+    title: 'Baloncesto. Negocios. Construyendo un legado.',
     followers: '4.3M',
     gridStyle: '1x2-featured',
     socials: [
@@ -148,21 +148,21 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Highlight Reel',
+        title: 'Mejores jugadas',
         icon: 'youtube',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1546519638-68e109498ffc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYXNrZXRiYWxsJTIwY291cnR8ZW58MXx8fHwxNzc2NzYxMjIyfDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Signature Shoes',
+        title: 'Zapatillas exclusivas',
         icon: 'merch',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbmVha2Vyc3xlbnwxfHx8fDE3NzY3NjEyMjJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Foundation',
+        title: 'Fundación',
         icon: 'heart',
         url: '#',
         image:
@@ -177,7 +177,7 @@ export const CREATORS: Creator[] = [
     accentColor: '#F3E5DC',
     image:
       'https://images.unsplash.com/photo-1655947717064-d856af599bd1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb2RjYXN0JTIwc3R1ZGlvJTIwbWljcm9waG9uZSUyMGhlYWRwaG9uZXMlMjBicm9hZGNhc3R8ZW58MXx8fHwxNzc2NzYwOTIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
-    title: 'Deep dives into performance. All my links down below.',
+    title: 'Análisis profundos sobre rendimiento. Todos mis links aquí abajo.',
     followers: '100K',
     gridStyle: 'balanced',
     socials: [
@@ -188,42 +188,42 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Ep 142: Focus',
+        title: 'Ep 142: Enfoque',
         icon: 'podcast',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1583531172005-814191b8b6c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb2RjYXN0JTIwZXBpc29kZXxlbnwxfHx8fDE3NzY3NjEyMjN8MA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Ep 141: Habits',
+        title: 'Ep 141: Hábitos',
         icon: 'podcast',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1589903308904-1010c2294adc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkaW8lMjBtaWN8ZW58MXx8fHwxNzc2NzYxMjIzfDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Ep 140: Sleep',
+        title: 'Ep 140: Sueño',
         icon: 'podcast',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhdWRpbyUyMHJlY29yZGluZ3xlbnwxfHx8fDE3NzY3NjEyMjR8MA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Ep 139: Routine',
+        title: 'Ep 139: Rutina',
         icon: 'podcast',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiY2tncm91bmQlMjBhdWRpb3xlbnwxfHx8fDE3NzY3NjEyMjR8MA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Newsletter',
+        title: 'Boletín',
         icon: 'mail',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbWFpbCUyMG5ld3NsZXR0ZXJ8ZW58MXx8fHwxNzc2NzYxMjI0fDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Join Patreon',
+        title: 'Únete a Patreon',
         icon: 'patreon',
         url: '#',
         image:
@@ -237,7 +237,7 @@ export const CREATORS: Creator[] = [
     color: '#E2725B',
     accentColor: '#B2AC88',
     image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=1080',
-    title: 'Gourmet, accessible recipes. Links down below.',
+    title: 'Recetas gourmet y accesibles. Links aquí abajo.',
     followers: '12.4M',
     gridStyle: 'quad',
     socials: [
@@ -247,7 +247,7 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'New Cookbook',
+        title: 'Nuevo libro de recetas',
         icon: 'merch',
         url: '#',
         image:
@@ -261,14 +261,14 @@ export const CREATORS: Creator[] = [
           'https://images.unsplash.com/photo-1556910103-1c02745aae4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxraXRjaGVuJTIwY29va2luZ3xlbnwxfHx8fDE3NzY3NjEyMjV8MA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Kitchen Gear',
+        title: 'Equipo de cocina',
         icon: 'merch',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1581622558667-3419a8dc5f83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxraXRjaGVuJTIwZXF1aXBtZW50fGVufDF8fHx8MTc3Njc2MTIyNnww&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Secret Recipes',
+        title: 'Recetas secretas',
         icon: 'mail',
         url: '#',
         image:
@@ -283,7 +283,7 @@ export const CREATORS: Creator[] = [
     accentColor: '#FFFFFF',
     image:
       'https://images.unsplash.com/photo-1699519638135-a6734c58b361?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2NjZXIlMjBmb290YmFsbCUyMHBsYXllciUyMGZpZWxkJTIwc3RhZGl1bXxlbnwxfHx8fDE3NzY3NjA5MjF8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    title: 'Soccer is life. All my links down below.',
+    title: 'El fútbol es vida. Todos mis links aquí abajo.',
     followers: '280K',
     gridStyle: 'mixed-media',
     socials: [
@@ -293,28 +293,28 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Twitch Streams',
+        title: 'Streams en Twitch',
         icon: 'twitch',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYW1pbmclMjBzdHJlYW18ZW58MXx8fHwxNzc2NzYxMjI2fDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'E-Sports Team',
+        title: 'Equipo de eSports',
         icon: 'gamepad',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1511512578047-dfb367046420?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHhlc3BvcnRzfGVufDF8fHx8MTc3Njc2MTIyN3ww&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'My Club',
+        title: 'Mi club',
         icon: 'globe',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1775725181800-f55689a25857?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2NjZXIlMjB0ZWFtJTIwY2x1YiUyMHN0YWRpdW18ZW58MXx8fHwxNzc2Nzc4MTYxfDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Highlights',
+        title: 'Mejores jugadas',
         icon: 'youtube',
         url: '#',
         image:
@@ -329,7 +329,7 @@ export const CREATORS: Creator[] = [
     accentColor: '#008080',
     image:
       'https://images.unsplash.com/photo-1758523670550-223a01cd7764?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW4lMjB2aXJ0dWFsJTIwcmVhbGl0eSUyMGhlYWRzZXR8ZW58MXx8fHwxNzc2Nzc2MjYyfDA&ixlib=rb-4.1.0&q=80&w=1080',
-    title: 'Honest data. No bias. Your email below.',
+    title: 'Datos honestos. Sin sesgos. Tu correo abajo.',
     followers: '21.3M',
     gridStyle: 'lead-gen',
     socials: [
@@ -339,28 +339,28 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'My Gear List',
+        title: 'Mi lista de equipo',
         icon: 'merch',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1498049794561-7780e7231661?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNoJTIwZ2VhcnxlbnwxfHx8fDE3NzY3NjEyMjh8MA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'PC Builds',
+        title: 'Armados de PC',
         icon: 'gamepad',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwYyUyMGJ1aWxkfGVufDF8fHx8MTc3Njc2MTIyOHww&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Discord Server',
+        title: 'Servidor de Discord',
         icon: 'discord',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1614680376408-81e91ffe3db7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkaXNjb3JkJTJMJTIwdGVjaHxlbnwxfHx8fDE3NzY3NjEyMjl8MA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Sponsors',
+        title: 'Patrocinios',
         icon: 'mail',
         url: '#',
         image:
@@ -375,7 +375,7 @@ export const CREATORS: Creator[] = [
     accentColor: '#EA4335',
     image:
       'https://images.unsplash.com/photo-1636581563711-cd454f1bf99a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMGJveGVyJTIwZmlnaHRlciUyMHJpbmclMjB0cmFpbmluZyUyMGdsb3Zlc3xlbnwxfHx8fDE3NzY3NjA5MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    title: 'Fighter. Champion. Legend. Links down below.',
+    title: 'Peleadora. Campeona. Leyenda. Links aquí abajo.',
     followers: '190K',
     gridStyle: 'carousel',
     socials: [
@@ -385,28 +385,28 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Fight Camp Merch',
+        title: 'Merch del campamento',
         icon: 'merch',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3hpbmclMjBnbG92ZXN8ZW58MXx8fHwxNzc2NzU0MjMzfDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Workout Plan',
+        title: 'Plan de entrenamiento',
         icon: 'activity',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1647482272246-cd545777ad0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxNTUElMjBmaWdodGVyJTIwd29ya291dCUyMHRyYWluaW5nJTIwaW50ZW5zaXR5fGVufDF8fHx8MTc3Njc3Mjg0NHww&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Sponsors',
+        title: 'Patrocinios',
         icon: 'mail',
         url: '#',
         image:
           'https://images.unsplash.com/photo-1773682614225-c9b92727ce1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcG9ydHMlMjBicmFuZCUyMHNwb25zb3JzaGlwJTIwZGVhbCUyMGF0aGxldGV8ZW58MXx8fHwxNzc2NzcyODQ0fDA&ixlib=rb-4.1.0&q=80&w=1080',
       },
       {
-        title: 'Next Fight PPV',
+        title: 'Próxima pelea PPV',
         icon: 'ticket',
         url: '#',
         image:

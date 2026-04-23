@@ -219,7 +219,7 @@ const HOME_COPY = {
       trust3: 'Hecho para creadores',
     },
     phone: {
-      totalFollowers: 'Seguidores totales',
+      totalFollowers: 'Total de seguidores',
       allLinks: 'TODOS MIS LINKS',
       youtube: 'YouTube',
     },

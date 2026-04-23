@@ -5,7 +5,7 @@ interface ConnectBarProps {
   onConnect?: (value: string) => void;
 }
 
-export function ConnectBar({ placeholder = 'your@email.com', onConnect }: ConnectBarProps) {
+export function ConnectBar({ placeholder = 'tu@email.com', onConnect }: ConnectBarProps) {
   const [value, setValue] = useState('');
 
   return (
@@ -52,7 +52,7 @@ export function ConnectBar({ placeholder = 'your@email.com', onConnect }: Connec
           lineHeight: 1,
         }}
       >
-        Connect with
+        Conectar con
       </button>
     </div>
   );

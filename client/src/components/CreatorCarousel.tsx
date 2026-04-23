@@ -248,7 +248,7 @@ export default function CreatorCarousel() {
               </div>
 
               <p className="text-white text-sm text-center mb-1.5 font-medium">
-                {creator.followers} {isSpanish ? 'Seguidores totales' : 'Total Followers'} <span className="text-[#8A8F98] text-xs">▾</span>
+                {creator.followers} {isSpanish ? 'Total de seguidores' : 'Total Followers'} <span className="text-[#8A8F98] text-xs">▾</span>
               </p>
               <p className="text-[#8A8F98] text-xs text-center whitespace-pre-line leading-relaxed">{isSpanish ? creator.bio.es : creator.bio.en}</p>
             </div>
