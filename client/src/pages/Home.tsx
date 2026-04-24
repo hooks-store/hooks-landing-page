@@ -46,7 +46,7 @@ const HOME_COPY = {
   en: {
     hero: {
       rotatingPhrases: ['Build your brand', 'Build your store', 'Build your page'],
-      titleEnd: 'and sell from one link',
+        titleEnd: 'and sell from one link.',
       subheadline: 'Digital products, courses, coaching, memberships, and more. Hooks gives you what you need to turn your audience into revenue.',
     },
     manifesto: {
@@ -143,13 +143,12 @@ const HOME_COPY = {
           'Comparte tus enlaces',
           'Hazte viral',
           'Crece tu comunidad',
-          'Conecta con seguidores',
           'Crea tus cursos',
           'Agenda tus llamadas',
           'Crea membresías',
           'Crea con IA',
         ],
-        titleEnd: 'y vende desde un solo link',
+        titleEnd: 'y vende desde un solo link.',
         subheadline: 'Productos digitales, cursos, asesorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.',
       },
     manifesto: {
@@ -410,7 +409,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/50 pointer-events-none" />
 
         <div className="container relative z-10 flex flex-col lg:flex-row items-center gap-10 md:gap-12 lg:gap-8 py-16 sm:py-20">
-          <div className="w-full lg:w-[55%] text-center lg:text-left">
+          <div className="w-full lg:w-[55%] text-left">
             <h1
               className="text-[34px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-bold leading-[1.08] tracking-[-0.02em] mb-6"
               style={{
