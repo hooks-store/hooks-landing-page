@@ -45,8 +45,7 @@ const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
 const HOME_COPY = {
   en: {
     hero: {
-      rotatingWords: ['brand', 'store', 'page'],
-      titleStart: 'Build your',
+      rotatingPhrases: ['Build your brand', 'Build your store', 'Build your page'],
       titleEnd: 'and sell from one link',
       subheadline: 'Digital products, courses, coaching, memberships, and more. Hooks gives you what you need to turn your audience into revenue.',
     },
@@ -138,8 +137,18 @@ const HOME_COPY = {
   },
     es: {
       hero: {
-        rotatingWords: ['marca', 'perfil', 'página'],
-        titleStart: 'Crea tu',
+        rotatingPhrases: [
+          'Crea tu marca',
+          'Gana dinero',
+          'Comparte tus enlaces',
+          'Hazte viral',
+          'Crece tu comunidad',
+          'Conecta con seguidores',
+          'Crea tus cursos',
+          'Agenda tus llamadas',
+          'Crea membresías',
+          'Crea con IA',
+        ],
         titleEnd: 'y vende desde un solo link',
         subheadline: 'Productos digitales, cursos, asesorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.',
       },
@@ -234,9 +243,9 @@ const HOME_COPY = {
 export default function Home() {
   const { locale } = useLanguage();
   const copy = HOME_COPY[locale];
-  const heroRotatingWords = copy.hero.rotatingWords;
+  const heroRotatingPhrases = copy.hero.rotatingPhrases;
   const [heroLoaded, setHeroLoaded] = useState(false);
-  const [heroWordIndex, setHeroWordIndex] = useState(0);
+  const [heroPhraseIndex, setHeroPhraseIndex] = useState(0);
   const manifestoSectionRef = useRef<HTMLElement | null>(null);
   const [manifestoScrollProgress, setManifestoScrollProgress] = useState(0);
 
@@ -246,16 +255,16 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    setHeroWordIndex(0);
+    setHeroPhraseIndex(0);
   }, [locale]);
 
   useEffect(() => {
-    const wordTimer = setInterval(() => {
-      setHeroWordIndex((current) => (current + 1) % heroRotatingWords.length);
-    }, 2200);
+    const phraseTimer = setInterval(() => {
+      setHeroPhraseIndex((current) => (current + 1) % heroRotatingPhrases.length);
+    }, 3000);
 
-    return () => clearInterval(wordTimer);
-  }, [heroRotatingWords.length]);
+    return () => clearInterval(phraseTimer);
+  }, [heroRotatingPhrases.length]);
 
   useEffect(() => {
     const sectionElement = manifestoSectionRef.current;
@@ -410,11 +419,15 @@ export default function Home() {
                 transition: 'all 0.6s ease-out 0.2s',
               }}
             >
-              <span className="italic">
-                {copy.hero.titleStart} <span className="text-[#D94B78]">{heroRotatingWords[heroWordIndex % heroRotatingWords.length]}</span>
+              <span className="relative block h-[1.08em]">
+                <span
+                  key={`${locale}-hero-phrase-${heroPhraseIndex}`}
+                  className="hero-phrase-gradient absolute inset-x-0 top-0 whitespace-nowrap italic"
+                >
+                  {heroRotatingPhrases[heroPhraseIndex % heroRotatingPhrases.length]}
+                </span>
               </span>
-              <br />
-              {copy.hero.titleEnd}
+              <span className="block">{copy.hero.titleEnd}</span>
             </h1>
             <p
               className="text-white text-base md:text-[17px] max-w-[550px] leading-[1.6] mb-8 mx-auto lg:mx-0"
