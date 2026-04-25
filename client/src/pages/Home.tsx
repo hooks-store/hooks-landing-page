@@ -47,7 +47,7 @@ const HOME_COPY = {
     hero: {
       rotatingPhrases: ['Build your brand', 'Build your store', 'Build your page'],
         titleEnd: 'and sell from one link.',
-      subheadline: 'Digital products, courses, coaching, memberships, and more. Hooks gives you what you need to turn your audience into revenue.',
+      subheadline: 'Create a verified profile, sell products, courses, coaching, and memberships from one place. Hooks brings everything together to turn your audience into revenue.',
     },
     manifesto: {
       intro: 'The platform for the new creator economy. ',
@@ -62,37 +62,37 @@ const HOME_COPY = {
       cards: {
         digitalProducts: {
           title: 'Digital Product Builder',
-          desc: 'Create and sell digital products directly from your Hooks profile with checkout-ready product cards.',
+          desc: 'Sell guides, templates, ebooks, and premium files from your Hooks profile with a simpler checkout and fewer lost sales.',
           metricLabel: 'Total Sales',
           metricValue: '$6,467',
         },
         courses: {
           title: 'Course Builder',
-          desc: 'Publish paid courses in minutes so followers can learn from you and buy access in one tap.',
+          desc: 'Publish paid courses in minutes so followers can buy access, start learning, and stay connected without extra friction.',
           metricLabel: 'Enrolled Students',
           metricValue: '1,204',
         },
         coaching: {
           title: 'Coaching Calls',
-          desc: 'Promote paid coaching calls from your profile and turn expertise into booked sessions.',
+          desc: 'Promote paid coaching calls from your profile and turn audience trust into booked sessions.',
           metricLabel: 'Calls Booked',
           metricValue: '34 this week',
         },
         memberships: {
           title: 'Memberships',
-          desc: 'Offer members-only content behind a paywall to build recurring revenue from your audience.',
+          desc: 'Offer members-only content behind a paywall and build clearer recurring revenue from your audience.',
           metricLabel: 'Active Members',
           metricValue: '892',
         },
         analytics: {
           title: 'Analytics',
-          desc: 'Track clicks, earnings, and engagement in real time from a single analytics dashboard.',
+          desc: 'Track clicks, earnings, and engagement in real time so you know what converts and where to focus.',
           metricLabel: 'Profile Views',
           metricValue: '1.2M',
         },
         designSite: {
           title: 'Design your link-in-bio site',
-          desc: 'Build a fully customizable branded link and website experience that matches your style, voice, and business goals.',
+          desc: 'Build a verified, branded profile that earns more trust. Hooks can show TikTok visitors a clear prompt to open your link in an external browser when needed.',
           imageAlt: 'Design your link-in-bio site preview',
           metricLabel: 'Published Sites',
           metricValue: '3,912',
@@ -121,8 +121,8 @@ const HOME_COPY = {
       line3: 'Get paid.',
       primaryCta: 'Start for free',
       trust1: 'No card required',
-      trust2: 'Live in minutes',
-      trust3: 'Built for creators',
+      trust2: 'Verified profile included',
+      trust3: 'Optimized for TikTok traffic',
     },
     phone: {
       totalFollowers: 'Total Followers',
@@ -149,7 +149,7 @@ const HOME_COPY = {
           'Crea con IA',
         ],
         titleEnd: 'y vende desde un solo link.',
-        subheadline: 'Productos digitales, cursos, asesorías, membresías y más. Hooks reúne lo que necesitas para convertir tu audiencia en ingresos.',
+        subheadline: 'Crea un perfil verificado, vende productos, cursos, asesorías y membresías desde un solo lugar. Hooks reúne todo en un solo lugar para convertir tu audiencia en ingresos.',
       },
     manifesto: {
       intro: 'La única plataforma que necesitarás. ',
@@ -164,37 +164,37 @@ const HOME_COPY = {
       cards: {
         digitalProducts: {
           title: 'Productos digitales',
-          desc: 'Guías, plantillas, ebooks, recursos descargables y archivos premium.',
+          desc: 'Vende guías, plantillas, ebooks y archivos premium con un checkout simple para cobrar más rápido y perder menos ventas.',
           metricLabel: 'Ventas totales',
           metricValue: '$6,467',
         },
         courses: {
           title: 'Cursos en línea',
-          desc: 'Organiza módulos, contenidos y acceso para tus estudiantes.',
+          desc: 'Organiza módulos, contenidos y acceso para que tus estudiantes compren y empiecen sin fricción.',
           metricLabel: 'Estudiantes inscritos',
           metricValue: '1,204',
         },
         coaching: {
           title: 'Asesorías y sesiones',
-          desc: 'Agenda llamadas, mentorías o servicios 1 a 1 desde tu perfil.',
+          desc: 'Agenda llamadas, mentorías o servicios 1 a 1 y convierte la confianza de tu audiencia en sesiones pagadas.',
           metricLabel: 'Sesiones reservadas',
           metricValue: '34 esta semana',
         },
         memberships: {
           title: 'Membresías',
-          desc: 'Crea acceso recurrente para tu comunidad con pagos periódicos.',
+          desc: 'Crea acceso recurrente para tu comunidad y construye ingresos más previsibles con pagos periódicos.',
           metricLabel: 'Miembros activos',
           metricValue: '892',
         },
         analytics: {
           title: 'Estadísticas',
-          desc: 'Mide clics, ingresos y actividad en tiempo real desde un único panel.',
+          desc: 'Mide clics, ingresos y actividad en tiempo real para saber qué convierte y dónde crecer.',
           metricLabel: 'Visitas del perfil',
           metricValue: '1.2M',
         },
         designSite: {
           title: 'Diseña tu sitio de link en bio',
-          desc: 'Crea una experiencia de perfil y sitio totalmente personalizable para reflejar tu estilo, voz y negocio.',
+          desc: 'Construye un perfil verificado y personalizable que genera más confianza. No pierdas ventas por el navegador interno de TikTok: Hooks muestra un aviso claro para abrir tu link en el navegador externo cuando sea necesario.',
           imageAlt: 'Vista previa del sitio de link en bio',
           metricLabel: 'Sitios publicados',
           metricValue: '3,912',
@@ -223,8 +223,8 @@ const HOME_COPY = {
       line3: 'Empieza a cobrar.',
       primaryCta: 'Crear gratis',
       trust1: 'Sin tarjeta de crédito',
-      trust2: 'Listo en minutos',
-      trust3: 'Hecho para creadores',
+      trust2: 'Perfil verificado incluido',
+      trust3: 'Optimizado para tráfico desde TikTok',
     },
     phone: {
       totalFollowers: 'Total de seguidores',
