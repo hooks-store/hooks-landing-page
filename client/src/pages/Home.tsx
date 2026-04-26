@@ -42,6 +42,12 @@ const COACHING_FRAMES = [
 ];
 const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
 const SECTION_HEADLINE_CLASS = 'text-[30px] sm:text-[40px] md:text-[48px] lg:text-[clamp(36px,3.6vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] lg:whitespace-nowrap';
+const FEATURE_CARD_CLASS = 'bg-[linear-gradient(180deg,_#0B1926_0%,_#0A0A0A_76%)] border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-all duration-300 group';
+const FEATURE_CARD_MEDIA_CLASS = 'h-[320px] sm:h-[390px] relative overflow-hidden bg-transparent';
+const FEATURE_CARD_BODY_CLASS = 'bg-transparent p-6 sm:p-7 pt-6';
+const FEATURE_CARD_TITLE_CLASS = 'text-white text-[24px] font-semibold mb-2';
+const FEATURE_CARD_TEXT_CLASS = 'text-[#8A8F98] text-[15px] leading-[1.6]';
+const FEATURE_CARD_CONTENT_CLASS = 'relative z-10 h-full w-full';
 
 const DIGITAL_PRODUCT_PREVIEW_COPY = {
   en: {
@@ -417,7 +423,6 @@ export default function Home() {
       title: copy.features.cards.digitalProducts.title,
       desc: copy.features.cards.digitalProducts.desc,
       preview: <DigitalProductsFeaturePreview />,
-      overlayClass: 'from-[#0B1926]/28 via-[#0B1926]/8 to-transparent',
       metricLabel: copy.features.cards.digitalProducts.metricLabel,
       metricValue: copy.features.cards.digitalProducts.metricValue,
       icon: <ShoppingBag className="w-3.5 h-3.5 text-orange-500" />,
@@ -427,7 +432,6 @@ export default function Home() {
       desc: copy.features.cards.courses.desc,
       videoSrc: FEATURE_VIDEO_COURSE_BUILDER,
       videoClassName: undefined,
-      overlayClass: 'from-[#0B1926]/36 via-[#0B1926]/9 to-transparent',
       metricLabel: copy.features.cards.courses.metricLabel,
       metricValue: copy.features.cards.courses.metricValue,
       icon: <Check className="w-4 h-4 text-blue-500" />,
@@ -436,7 +440,6 @@ export default function Home() {
       title: copy.features.cards.coaching.title,
       desc: copy.features.cards.coaching.desc,
       preview: <CoachingCallsFeaturePreview />,
-      overlayClass: 'from-[#0B1926]/38 via-[#0B1926]/12 to-transparent',
       metricLabel: copy.features.cards.coaching.metricLabel,
       metricValue: copy.features.cards.coaching.metricValue,
       icon: <Users className="w-3.5 h-3.5 text-green-600" />,
@@ -445,7 +448,6 @@ export default function Home() {
       title: copy.features.cards.memberships.title,
       desc: copy.features.cards.memberships.desc,
       preview: <MembershipsFeaturePreview />,
-      overlayClass: 'from-[#0B1926]/30 via-[#0B1926]/7 to-transparent',
       metricLabel: copy.features.cards.memberships.metricLabel,
       metricValue: copy.features.cards.memberships.metricValue,
       icon: <Lock className="w-3.5 h-3.5 text-purple-500" />,
@@ -454,7 +456,6 @@ export default function Home() {
       title: copy.features.cards.analytics.title,
       desc: copy.features.cards.analytics.desc,
       preview: <AnalyticsFeaturePreview />,
-      overlayClass: 'from-[#0B1926]/30 via-[#0B1926]/6 to-transparent',
       metricLabel: copy.features.cards.analytics.metricLabel,
       metricValue: copy.features.cards.analytics.metricValue,
       icon: <BarChart3 className="w-3.5 h-3.5 text-indigo-500" />,
@@ -466,13 +467,12 @@ export default function Home() {
         <iframe
           src="/videos/features/design-link-in-bio-site-loop.html"
           title={copy.features.cards.designSite.imageAlt}
-          className="w-full h-full border-0 pointer-events-none bg-[#050814]"
+          className="w-full h-full border-0 pointer-events-none bg-transparent"
           loading="lazy"
           tabIndex={-1}
           aria-hidden="true"
         />
       ),
-      overlayClass: 'from-[#0B1926]/34 via-[#0B1926]/10 to-transparent',
       metricLabel: copy.features.cards.designSite.metricLabel,
       metricValue: copy.features.cards.designSite.metricValue,
       icon: <Globe className="w-3.5 h-3.5 text-cyan-500" />,
@@ -583,12 +583,12 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {featureCards.map((card, i) => (
               <SectionWrapper key={card.title} delay={i * 80}>
-                <div className="border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-all duration-300 group">
-                  <div className="h-[320px] sm:h-[390px] relative overflow-hidden">
+                <div className={FEATURE_CARD_CLASS}>
+                  <div className={FEATURE_CARD_MEDIA_CLASS}>
                     {card.videoSrc ? (
                       <video
                         src={card.videoSrc}
-                        className={`w-full h-full ${card.videoClassName ?? 'object-cover'}`}
+                        className={`${FEATURE_CARD_CONTENT_CLASS} ${card.videoClassName ?? 'object-cover'}`}
                         autoPlay
                         muted
                         loop
@@ -597,13 +597,12 @@ export default function Home() {
                         aria-hidden="true"
                       />
                     ) : (
-                      <div className="w-full h-full">{card.preview}</div>
+                      <div className={FEATURE_CARD_CONTENT_CLASS}>{card.preview}</div>
                     )}
-                    <div className={`absolute inset-0 bg-gradient-to-t ${card.overlayClass ?? 'from-[#0B1926] via-[#0B1926]/75 to-black/20'}`} />
                   </div>
-                  <div className="bg-[#0A0A0A] p-6 sm:p-7 pt-6">
-                    <h3 className="text-white text-[24px] font-semibold mb-2">{card.title}</h3>
-                    <p className="text-[#8A8F98] text-[15px] leading-[1.6]">{card.desc}</p>
+                  <div className={FEATURE_CARD_BODY_CLASS}>
+                    <h3 className={FEATURE_CARD_TITLE_CLASS}>{card.title}</h3>
+                    <p className={FEATURE_CARD_TEXT_CLASS}>{card.desc}</p>
                   </div>
                 </div>
               </SectionWrapper>
@@ -624,24 +623,26 @@ export default function Home() {
 
           <SectionWrapper delay={150}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-              <div className="card-navy-teal overflow-hidden p-5 md:p-6 transition-all duration-300">
-                <div className="relative h-[260px] md:h-[340px] lg:h-[380px] rounded-2xl overflow-hidden border border-white/10 bg-[#050814]">
-                  <VerifiedBadgePreview />
+              <div className={FEATURE_CARD_CLASS}>
+                <div className={FEATURE_CARD_MEDIA_CLASS}>
+                  <div className="relative z-10 h-full w-full">
+                    <VerifiedBadgePreview />
+                  </div>
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-white/10">
-                  <h3 className="text-white font-bold text-xl mb-3">{copy.tiktokStore.verifiedTitle}</h3>
-                  <p className="text-[#8A8F98] text-[15px] leading-[1.6]">
+                <div className={FEATURE_CARD_BODY_CLASS}>
+                  <h3 className={FEATURE_CARD_TITLE_CLASS}>{copy.tiktokStore.verifiedTitle}</h3>
+                  <p className={FEATURE_CARD_TEXT_CLASS}>
                     {copy.tiktokStore.verifiedBody}
                   </p>
                 </div>
               </div>
 
-              <div className="card-navy-teal overflow-hidden p-5 md:p-6 transition-all duration-300">
-                <div className="relative h-[260px] md:h-[340px] lg:h-[380px] rounded-2xl overflow-hidden border border-white/10 bg-[#050814]">
+              <div className={FEATURE_CARD_CLASS}>
+                <div className={FEATURE_CARD_MEDIA_CLASS}>
                   <video
                     src={FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE}
-                    className="w-full h-full object-contain bg-[#050814]"
+                    className="relative z-10 w-full h-full object-contain bg-transparent"
                     autoPlay
                     muted
                     loop
@@ -651,9 +652,9 @@ export default function Home() {
                   />
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-white/10">
-                  <h3 className="text-white font-bold text-xl mb-3">{copy.tiktokStore.browserTitle}</h3>
-                  <p className="text-[#8A8F98] text-[15px] leading-[1.6]">
+                <div className={FEATURE_CARD_BODY_CLASS}>
+                  <h3 className={FEATURE_CARD_TITLE_CLASS}>{copy.tiktokStore.browserTitle}</h3>
+                  <p className={FEATURE_CARD_TEXT_CLASS}>
                     {copy.tiktokStore.browserBody}
                   </p>
                 </div>
@@ -674,9 +675,9 @@ export default function Home() {
           </SectionWrapper>
 
           <SectionWrapper delay={150}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="card-navy-teal overflow-hidden p-5 md:p-6 transition-all duration-300">
-                <div className="relative h-[230px] sm:h-[260px] md:h-[340px] lg:h-[380px]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+              <div className={FEATURE_CARD_CLASS}>
+                <div className={FEATURE_CARD_MEDIA_CLASS}>
                   <WorldMap />
                   {/* Floating stat cards */}
                   <div className="hidden sm:block absolute top-4 left-4 md:top-6 md:left-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10">
@@ -719,27 +720,27 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-white/10">
-                  <h3 className="text-white font-bold text-xl mb-3">{copy.analytics.cardOneTitle}</h3>
-                  <p className="text-[#8A8F98] text-[15px] leading-[1.6] max-w-[700px]">
+                <div className={FEATURE_CARD_BODY_CLASS}>
+                  <h3 className={FEATURE_CARD_TITLE_CLASS}>{copy.analytics.cardOneTitle}</h3>
+                  <p className={`${FEATURE_CARD_TEXT_CLASS} max-w-[700px]`}>
                     {copy.analytics.cardOneBody}
                   </p>
                 </div>
               </div>
 
-              <div className="card-navy-teal overflow-hidden p-5 md:p-6 transition-all duration-300">
-                <div className="relative h-[260px] md:h-[340px] lg:h-[380px] rounded-2xl overflow-hidden border border-white/10 bg-[#050814]">
+              <div className={FEATURE_CARD_CLASS}>
+                <div className={FEATURE_CARD_MEDIA_CLASS}>
                   <iframe
                     src="/videos/features/premium_analytics_loop_v2.html"
                     title={copy.analytics.frameTitle}
-                    className="w-full h-full"
+                    className="w-full h-full bg-transparent"
                     loading="lazy"
                   />
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-white/10">
-                  <h3 className="text-white font-bold text-xl mb-3">{copy.analytics.cardTwoTitle}</h3>
-                  <p className="text-[#8A8F98] text-[15px] leading-[1.6]">
+                <div className={FEATURE_CARD_BODY_CLASS}>
+                  <h3 className={FEATURE_CARD_TITLE_CLASS}>{copy.analytics.cardTwoTitle}</h3>
+                  <p className={FEATURE_CARD_TEXT_CLASS}>
                     {copy.analytics.cardTwoBody}
                   </p>
                 </div>
@@ -810,8 +811,8 @@ function DigitalProductsFeaturePreview() {
   const activeItem = copy.items[activeProduct];
 
   return (
-    <div className="h-full w-full overflow-hidden bg-[#0B1926] px-4 py-5 flex items-center justify-center" aria-hidden="true">
-      <div className="digital-product-preview-frame relative w-full max-w-[360px] h-full max-h-[332px] min-h-[268px] rounded-[26px] border border-white/12 bg-[#07111D] shadow-[0_28px_70px_rgba(0,0,0,0.34)] overflow-hidden">
+    <div className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center" aria-hidden="true">
+      <div className="digital-product-preview-frame relative w-full max-w-[360px] h-full max-h-[332px] min-h-[268px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
         <div className="absolute inset-0 digital-product-grid opacity-45" />
 
@@ -822,12 +823,11 @@ function DigitalProductsFeaturePreview() {
             return (
               <div
                 key={item.title}
-                className="absolute inset-0 rounded-[18px] border border-white/18 overflow-hidden shadow-[0_18px_42px_rgba(0,0,0,0.28)] transition-[opacity,transform,filter] duration-700 ease-out"
+                className="absolute inset-0 rounded-[18px] border border-white/18 overflow-hidden transition-[opacity,transform,filter] duration-700 ease-out"
                 style={{
                   opacity: isActive ? 1 : 0,
                   filter: isActive ? 'blur(0)' : 'blur(5px)',
                   transform: isActive ? 'translate3d(0,0,0) scale(1)' : 'translate3d(-8px,10px,0) scale(0.96)',
-                  boxShadow: isActive ? `0 18px 42px ${item.accent}33` : undefined,
                 }}
               >
                 <img
@@ -842,7 +842,7 @@ function DigitalProductsFeaturePreview() {
         </div>
 
         <div className="absolute right-4 top-5 left-[48%] bottom-[74px] min-w-0">
-          <div className="h-full rounded-[20px] border border-white/10 bg-white/[0.075] p-3.5 sm:p-4 shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
+          <div className="h-full rounded-[20px] border border-white/10 bg-white/[0.075] p-3.5 sm:p-4">
             <div key={`copy-${activeProduct}`} className="digital-product-copy-shift min-w-0">
               <div className="flex items-center justify-between gap-2">
                 <div className="inline-flex min-w-0 items-center rounded-full bg-white/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white/62">
@@ -889,7 +889,7 @@ function DigitalProductsFeaturePreview() {
           </div>
         </div>
 
-        <div key={`receipt-${activeProduct}`} className="digital-product-receipt absolute left-4 right-4 bottom-4 h-[50px] rounded-[18px] border border-white/10 bg-[#091522]/92 px-4 flex items-center justify-between shadow-[0_18px_38px_rgba(0,0,0,0.24)]">
+        <div key={`receipt-${activeProduct}`} className="digital-product-receipt absolute left-4 right-4 bottom-4 h-[50px] rounded-[18px] border border-white/10 bg-[#091522]/92 px-4 flex items-center justify-between">
           <div className="min-w-0">
             <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#51E29A]">{copy.statusLabel}</div>
             <div className="mt-1 text-[11px] text-white/52 truncate">{copy.checkoutLabel}</div>
@@ -1100,8 +1100,8 @@ function MembershipsFeaturePreview() {
   const copy = HOME_COPY[locale].memberships;
 
   return (
-    <div className="h-full w-full bg-gradient-to-b from-[#D9E0EE] to-[#BCC7DA] p-5 flex items-center justify-center">
-      <div className="w-[72%] h-[94%] bg-[#F5F8FE] rounded-[22px] overflow-hidden shadow-[0_24px_60px_rgba(15,23,42,0.25)] border border-white/70 relative">
+    <div className="h-full w-full bg-transparent p-5 flex items-center justify-center">
+      <div className="w-[68%] h-[88%] bg-[#F5F8FE] rounded-[22px] overflow-hidden border border-white/70 relative">
         <div className="h-[27%] bg-gradient-to-r from-[#2B84FF] via-[#5B68FF] to-[#6FDD9E] relative overflow-hidden">
           <div className="absolute -top-8 left-14 w-40 h-24 rounded-full bg-[#9EF2C8]/45 blur-sm animate-bob" />
           <div className="absolute top-2 left-28 w-36 h-16 rounded-full bg-[#A2A1FF]/55 blur-sm animate-bob" style={{ animationDelay: '0.5s' }} />
@@ -1121,7 +1121,7 @@ function MembershipsFeaturePreview() {
             <div className="h-1.5 rounded-full bg-[#E5EAF6] w-[76%]" />
           </div>
         </div>
-        <div className="absolute left-4 right-4 bottom-4 h-9 rounded-xl bg-[#1E2432] flex items-center justify-center shadow-[0_12px_24px_rgba(15,23,42,0.35)]">
+        <div className="absolute left-4 right-4 bottom-4 h-9 rounded-xl bg-[#1E2432] flex items-center justify-center">
           <span className="text-white text-[11px] font-semibold">{copy.cta}</span>
         </div>
       </div>
@@ -1140,7 +1140,7 @@ function CoachingCallsFeaturePreview() {
   }, []);
 
   return (
-    <div className="h-full w-full bg-[#0B1926] relative overflow-hidden">
+    <div className="h-full w-full bg-transparent relative overflow-hidden">
       {COACHING_FRAMES.map((src, index) => {
         const isActive = index === activeFrame;
 
@@ -1154,7 +1154,7 @@ function CoachingCallsFeaturePreview() {
               src={src}
               alt=""
               aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover opacity-35 blur-sm"
+              className="absolute inset-0 w-full h-full object-cover opacity-0 blur-sm"
             />
             <img
               src={src}
@@ -1165,14 +1165,13 @@ function CoachingCallsFeaturePreview() {
           </div>
         );
       })}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-black/4 pointer-events-none" />
     </div>
   );
 }
 
 function VerifiedBadgePreview() {
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[radial-gradient(circle_at_center,_rgba(56,189,248,0.2)_0%,_rgba(11,25,38,0.62)_42%,_#050814_100%)] flex items-center justify-center">
+    <div className="relative h-full w-full overflow-hidden bg-transparent flex items-center justify-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -1181,7 +1180,7 @@ function VerifiedBadgePreview() {
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="w-[168px] h-[168px] sm:w-[190px] sm:h-[190px] md:w-[220px] md:h-[220px] text-[#38BDF8] drop-shadow-[0_28px_70px_rgba(56,189,248,0.38)]"
+        className="w-[168px] h-[168px] sm:w-[190px] sm:h-[190px] md:w-[220px] md:h-[220px] text-[#38BDF8]"
         aria-hidden="true"
       >
         <path

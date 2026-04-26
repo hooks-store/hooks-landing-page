@@ -2,10 +2,16 @@ import { HooksLogo } from './HooksIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const socialLinks = [
-  { name: 'Twitter', icon: '𝕏' },
-  { name: 'Instagram', icon: '◎' },
-  { name: 'TikTok', icon: '♪' },
-  { name: 'YouTube', icon: '▶' },
+  {
+    name: 'Instagram',
+    href: 'https://www.instagram.com/hooks_crea?igsh=cncwYmx0amtqdGJ',
+    icon: '/images/icons/instagram-glyph-white.svg',
+  },
+  {
+    name: 'TikTok',
+    href: 'https://www.tiktok.com/@tradingsharksoficial?_r=1&_t=ZN-95kiUln8K5C',
+    icon: '/images/icons/tiktok-social-icon-circle-black.svg',
+  },
 ];
 
 export default function Footer() {
@@ -20,19 +26,19 @@ export default function Footer() {
       ? [
           {
             title: 'Producto',
-            links: ['Características', 'Precios', 'Plantillas', 'Integraciones', 'Herramientas para creadores'],
+            links: ['Características', 'Herramientas para creadores'],
           },
           {
             title: 'Empresa',
-            links: ['Quiénes somos', 'Empleos', 'Prensa', 'Blog', 'Contacto'],
+            links: ['Quiénes somos', 'Contacto'],
           },
           {
             title: 'Recursos',
-            links: ['Centro de ayuda', 'Comunidad', 'Tutoriales', 'Documentación API', 'Estado'],
+            links: ['Centro de ayuda', 'Comunidad'],
           },
           {
             title: 'Legal',
-            links: ['Política de privacidad', 'Términos de servicio', 'Política de cookies', 'DMCA', 'Accesibilidad'],
+            links: ['Política de privacidad', 'Términos de servicio', 'Política de cookies'],
           },
         ]
       : [
@@ -71,11 +77,14 @@ export default function Footer() {
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
-                  href="#"
+                  href={social.href}
                   className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-[#8A8F98] text-xs hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-200 hover:scale-110"
                   title={social.name}
+                  aria-label={social.name}
+                  target="_blank"
+                  rel="noreferrer"
                 >
-                  {social.icon}
+                  <img src={social.icon} alt="" className="h-4 w-4 object-contain" />
                 </a>
               ))}
             </div>
@@ -86,12 +95,9 @@ export default function Footer() {
               <ul className="space-y-3">
                 {col.links.map((link) => (
                   <li key={link}>
-                    <a
-                      href="#"
-                      className="text-[#8A8F98] text-sm hover:text-white hover:translate-x-1 transition-all duration-200 inline-block"
-                    >
+                    <span className="text-[#8A8F98] text-sm inline-block">
                       {link}
-                    </a>
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -102,9 +108,9 @@ export default function Footer() {
           <p className="text-[#8A8F98] text-sm text-center md:text-left">&copy; {new Date().getFullYear()} Hooks. {copy.rightsReserved}</p>
           <div className="flex gap-6">
             {copy.legalShort.map((item) => (
-              <a key={item} href="#" className="text-[#8A8F98] text-xs hover:text-white transition-colors duration-200">
+              <span key={item} className="text-[#8A8F98] text-xs">
                 {item}
-              </a>
+              </span>
             ))}
           </div>
         </div>
