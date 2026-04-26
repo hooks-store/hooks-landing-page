@@ -289,6 +289,55 @@ html {
   }
 }
 
+.digital-product-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: linear-gradient(180deg, transparent, black 24%, black 76%, transparent);
+  mask-image: linear-gradient(180deg, transparent, black 24%, black 76%, transparent);
+}
+
+@keyframes digitalProductCopyShift {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes digitalProductReceipt {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes digitalProductProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.digital-product-copy-shift {
+  animation: digitalProductCopyShift 520ms ease-out both;
+}
+
+.digital-product-receipt {
+  animation: digitalProductReceipt 520ms ease-out both;
+}
+
+.digital-product-progress {
+  transform-origin: left center;
+  animation: digitalProductProgress 2200ms linear both;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,

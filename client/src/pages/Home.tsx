@@ -33,7 +33,6 @@ const HERO_BG_VIDEO_SOURCES = [
 ];
 const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
-const FEATURE_VIDEO_DIGITAL_PRODUCT = '/videos/features/digital-product-builder.mov';
 const FEATURE_VIDEO_COURSE_BUILDER = '/videos/features/course-builder.mov';
 const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide.mov';
 const COACHING_FRAMES = [
@@ -43,6 +42,69 @@ const COACHING_FRAMES = [
 ];
 const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
 const SECTION_HEADLINE_CLASS = 'text-[30px] sm:text-[40px] md:text-[48px] lg:text-[clamp(36px,3.6vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] lg:whitespace-nowrap';
+
+const DIGITAL_PRODUCT_PREVIEW_COPY = {
+  en: {
+    statusLabel: 'Sale ready',
+    checkoutLabel: 'Instant checkout',
+    items: [
+      {
+        label: 'Ebook',
+        title: 'Hook Loop Kit',
+        subtitle: 'Creator blueprint',
+        price: '$29.99',
+        imageSrc: '/images/digital-products/ebook.svg',
+        accent: '#23B26D',
+      },
+      {
+        label: 'Template',
+        title: 'Launch OS',
+        subtitle: 'Notion workspace',
+        price: '$49',
+        imageSrc: '/images/digital-products/template.svg',
+        accent: '#FF784F',
+      },
+      {
+        label: 'Guide',
+        title: 'Viral Scripts',
+        subtitle: '30 ready prompts',
+        price: '$19',
+        imageSrc: '/images/digital-products/guide.svg',
+        accent: '#5A78FF',
+      },
+    ],
+  },
+  es: {
+    statusLabel: 'Venta lista',
+    checkoutLabel: 'Checkout inmediato',
+    items: [
+      {
+        label: 'Ebook',
+        title: 'Kit de Hooks',
+        subtitle: 'Guía para creadores',
+        price: '$29.99',
+        imageSrc: '/images/digital-products/ebook.svg',
+        accent: '#23B26D',
+      },
+      {
+        label: 'Plantilla',
+        title: 'Launch OS',
+        subtitle: 'Workspace en Notion',
+        price: '$49',
+        imageSrc: '/images/digital-products/template.svg',
+        accent: '#FF784F',
+      },
+      {
+        label: 'Guía',
+        title: 'Scripts virales',
+        subtitle: '30 prompts listos',
+        price: '$19',
+        imageSrc: '/images/digital-products/guide.svg',
+        accent: '#5A78FF',
+      },
+    ],
+  },
+} as const;
 
 const HOME_COPY = {
   en: {
@@ -354,9 +416,8 @@ export default function Home() {
     {
       title: copy.features.cards.digitalProducts.title,
       desc: copy.features.cards.digitalProducts.desc,
-      videoSrc: FEATURE_VIDEO_DIGITAL_PRODUCT,
-      videoClassName: 'object-contain p-2 bg-[#0B1926]',
-      overlayClass: 'from-[#0B1926]/34 via-[#0B1926]/8 to-transparent',
+      preview: <DigitalProductsFeaturePreview />,
+      overlayClass: 'from-[#0B1926]/28 via-[#0B1926]/8 to-transparent',
       metricLabel: copy.features.cards.digitalProducts.metricLabel,
       metricValue: copy.features.cards.digitalProducts.metricValue,
       icon: <ShoppingBag className="w-3.5 h-3.5 text-orange-500" />,
@@ -365,6 +426,7 @@ export default function Home() {
       title: copy.features.cards.courses.title,
       desc: copy.features.cards.courses.desc,
       videoSrc: FEATURE_VIDEO_COURSE_BUILDER,
+      videoClassName: undefined,
       overlayClass: 'from-[#0B1926]/36 via-[#0B1926]/9 to-transparent',
       metricLabel: copy.features.cards.courses.metricLabel,
       metricValue: copy.features.cards.courses.metricValue,
@@ -731,6 +793,118 @@ export default function Home() {
 }
 
 // ===== SUB-COMPONENTS =====
+
+function DigitalProductsFeaturePreview() {
+  const { locale } = useLanguage();
+  const copy = DIGITAL_PRODUCT_PREVIEW_COPY[locale];
+  const [activeProduct, setActiveProduct] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveProduct((current) => (current + 1) % copy.items.length);
+    }, 2200);
+
+    return () => clearInterval(interval);
+  }, [copy.items.length]);
+
+  const activeItem = copy.items[activeProduct];
+
+  return (
+    <div className="h-full w-full overflow-hidden bg-[#0B1926] px-4 py-5 flex items-center justify-center" aria-hidden="true">
+      <div className="digital-product-preview-frame relative w-full max-w-[360px] h-full max-h-[332px] min-h-[268px] rounded-[26px] border border-white/12 bg-[#07111D] shadow-[0_28px_70px_rgba(0,0,0,0.34)] overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
+        <div className="absolute inset-0 digital-product-grid opacity-45" />
+
+        <div className="absolute left-4 top-5 bottom-[74px] w-[40%] max-w-[136px]">
+          {copy.items.map((item, index) => {
+            const isActive = index === activeProduct;
+
+            return (
+              <div
+                key={item.title}
+                className="absolute inset-0 rounded-[18px] border border-white/18 overflow-hidden shadow-[0_18px_42px_rgba(0,0,0,0.28)] transition-[opacity,transform,filter] duration-700 ease-out"
+                style={{
+                  opacity: isActive ? 1 : 0,
+                  filter: isActive ? 'blur(0)' : 'blur(5px)',
+                  transform: isActive ? 'translate3d(0,0,0) scale(1)' : 'translate3d(-8px,10px,0) scale(0.96)',
+                  boxShadow: isActive ? `0 18px 42px ${item.accent}33` : undefined,
+                }}
+              >
+                <img
+                  src={item.imageSrc}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  draggable="false"
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="absolute right-4 top-5 left-[48%] bottom-[74px] min-w-0">
+          <div className="h-full rounded-[20px] border border-white/10 bg-white/[0.075] p-3.5 sm:p-4 shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
+            <div key={`copy-${activeProduct}`} className="digital-product-copy-shift min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <div className="inline-flex min-w-0 items-center rounded-full bg-white/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white/62">
+                  <span className="truncate">{activeItem.label}</span>
+                </div>
+                <div className="shrink-0 text-[14px] sm:text-[16px] font-bold leading-none text-white">
+                  {activeItem.price}
+                </div>
+              </div>
+              <h4 className="mt-2 text-[17px] sm:text-[19px] font-bold leading-[1.03] tracking-tight text-white">
+                {activeItem.title}
+              </h4>
+              <p className="mt-1 hidden sm:block truncate text-[11px] leading-tight text-white/52">
+                {activeItem.subtitle}
+              </p>
+            </div>
+
+            <div className="absolute left-3.5 right-3.5 bottom-3.5 space-y-1">
+              {copy.items.map((item, index) => {
+                const isActive = index === activeProduct;
+
+                return (
+                  <div
+                    key={`type-${item.title}`}
+                    className="h-6 rounded-[9px] border bg-white/[0.045] px-1.5 flex items-center gap-1.5 transition-colors duration-500"
+                    style={{
+                      borderColor: isActive ? `${item.accent}80` : 'rgba(255, 255, 255, 0.1)',
+                      backgroundColor: isActive ? `${item.accent}18` : undefined,
+                    }}
+                  >
+                    <img
+                      src={item.imageSrc}
+                      alt=""
+                      className="h-4 w-4 shrink-0 rounded-[5px] object-cover"
+                      draggable="false"
+                    />
+                    <span className="min-w-0 truncate text-[8px] font-bold uppercase tracking-[0.1em] text-white/62">
+                      {item.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div key={`receipt-${activeProduct}`} className="digital-product-receipt absolute left-4 right-4 bottom-4 h-[50px] rounded-[18px] border border-white/10 bg-[#091522]/92 px-4 flex items-center justify-between shadow-[0_18px_38px_rgba(0,0,0,0.24)]">
+          <div className="min-w-0">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#51E29A]">{copy.statusLabel}</div>
+            <div className="mt-1 text-[11px] text-white/52 truncate">{copy.checkoutLabel}</div>
+          </div>
+          <div className="ml-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#51E29A]/14">
+            <Check className="h-4 w-4 text-[#51E29A]" />
+          </div>
+          <div className="absolute left-4 right-4 bottom-0 h-px overflow-hidden bg-white/10">
+            <div className="digital-product-progress h-full bg-[#51E29A]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function HeroBackgroundVideoLoop() {
   const [frontSlot, setFrontSlot] = useState<0 | 1>(0);

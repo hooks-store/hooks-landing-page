@@ -1,0 +1,23 @@
+<svg width="240" height="320" viewBox="0 0 240 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="240" height="320" rx="28" fill="#07111D"/>
+  <rect x="18" y="18" width="204" height="284" rx="22" fill="url(#cover)"/>
+  <path d="M28 88C66 52 109 62 141 37C176 10 205 33 222 61V18H18V171C20 134 9 106 28 88Z" fill="#0B3B24" fill-opacity="0.38"/>
+  <path d="M160 38H196V74H160V38Z" fill="#F3D05D"/>
+  <path d="M171 48V64M164 56H188" stroke="#111827" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="194" cy="42" r="12" fill="#7E4DFF"/>
+  <text x="36" y="81" fill="#F6C9D8" font-family="Inter, Arial, sans-serif" font-size="39" font-weight="900" letter-spacing="-2">HOOK.</text>
+  <text x="36" y="122" fill="#F6C9D8" font-family="Inter, Arial, sans-serif" font-size="39" font-weight="900" letter-spacing="-2">LOOP.</text>
+  <text x="36" y="163" fill="#F6C9D8" font-family="Inter, Arial, sans-serif" font-size="35" font-weight="900" letter-spacing="-2">EXPLODE.</text>
+  <text x="36" y="205" fill="#FFF4C7" font-family="Georgia, serif" font-size="18" font-style="italic">The Creator&apos;s</text>
+  <text x="36" y="226" fill="#FFF4C7" font-family="Georgia, serif" font-size="18" font-style="italic">Blueprint</text>
+  <text x="36" y="248" fill="#FFF4C7" font-family="Inter, Arial, sans-serif" font-size="9" font-weight="800" letter-spacing="1.4">FOR EXPLOSIVE REACH</text>
+  <rect x="36" y="265" width="168" height="20" rx="10" fill="#111827" fill-opacity="0.34"/>
+  <text x="76" y="279" fill="white" fill-opacity="0.84" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="800" letter-spacing="1">DIGITAL VERSION</text>
+  <defs>
+    <linearGradient id="cover" x1="35" y1="41" x2="218" y2="295" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E7B42"/>
+      <stop offset="0.52" stop-color="#17955A"/>
+      <stop offset="1" stop-color="#123F2E"/>
+    </linearGradient>
+  </defs>
+</svg>
