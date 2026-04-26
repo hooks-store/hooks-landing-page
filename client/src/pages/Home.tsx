@@ -26,10 +26,14 @@ const PHONE_GUY_FOR_LATER = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2W
 const FEMALE_CREATOR = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/female-creator-KoNNQiTsKfMVtWm8xvoSep.webp';
 const CREATOR_CTA_BG = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-cta-bg-C9mdqCe3aNkVQnH8bbSzUM.webp';
 const HERO_BG_VIDEO_SOURCES = [
-  '/videos/hero/chef-4secs.mp4',
-  '/videos/hero/nba-player.mov',
-  '/videos/hero/podcast-short.mp4',
-  '/videos/hero/travel-girl.mp4',
+  '/videos/hero/creator-loop-01.mp4',
+  '/videos/hero/creator-loop-02.mp4',
+  '/videos/hero/creator-loop-03.mp4',
+  '/videos/hero/creator-loop-04.mp4',
+  '/videos/hero/creator-loop-05.mp4',
+  '/videos/hero/creator-loop-06.mp4',
+  '/videos/hero/creator-loop-07.mp4',
+  '/videos/hero/creator-loop-08.mp4',
 ];
 const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
