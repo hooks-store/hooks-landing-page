@@ -42,6 +42,7 @@ const COACHING_FRAMES = [
   '/images/coaching-frames/frame-05.png',
 ];
 const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
+const SECTION_HEADLINE_CLASS = 'text-[30px] sm:text-[40px] md:text-[48px] lg:text-[clamp(36px,3.6vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] lg:whitespace-nowrap';
 
 const HOME_COPY = {
   en: {
@@ -119,7 +120,7 @@ const HOME_COPY = {
     tiktokStore: {
       eyebrow: 'Consigue más ventas con',
       headline: 'Una tienda optimizada para tráfico de TikTok',
-      verifiedTitle: 'Insignia verificada',
+      verifiedTitle: 'Tu Perfil verificado',
       verifiedBody: 'Deja de perder visitantes. Tu insignia verificada genera confianza al instante y confirma que están en el lugar correcto, listos para comprar.',
       browserTitle: '¿TikTok está bloqueando tu link?',
       browserBody: 'La mayoría de herramientas de link en bio ignoran el problema del navegador de TikTok. Creamos una guía animada que lleva a tus visitantes a su navegador preferido para que cada clic realmente convierta.',
@@ -230,7 +231,7 @@ const HOME_COPY = {
     tiktokStore: {
       eyebrow: 'Consigue más ventas con',
       headline: 'Una tienda optimizada para tráfico de TikTok',
-      verifiedTitle: 'Insignia verificada',
+      verifiedTitle: 'Tu Perfil verificado',
       verifiedBody: 'Deja de perder visitantes. Tu insignia verificada genera confianza al instante y confirma que están en el lugar correcto, listos para comprar.',
       browserTitle: '¿TikTok está bloqueando tu link?',
       browserBody: 'La mayoría de herramientas de link en bio ignoran el problema del navegador de TikTok. Creamos una guía animada que lleva a tus visitantes a su navegador preferido para que cada clic realmente convierta.',
@@ -512,7 +513,7 @@ export default function Home() {
         <div className="container">
           <SectionWrapper>
             <p className={SECTION_EYEBROW_CLASS}>{copy.features.eyebrow}</p>
-            <h2 className="text-[30px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] max-w-[700px] mb-12 md:mb-16">
+            <h2 className={`${SECTION_HEADLINE_CLASS} max-w-[700px] lg:max-w-none mb-12 md:mb-16`}>
               {copy.features.headline}
             </h2>
           </SectionWrapper>
@@ -550,11 +551,11 @@ export default function Home() {
       </section>
 
       {/* ===== 4. TIKTOK STORE OPTIMIZATION SECTION ===== */}
-      <section className="pt-4 pb-16 md:pt-6 md:pb-24">
+      <section id="tienda-optimizada-tiktok" className="scroll-mt-24 pt-4 pb-16 md:pt-6 md:pb-24">
         <div className="container">
           <SectionWrapper>
             <p className={SECTION_EYEBROW_CLASS}>{copy.tiktokStore.eyebrow}</p>
-            <h2 className="text-[30px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] max-w-[760px] mb-12 md:mb-16">
+            <h2 className={`${SECTION_HEADLINE_CLASS} max-w-[760px] lg:max-w-none mb-12 md:mb-16`}>
               {copy.tiktokStore.headline}
             </h2>
           </SectionWrapper>
@@ -605,7 +606,7 @@ export default function Home() {
         <div className="container">
           <SectionWrapper>
             <p className={SECTION_EYEBROW_CLASS}>{copy.analytics.eyebrow}</p>
-            <h2 className="text-[30px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] mb-12 md:mb-16">
+            <h2 className={`${SECTION_HEADLINE_CLASS} mb-12 md:mb-16`}>
               {copy.analytics.headline}
             </h2>
           </SectionWrapper>
@@ -706,8 +707,18 @@ export default function Home() {
 
               <div className="mt-6 flex flex-col items-center gap-6 text-[15px]">
                 <p className="text-[#FF624F]">✓ {copy.finalCta.trust1}</p>
-                <p className="text-[#D94B78]">✓ {copy.finalCta.trust2}</p>
-                <p className="text-[#5B4BFF]">✓ {copy.finalCta.trust3}</p>
+                <a
+                  href="#tienda-optimizada-tiktok"
+                  className="text-[#D94B78] transition-colors duration-200 hover:text-[#E36A92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D94B78]/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[#0A0A0A] rounded-sm"
+                >
+                  ✓ {copy.finalCta.trust2}
+                </a>
+                <a
+                  href="#tienda-optimizada-tiktok"
+                  className="text-[#5B4BFF] transition-colors duration-200 hover:text-[#7B6DFF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B4BFF]/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[#0A0A0A] rounded-sm"
+                >
+                  ✓ {copy.finalCta.trust3}
+                </a>
               </div>
             </div>
           </SectionWrapper>
