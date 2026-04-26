@@ -35,6 +35,7 @@ const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
 const FEATURE_VIDEO_DIGITAL_PRODUCT = '/videos/features/digital-product-builder.mov';
 const FEATURE_VIDEO_COURSE_BUILDER = '/videos/features/course-builder.mov';
+const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide.mov';
 const COACHING_FRAMES = [
   '/images/coaching-frames/frame-03.png',
   '/images/coaching-frames/frame-04.png',
@@ -114,6 +115,15 @@ const HOME_COPY = {
       cardTwoTitle: 'Premium analytics animation loop.',
       cardTwoBody: 'A polished live analytics canvas that complements your global stats view with richer motion and performance storytelling.',
       frameTitle: 'Premium analytics animation',
+    },
+    tiktokStore: {
+      eyebrow: 'Consigue más ventas con',
+      headline: 'Una tienda optimizada para tráfico de TikTok',
+      verifiedTitle: 'Insignia verificada',
+      verifiedBody: 'Deja de perder visitantes. Tu insignia verificada genera confianza al instante y confirma que están en el lugar correcto, listos para comprar.',
+      browserTitle: '¿TikTok está bloqueando tu link?',
+      browserBody: 'La mayoría de herramientas de link en bio ignoran el problema del navegador de TikTok. Creamos una guía animada que lleva a tus visitantes a su navegador preferido para que cada clic realmente convierta.',
+      browserVideoLabel: 'Guía animada para abrir un link de TikTok en el navegador preferido',
     },
     finalCta: {
       line1: 'Build your store.',
@@ -216,6 +226,15 @@ const HOME_COPY = {
       cardTwoTitle: 'Visualización premium de estadísticas.',
       cardTwoBody: 'Un panel de estadísticas en vivo que complementa tus métricas globales con una narrativa visual más sólida.',
       frameTitle: 'Visualización premium de estadísticas',
+    },
+    tiktokStore: {
+      eyebrow: 'Consigue más ventas con',
+      headline: 'Una tienda optimizada para tráfico de TikTok',
+      verifiedTitle: 'Insignia verificada',
+      verifiedBody: 'Deja de perder visitantes. Tu insignia verificada genera confianza al instante y confirma que están en el lugar correcto, listos para comprar.',
+      browserTitle: '¿TikTok está bloqueando tu link?',
+      browserBody: 'La mayoría de herramientas de link en bio ignoran el problema del navegador de TikTok. Creamos una guía animada que lleva a tus visitantes a su navegador preferido para que cada clic realmente convierta.',
+      browserVideoLabel: 'Guía animada para abrir un link de TikTok en el navegador preferido',
     },
     finalCta: {
       line1: 'Crea tu perfil.',
@@ -527,6 +546,57 @@ export default function Home() {
               </SectionWrapper>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ===== 4. TIKTOK STORE OPTIMIZATION SECTION ===== */}
+      <section className="pt-4 pb-16 md:pt-6 md:pb-24">
+        <div className="container">
+          <SectionWrapper>
+            <p className={SECTION_EYEBROW_CLASS}>{copy.tiktokStore.eyebrow}</p>
+            <h2 className="text-[30px] sm:text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.02em] max-w-[760px] mb-12 md:mb-16">
+              {copy.tiktokStore.headline}
+            </h2>
+          </SectionWrapper>
+
+          <SectionWrapper delay={150}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+              <div className="card-navy-teal overflow-hidden p-5 md:p-6 transition-all duration-300">
+                <div className="relative h-[260px] md:h-[340px] lg:h-[380px] rounded-2xl overflow-hidden border border-white/10 bg-[#050814]">
+                  <VerifiedBadgePreview />
+                </div>
+
+                <div className="mt-6 pt-5 border-t border-white/10">
+                  <h3 className="text-white font-bold text-xl mb-3">{copy.tiktokStore.verifiedTitle}</h3>
+                  <p className="text-[#8A8F98] text-[15px] leading-[1.6]">
+                    {copy.tiktokStore.verifiedBody}
+                  </p>
+                </div>
+              </div>
+
+              <div className="card-navy-teal overflow-hidden p-5 md:p-6 transition-all duration-300">
+                <div className="relative h-[260px] md:h-[340px] lg:h-[380px] rounded-2xl overflow-hidden border border-white/10 bg-[#050814]">
+                  <video
+                    src={FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE}
+                    className="w-full h-full object-contain bg-[#050814]"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-label={copy.tiktokStore.browserVideoLabel}
+                  />
+                </div>
+
+                <div className="mt-6 pt-5 border-t border-white/10">
+                  <h3 className="text-white font-bold text-xl mb-3">{copy.tiktokStore.browserTitle}</h3>
+                  <p className="text-[#8A8F98] text-[15px] leading-[1.6]">
+                    {copy.tiktokStore.browserBody}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </SectionWrapper>
         </div>
       </section>
 
@@ -911,6 +981,30 @@ function CoachingCallsFeaturePreview() {
         );
       })}
       <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-black/4 pointer-events-none" />
+    </div>
+  );
+}
+
+function VerifiedBadgePreview() {
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-[radial-gradient(circle_at_center,_rgba(56,189,248,0.2)_0%,_rgba(11,25,38,0.62)_42%,_#050814_100%)] flex items-center justify-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="w-[168px] h-[168px] sm:w-[190px] sm:h-[190px] md:w-[220px] md:h-[220px] text-[#38BDF8] drop-shadow-[0_28px_70px_rgba(56,189,248,0.38)]"
+        aria-hidden="true"
+      >
+        <path
+          d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
+          fill="currentColor"
+        />
+        <path d="m9 12 2 2 4-4" />
+      </svg>
     </div>
   );
 }
