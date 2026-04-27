@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect, useRef, type CSSProperties } from 'react';
+import { AnimatePresence, motion, useInView, useReducedMotion, type Variants } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SectionWrapper from '@/components/SectionWrapper';
@@ -18,7 +19,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Eye, Globe, ShoppingBag, Lock,
   ChevronDown, BarChart3, Users,
-  Instagram, Facebook, Youtube, Music2, Check
+  Instagram, Facebook, Youtube, Music2, Check,
+  Play, Star, ArrowRight
 } from 'lucide-react';
 
 // Image URLs
@@ -37,7 +39,6 @@ const HERO_BG_VIDEO_SOURCES = [
 ];
 const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
-const FEATURE_VIDEO_COURSE_BUILDER = '/videos/features/course-builder.mov';
 const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide.mov';
 const COACHING_FRAMES = [
   '/images/coaching-frames/frame-03.png',
@@ -115,6 +116,123 @@ const DIGITAL_PRODUCT_PREVIEW_COPY = {
     ],
   },
 } as const;
+
+type CoursePreviewItem = {
+  category: string;
+  title: string;
+  desc: string;
+  price?: string;
+  oldPrice?: string;
+  rating?: string;
+  discount?: string;
+  durationLabel?: string;
+  cta: string;
+  accent: string;
+  buyer: string;
+};
+
+const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: CoursePreviewItem[] }> = {
+  en: {
+    eyebrow: 'Just sold',
+    items: [
+      {
+        category: 'Short-form video',
+        title: 'Short-Form Video Accelerator',
+        desc: 'Create scroll-stopping TikToks, Reels, and Shorts that grow your audience fast.',
+        price: '$79.99',
+        oldPrice: '$159.98',
+        rating: '4.9',
+        discount: '50% OFF',
+        cta: 'Get started',
+        accent: '#FF4F8A',
+        buyer: 'Maya · 12s ago',
+      },
+      {
+        category: 'Monetization',
+        title: 'Creator Monetization Bootcamp',
+        desc: 'Turn content into income with digital products, communities, and sponsorships.',
+        durationLabel: '10 min preview',
+        cta: 'Watch now',
+        accent: '#FFB14F',
+        buyer: '128 watching now',
+      },
+      {
+        category: 'Personal finance',
+        title: 'Personal Finance Blueprint',
+        desc: 'Budget, invest, and build long-term wealth with simple, creator-friendly systems.',
+        price: '$89.99',
+        oldPrice: '$179.98',
+        rating: '4.8',
+        discount: '50% OFF',
+        cta: 'Get started',
+        accent: '#5AB7FF',
+        buyer: 'Jordan · 32s ago',
+      },
+      {
+        category: 'Fitness',
+        title: 'Lean Body Transformation',
+        desc: 'Build strength, lose fat, and create a sustainable routine without endless gym hours.',
+        price: '$74.99',
+        oldPrice: '$149.98',
+        rating: '4.9',
+        discount: '50% OFF',
+        cta: 'Start training',
+        accent: '#51E29A',
+        buyer: 'Liv · 4s ago',
+      },
+    ],
+  },
+  es: {
+    eyebrow: 'Recién vendido',
+    items: [
+      {
+        category: 'Videos cortos',
+        title: 'Acelerador de videos cortos',
+        desc: 'Crea TikToks, Reels y Shorts que detienen el scroll y hacen crecer tu audiencia.',
+        price: '$79.99',
+        oldPrice: '$159.98',
+        rating: '4.9',
+        discount: '50% OFF',
+        cta: 'Empezar',
+        accent: '#FF4F8A',
+        buyer: 'Sofía · hace 12s',
+      },
+      {
+        category: 'Monetización',
+        title: 'Bootcamp de monetización',
+        desc: 'Convierte tu contenido en ingresos con productos digitales, comunidades y patrocinios.',
+        durationLabel: 'Vista previa · 10 min',
+        cta: 'Ver ahora',
+        accent: '#FFB14F',
+        buyer: '128 viendo ahora',
+      },
+      {
+        category: 'Finanzas',
+        title: 'Plan de finanzas personales',
+        desc: 'Aprende a presupuestar, invertir y construir riqueza con sistemas simples para creadores.',
+        price: '$89.99',
+        oldPrice: '$179.98',
+        rating: '4.8',
+        discount: '50% OFF',
+        cta: 'Empezar',
+        accent: '#5AB7FF',
+        buyer: 'Diego · hace 32s',
+      },
+      {
+        category: 'Fitness',
+        title: 'Transformación corporal lean',
+        desc: 'Gana fuerza, pierde grasa y arma una rutina sostenible sin pasar horas en el gimnasio.',
+        price: '$74.99',
+        oldPrice: '$149.98',
+        rating: '4.9',
+        discount: '50% OFF',
+        cta: 'Empezar a entrenar',
+        accent: '#51E29A',
+        buyer: 'Lucía · hace 4s',
+      },
+    ],
+  },
+};
 
 const HOME_COPY = {
   en: {
@@ -434,8 +552,7 @@ export default function Home() {
     {
       title: copy.features.cards.courses.title,
       desc: copy.features.cards.courses.desc,
-      videoSrc: FEATURE_VIDEO_COURSE_BUILDER,
-      videoClassName: undefined,
+      preview: <CoursesFeaturePreview />,
       metricLabel: copy.features.cards.courses.metricLabel,
       metricValue: copy.features.cards.courses.metricValue,
       icon: <Check className="w-4 h-4 text-blue-500" />,
@@ -589,20 +706,7 @@ export default function Home() {
               <SectionWrapper key={card.title} delay={i * 80}>
                 <div className={FEATURE_CARD_CLASS}>
                   <div className={FEATURE_CARD_MEDIA_CLASS}>
-                    {card.videoSrc ? (
-                      <video
-                        src={card.videoSrc}
-                        className={`${FEATURE_CARD_CONTENT_CLASS} ${card.videoClassName ?? 'object-cover'}`}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <div className={FEATURE_CARD_CONTENT_CLASS}>{card.preview}</div>
-                    )}
+                    <div className={FEATURE_CARD_CONTENT_CLASS}>{card.preview}</div>
                   </div>
                   <div className={FEATURE_CARD_BODY_CLASS}>
                     <h3 className={FEATURE_CARD_TITLE_CLASS}>{card.title}</h3>
@@ -799,111 +903,409 @@ export default function Home() {
 
 // ===== SUB-COMPONENTS =====
 
+const DIGITAL_PRODUCT_ROTATION_MS = 2200;
+const DIGITAL_PRODUCT_EASE = [0.22, 1, 0.36, 1] as const;
+
 function DigitalProductsFeaturePreview() {
   const { locale } = useLanguage();
   const copy = DIGITAL_PRODUCT_PREVIEW_COPY[locale];
   const [activeProduct, setActiveProduct] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.4 });
+  const reduceMotion = useReducedMotion() ?? false;
 
   useEffect(() => {
+    if (!isInView) return;
     const interval = setInterval(() => {
       setActiveProduct((current) => (current + 1) % copy.items.length);
-    }, 2200);
-
+    }, DIGITAL_PRODUCT_ROTATION_MS);
     return () => clearInterval(interval);
-  }, [copy.items.length]);
+  }, [copy.items.length, isInView]);
 
   const activeItem = copy.items[activeProduct];
 
+  const copyContainerVariants: Variants = {
+    enter: {
+      transition: { staggerChildren: reduceMotion ? 0 : 0.06, delayChildren: reduceMotion ? 0 : 0.04 },
+    },
+    exit: {
+      transition: { staggerChildren: reduceMotion ? 0 : 0.03, staggerDirection: -1 },
+    },
+  };
+
+  const copyChildVariants: Variants = {
+    initial: { opacity: 0, y: reduceMotion ? 0 : 8 },
+    enter: { opacity: 1, y: 0, transition: { duration: 0.42, ease: DIGITAL_PRODUCT_EASE } },
+    exit: { opacity: 0, y: reduceMotion ? 0 : -6, transition: { duration: 0.22, ease: 'easeIn' } },
+  };
+
   return (
-    <div className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center" aria-hidden="true">
+    <div
+      ref={containerRef}
+      className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
+      aria-hidden="true"
+    >
+      {/* Preload off-screen product images so the first cycles don't flash blank */}
+      <div className="hidden">
+        {copy.items.map((item) => (
+          <link key={item.imageSrc} rel="preload" as="image" href={item.imageSrc} />
+        ))}
+      </div>
+
       <div className="digital-product-preview-frame relative w-full max-w-[360px] h-full max-h-[332px] min-h-[268px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
         <div className="absolute inset-0 digital-product-grid opacity-45" />
 
+        {/* Left: product image with cross-fade + blur travel */}
         <div className="absolute left-4 top-5 bottom-[74px] w-[40%] max-w-[136px]">
-          {copy.items.map((item, index) => {
-            const isActive = index === activeProduct;
-
-            return (
-              <div
-                key={item.title}
-                className="absolute inset-0 rounded-[18px] border border-white/18 overflow-hidden transition-[opacity,transform,filter] duration-700 ease-out"
-                style={{
-                  opacity: isActive ? 1 : 0,
-                  filter: isActive ? 'blur(0)' : 'blur(5px)',
-                  transform: isActive ? 'translate3d(0,0,0) scale(1)' : 'translate3d(-8px,10px,0) scale(0.96)',
-                }}
-              >
-                <img
-                  src={item.imageSrc}
-                  alt=""
-                  className="h-full w-full object-cover"
-                  draggable="false"
-                />
-              </div>
-            );
-          })}
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.div
+              key={activeItem.title}
+              className="absolute inset-0 rounded-[18px] border border-white/18 overflow-hidden"
+              initial={
+                reduceMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, filter: 'blur(6px)', x: -8, y: 10, scale: 0.96 }
+              }
+              animate={
+                reduceMotion
+                  ? { opacity: 1 }
+                  : { opacity: 1, filter: 'blur(0px)', x: 0, y: 0, scale: 1 }
+              }
+              exit={
+                reduceMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, filter: 'blur(6px)', x: 8, y: -8, scale: 0.97 }
+              }
+              transition={{ duration: 0.62, ease: DIGITAL_PRODUCT_EASE }}
+            >
+              <img
+                src={activeItem.imageSrc}
+                alt=""
+                className="h-full w-full object-cover"
+                draggable={false}
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
 
+        {/* Right: staggered copy block + type pills */}
         <div className="absolute right-4 top-5 left-[48%] bottom-[74px] min-w-0">
           <div className="h-full rounded-[20px] border border-white/10 bg-white/[0.075] p-3.5 sm:p-4">
-            <div key={`copy-${activeProduct}`} className="digital-product-copy-shift min-w-0">
-              <div className="flex items-center justify-between gap-2">
-                <div className="inline-flex min-w-0 items-center rounded-full bg-white/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white/62">
-                  <span className="truncate">{activeItem.label}</span>
-                </div>
-                <div className="shrink-0 text-[14px] sm:text-[16px] font-bold leading-none text-white">
-                  {activeItem.price}
-                </div>
-              </div>
-              <h4 className="mt-2 text-[17px] sm:text-[19px] font-bold leading-[1.03] tracking-tight text-white">
-                {activeItem.title}
-              </h4>
-              <p className="mt-1 hidden sm:block truncate text-[11px] leading-tight text-white/52">
-                {activeItem.subtitle}
-              </p>
-            </div>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={`copy-${activeProduct}`}
+                className="min-w-0"
+                variants={copyContainerVariants}
+                initial="initial"
+                animate="enter"
+                exit="exit"
+              >
+                <motion.div
+                  className="flex items-center justify-between gap-2"
+                  variants={copyChildVariants}
+                >
+                  <div className="inline-flex min-w-0 items-center rounded-full bg-white/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white/62">
+                    <span className="truncate">{activeItem.label}</span>
+                  </div>
+                  <div className="shrink-0 text-[14px] sm:text-[16px] font-bold leading-none text-white tabular-nums">
+                    {activeItem.price}
+                  </div>
+                </motion.div>
+                <motion.h4
+                  className="mt-2 text-[17px] sm:text-[19px] font-bold leading-[1.03] tracking-tight text-white"
+                  variants={copyChildVariants}
+                >
+                  {activeItem.title}
+                </motion.h4>
+                <motion.p
+                  className="mt-1 hidden sm:block truncate text-[11px] leading-tight text-white/52"
+                  variants={copyChildVariants}
+                >
+                  {activeItem.subtitle}
+                </motion.p>
+              </motion.div>
+            </AnimatePresence>
 
             <div className="absolute left-3.5 right-3.5 bottom-3.5 space-y-1">
               {copy.items.map((item, index) => {
                 const isActive = index === activeProduct;
-
                 return (
-                  <div
+                  <motion.div
                     key={`type-${item.title}`}
-                    className="h-6 rounded-[9px] border bg-white/[0.045] px-1.5 flex items-center gap-1.5 transition-colors duration-500"
-                    style={{
+                    className="h-6 rounded-[9px] border bg-white/[0.045] px-1.5 flex items-center gap-1.5"
+                    animate={{
                       borderColor: isActive ? `${item.accent}80` : 'rgba(255, 255, 255, 0.1)',
-                      backgroundColor: isActive ? `${item.accent}18` : undefined,
+                      backgroundColor: isActive ? `${item.accent}18` : 'rgba(255, 255, 255, 0)',
+                      scale: isActive && !reduceMotion ? [1, 1.015, 1] : 1,
+                    }}
+                    transition={{
+                      borderColor: { duration: 0.45, ease: 'easeOut' },
+                      backgroundColor: { duration: 0.45, ease: 'easeOut' },
+                      scale: { duration: 0.55, ease: DIGITAL_PRODUCT_EASE },
                     }}
                   >
                     <img
                       src={item.imageSrc}
                       alt=""
                       className="h-4 w-4 shrink-0 rounded-[5px] object-cover"
-                      draggable="false"
+                      draggable={false}
                     />
                     <span className="min-w-0 truncate text-[8px] font-bold uppercase tracking-[0.1em] text-white/62">
                       {item.label}
                     </span>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
           </div>
         </div>
 
-        <div key={`receipt-${activeProduct}`} className="digital-product-receipt absolute left-4 right-4 bottom-4 h-[50px] rounded-[18px] border border-white/10 bg-[#091522]/92 px-4 flex items-center justify-between">
+        {/* Receipt: stays mounted; only progress bar restarts each cycle */}
+        <div className="absolute left-4 right-4 bottom-4 h-[50px] rounded-[18px] border border-white/10 bg-[#091522]/92 px-4 flex items-center justify-between">
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#51E29A]">{copy.statusLabel}</div>
+            <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#51E29A]">
+              {copy.statusLabel}
+            </div>
             <div className="mt-1 text-[11px] text-white/52 truncate">{copy.checkoutLabel}</div>
           </div>
-          <div className="ml-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#51E29A]/14">
+          <motion.div
+            key={`check-${activeProduct}`}
+            className="ml-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#51E29A]/14"
+            initial={reduceMotion ? false : { scale: 0.85 }}
+            animate={reduceMotion ? undefined : { scale: [0.85, 1.08, 1] }}
+            transition={{ duration: 0.5, ease: DIGITAL_PRODUCT_EASE }}
+          >
             <Check className="h-4 w-4 text-[#51E29A]" />
-          </div>
+          </motion.div>
           <div className="absolute left-4 right-4 bottom-0 h-px overflow-hidden bg-white/10">
-            <div className="digital-product-progress h-full bg-[#51E29A]" />
+            <motion.div
+              key={`progress-${activeProduct}`}
+              className="h-full bg-[#51E29A]"
+              style={{ transformOrigin: 'left center' }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{
+                duration: reduceMotion ? 0 : DIGITAL_PRODUCT_ROTATION_MS / 1000,
+                ease: 'linear',
+              }}
+            />
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const COURSE_ROTATION_MS = 3200;
+
+function CoursesFeaturePreview() {
+  const { locale } = useLanguage();
+  const copy = COURSES_PREVIEW_COPY[locale];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.4 });
+  const reduceMotion = useReducedMotion() ?? false;
+
+  useEffect(() => {
+    if (!isInView) return;
+    const interval = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % copy.items.length);
+    }, COURSE_ROTATION_MS);
+    return () => clearInterval(interval);
+  }, [copy.items.length, isInView]);
+
+  const activeCourse = copy.items[activeIndex];
+  const accent = activeCourse.accent;
+
+  const containerVariants: Variants = {
+    initial: {},
+    enter: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.07,
+        delayChildren: reduceMotion ? 0 : 0.05,
+      },
+    },
+    exit: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.04,
+        staggerDirection: -1,
+      },
+    },
+  };
+
+  const childVariants: Variants = {
+    initial: { opacity: 0, y: reduceMotion ? 0 : 14 },
+    enter: { opacity: 1, y: 0, transition: { duration: 0.42, ease: DIGITAL_PRODUCT_EASE } },
+    exit: { opacity: 0, y: reduceMotion ? 0 : -10, transition: { duration: 0.22, ease: 'easeIn' } },
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
+      aria-hidden="true"
+    >
+      <div className="relative w-full max-w-[360px] h-full max-h-[332px] min-h-[268px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
+        <div className="absolute inset-0 digital-product-grid opacity-45" />
+
+        {/* Accent glow that smoothly tweens between courses */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          animate={{
+            background: `radial-gradient(120% 70% at 0% 0%, ${accent}38 0%, transparent 65%), radial-gradient(80% 60% at 100% 100%, ${accent}24 0%, transparent 60%)`,
+          }}
+          transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
+        />
+
+        <div className="relative h-full p-3.5 sm:p-4 flex flex-col gap-2.5">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={activeIndex}
+              variants={containerVariants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+              className="flex flex-col gap-2.5 flex-1 min-h-0"
+            >
+              {/* Header row: live sale chip + rating */}
+              <motion.div
+                variants={childVariants}
+                className="flex items-center justify-between gap-2 h-5"
+              >
+                <div className="inline-flex items-center gap-1.5 min-w-0 text-[10px] font-semibold text-white/85">
+                  <span className="relative flex h-1.5 w-1.5 shrink-0">
+                    <motion.span
+                      className="absolute inset-0 rounded-full"
+                      style={{ background: accent }}
+                      animate={
+                        reduceMotion
+                          ? undefined
+                          : { boxShadow: [`0 0 0 0 ${accent}66`, `0 0 0 5px ${accent}00`] }
+                      }
+                      transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
+                    />
+                  </span>
+                  <span className="text-white/55 truncate">{copy.eyebrow}</span>
+                  <span className="text-white/30">·</span>
+                  <span className="truncate">{activeCourse.buyer}</span>
+                </div>
+                {activeCourse.rating && (
+                  <div className="inline-flex items-center gap-1 shrink-0 rounded-full bg-white/8 px-2 py-0.5 text-[10px] font-semibold text-white/85">
+                    <Star className="h-2.5 w-2.5 text-[#FFD15C]" fill="#FFD15C" strokeWidth={0} />
+                    {activeCourse.rating}
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Thumbnail */}
+              <motion.div
+                variants={childVariants}
+                className="relative h-[104px] rounded-[18px] overflow-hidden border border-white/10"
+                style={{
+                  background: `radial-gradient(120% 80% at 30% 20%, ${accent}55 0%, transparent 65%), linear-gradient(135deg, #0E1F36 0%, #06101D 100%)`,
+                }}
+              >
+                {/* category badge */}
+                <div className="absolute left-3 top-3 inline-flex items-center rounded-full bg-black/45 backdrop-blur-sm px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white/85">
+                  {activeCourse.category}
+                </div>
+
+                {/* discount badge */}
+                {activeCourse.discount && (
+                  <motion.div
+                    initial={reduceMotion ? false : { scale: 0.6, rotate: -10, opacity: 0 }}
+                    animate={
+                      reduceMotion ? undefined : { scale: 1, rotate: -6, opacity: 1 }
+                    }
+                    transition={{ delay: 0.28, type: 'spring', stiffness: 360, damping: 18 }}
+                    className="absolute right-3 top-3 inline-flex items-center rounded-md bg-[#FF4F4F] px-2 py-1 text-[10px] font-bold tracking-wide text-white shadow-[0_6px_14px_rgba(255,79,79,0.35)]"
+                  >
+                    {activeCourse.discount}
+                  </motion.div>
+                )}
+
+                {/* Duration label for free preview */}
+                {activeCourse.durationLabel && !activeCourse.price && (
+                  <div className="absolute right-3 top-3 inline-flex items-center rounded-full bg-black/55 backdrop-blur-sm px-2 py-1 text-[10px] font-semibold text-white/90">
+                    {activeCourse.durationLabel}
+                  </div>
+                )}
+
+                {/* Center play circle */}
+                <motion.div
+                  initial={reduceMotion ? false : { scale: 0.7, opacity: 0 }}
+                  animate={reduceMotion ? undefined : { scale: [0.7, 1.08, 1], opacity: 1 }}
+                  transition={{ duration: 0.55, ease: DIGITAL_PRODUCT_EASE }}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <div
+                    className="relative h-12 w-12 rounded-full flex items-center justify-center"
+                    style={{
+                      background: `${accent}28`,
+                      boxShadow: `0 0 0 6px ${accent}12, 0 8px 24px rgba(0,0,0,0.35)`,
+                    }}
+                  >
+                    <div
+                      className="absolute inset-1.5 rounded-full"
+                      style={{ background: accent, opacity: 0.95 }}
+                    />
+                    <Play
+                      className="relative h-3.5 w-3.5 text-[#07111D] translate-x-[1px]"
+                      fill="#07111D"
+                      strokeWidth={0}
+                    />
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* Title + description */}
+              <motion.div variants={childVariants} className="min-w-0">
+                <h4 className="text-[15px] sm:text-[16px] font-bold leading-[1.15] tracking-tight text-white line-clamp-1">
+                  {activeCourse.title}
+                </h4>
+                <p className="mt-1 text-[11px] leading-[1.35] text-white/55 line-clamp-2">
+                  {activeCourse.desc}
+                </p>
+              </motion.div>
+
+              {/* Footer: price + CTA */}
+              <motion.div
+                variants={childVariants}
+                className="mt-auto flex items-center justify-between gap-3"
+              >
+                <div className="flex items-baseline gap-2 min-w-0">
+                  {activeCourse.price ? (
+                    <>
+                      <span className="text-[18px] font-bold text-white tabular-nums">
+                        {activeCourse.price}
+                      </span>
+                      {activeCourse.oldPrice && (
+                        <span className="text-[11px] text-white/40 line-through tabular-nums">
+                          {activeCourse.oldPrice}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white/65">
+                      {activeCourse.durationLabel}
+                    </span>
+                  )}
+                </div>
+                <motion.div
+                  initial={reduceMotion ? false : { scale: 0.92, opacity: 0 }}
+                  animate={reduceMotion ? undefined : { scale: [0.92, 1.04, 1], opacity: 1 }}
+                  transition={{ delay: 0.35, duration: 0.45, ease: DIGITAL_PRODUCT_EASE }}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold text-[#07111D] shadow-[0_8px_18px_rgba(0,0,0,0.25)]"
+                  style={{ background: accent }}
+                >
+                  <span className="whitespace-nowrap">{activeCourse.cta}</span>
+                  <ArrowRight className="h-3 w-3" strokeWidth={3} />
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>
