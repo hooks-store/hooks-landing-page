@@ -20,7 +20,9 @@ import {
   Eye, Globe, ShoppingBag, Lock,
   ChevronDown, BarChart3, Users,
   Instagram, Facebook, Youtube, Music2, Check,
-  Play, Star, ArrowRight
+  Play, Star, ArrowRight,
+  Calendar, Video, Bell, Mic, PhoneOff,
+  Bookmark, Compass
 } from 'lucide-react';
 
 // Image URLs
@@ -40,11 +42,6 @@ const HERO_BG_VIDEO_SOURCES = [
 const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
 const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide.mov';
-const COACHING_FRAMES = [
-  '/images/coaching-frames/frame-03.png',
-  '/images/coaching-frames/frame-04.png',
-  '/images/coaching-frames/frame-05.png',
-];
 const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
 const SECTION_HEADLINE_CLASS = 'text-[30px] sm:text-[40px] md:text-[48px] lg:text-[clamp(36px,3.6vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] lg:whitespace-nowrap';
 const FEATURE_CARD_CLASS = 'bg-[linear-gradient(180deg,_#0B1926_0%,_#0A0A0A_76%)] border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-all duration-300 group';
@@ -584,16 +581,7 @@ export default function Home() {
     {
       title: copy.features.cards.designSite.title,
       desc: copy.features.cards.designSite.desc,
-      preview: (
-        <iframe
-          src="/videos/features/design-link-in-bio-site-loop.html"
-          title={copy.features.cards.designSite.imageAlt}
-          className="w-full h-full border-0 pointer-events-none bg-transparent"
-          loading="lazy"
-          tabIndex={-1}
-          aria-hidden="true"
-        />
-      ),
+      preview: <DesignSiteFeaturePreview />,
       metricLabel: copy.features.cards.designSite.metricLabel,
       metricValue: copy.features.cards.designSite.metricValue,
       icon: <Globe className="w-3.5 h-3.5 text-cyan-500" />,
@@ -1535,42 +1523,756 @@ function MembershipsFeaturePreview() {
   );
 }
 
+type CoachingFeatureKey = 'agenda' | 'payment' | 'video' | 'reminders' | 'reviews';
+
+type CoachingFeatureItem = {
+  key: CoachingFeatureKey;
+  eyebrow: string;
+  meta: string;
+  title: string;
+  description: string;
+  ctaLabel: string;
+  badgeLabel: string;
+  accent: string;
+};
+
+type CoachingPreviewCopy = {
+  coachInitials: string;
+  coachName: string;
+  coachRole: string;
+  items: CoachingFeatureItem[];
+};
+
+const COACHING_PREVIEW_COPY: Record<'en' | 'es', CoachingPreviewCopy> = {
+  es: {
+    coachInitials: 'SM',
+    coachName: 'Sofía Méndez',
+    coachRole: 'Coach de creadores',
+    items: [
+      {
+        key: 'agenda',
+        eyebrow: 'Agenda abierta',
+        meta: '12 horarios disponibles',
+        title: 'Reserva 1:1 en un toque',
+        description: 'Sincroniza Google Calendar, Zoom o Teams al instante.',
+        ctaLabel: 'Reservar',
+        badgeLabel: 'Hoy',
+        accent: '#4F8FFF',
+      },
+      {
+        key: 'payment',
+        eyebrow: 'Pago confirmado',
+        meta: 'Hace 8 segundos',
+        title: 'Cobra al instante',
+        description: 'El pago se captura automáticamente al reservar.',
+        ctaLabel: 'Recibido',
+        badgeLabel: '+$120',
+        accent: '#22C55E',
+      },
+      {
+        key: 'video',
+        eyebrow: 'Google Meet',
+        meta: 'En vivo · 24:18',
+        title: 'Videollamadas con Google Meet',
+        description: 'Link de Google Meet automático en cada reserva.',
+        ctaLabel: 'Unirse',
+        badgeLabel: 'En vivo',
+        accent: '#6366F1',
+      },
+      {
+        key: 'reminders',
+        eyebrow: 'Recordatorios automáticos',
+        meta: '3 enviados',
+        title: 'Cero asistencias perdidas',
+        description: 'Notificaciones por email y push antes de cada sesión.',
+        ctaLabel: 'Activos',
+        badgeLabel: '24h',
+        accent: '#F59E0B',
+      },
+      {
+        key: 'reviews',
+        eyebrow: 'Nueva reseña',
+        meta: 'María G.',
+        title: 'Construye tu reputación',
+        description: 'Reseñas verificadas que generan confianza al instante.',
+        ctaLabel: '5,0',
+        badgeLabel: 'Verificada',
+        accent: '#FBBF24',
+      },
+    ],
+  },
+  en: {
+    coachInitials: 'SM',
+    coachName: 'Sofía Méndez',
+    coachRole: 'Creator coach',
+    items: [
+      {
+        key: 'agenda',
+        eyebrow: 'Open availability',
+        meta: '12 slots available',
+        title: 'Book a 1:1 in one tap',
+        description: 'Sync Google Calendar, Zoom or Teams in one tap.',
+        ctaLabel: 'Book',
+        badgeLabel: 'Today',
+        accent: '#4F8FFF',
+      },
+      {
+        key: 'payment',
+        eyebrow: 'Payment captured',
+        meta: '8 seconds ago',
+        title: 'Get paid instantly',
+        description: 'Payment is collected the moment a session is booked.',
+        ctaLabel: 'Received',
+        badgeLabel: '+$120',
+        accent: '#22C55E',
+      },
+      {
+        key: 'video',
+        eyebrow: 'Google Meet',
+        meta: 'Live · 24:18',
+        title: 'Video calls with Google Meet',
+        description: 'Auto-generated Google Meet link with every booking.',
+        ctaLabel: 'Join',
+        badgeLabel: 'Live',
+        accent: '#6366F1',
+      },
+      {
+        key: 'reminders',
+        eyebrow: 'Auto reminders',
+        meta: '3 sent',
+        title: 'Zero missed sessions',
+        description: 'Email and push reminders before every session.',
+        ctaLabel: 'On',
+        badgeLabel: '24h',
+        accent: '#F59E0B',
+      },
+      {
+        key: 'reviews',
+        eyebrow: 'New review',
+        meta: 'María G.',
+        title: 'Build your reputation',
+        description: 'Verified reviews that build trust instantly.',
+        ctaLabel: '5.0',
+        badgeLabel: 'Verified',
+        accent: '#FBBF24',
+      },
+    ],
+  },
+};
+
+const COACHING_ROTATION_MS = 2900;
+const COACH_AVATAR_SRC = '/images/coach-avatar.jpg';
+
 function CoachingCallsFeaturePreview() {
-  const [activeFrame, setActiveFrame] = useState(0);
+  const { locale } = useLanguage();
+  const copy = COACHING_PREVIEW_COPY[locale];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.4 });
+  const reduceMotion = useReducedMotion() ?? false;
 
   useEffect(() => {
+    if (!isInView) return;
     const interval = setInterval(() => {
-      setActiveFrame((prev) => (prev + 1) % COACHING_FRAMES.length);
-    }, 1300);
+      setActiveIndex((current) => (current + 1) % copy.items.length);
+    }, COACHING_ROTATION_MS);
     return () => clearInterval(interval);
-  }, []);
+  }, [copy.items.length, isInView]);
+
+  const item = copy.items[activeIndex];
+  const accent = item.accent;
+
+  const containerVariants: Variants = {
+    initial: {},
+    enter: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.07,
+        delayChildren: reduceMotion ? 0 : 0.05,
+      },
+    },
+    exit: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.04,
+        staggerDirection: -1,
+      },
+    },
+  };
+
+  const childVariants: Variants = {
+    initial: { opacity: 0, y: reduceMotion ? 0 : 14 },
+    enter: { opacity: 1, y: 0, transition: { duration: 0.42, ease: DIGITAL_PRODUCT_EASE } },
+    exit: { opacity: 0, y: reduceMotion ? 0 : -10, transition: { duration: 0.22, ease: 'easeIn' } },
+  };
 
   return (
-    <div className="h-full w-full bg-transparent relative overflow-hidden">
-      {COACHING_FRAMES.map((src, index) => {
-        const isActive = index === activeFrame;
+    <div
+      ref={containerRef}
+      className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
+      aria-hidden="true"
+    >
+      <div className="relative w-full max-w-[360px] h-full max-h-[332px] min-h-[280px] rounded-[26px] border border-white/[0.08] bg-black overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.05),_rgba(255,255,255,0)_45%)]" />
 
-        return (
-          <div
-            key={src}
-            className="absolute inset-0 transition-opacity duration-[850ms] ease-out"
-            style={{ opacity: isActive ? 1 : 0 }}
-          >
-            <img
-              src={src}
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover opacity-0 blur-sm"
-            />
-            <img
-              src={src}
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-contain p-2"
-            />
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          animate={{
+            background: `radial-gradient(120% 70% at 0% 0%, ${accent}26 0%, transparent 65%), radial-gradient(80% 60% at 100% 100%, ${accent}14 0%, transparent 60%)`,
+          }}
+          transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
+        />
+
+        <div className="relative h-full p-3.5 sm:p-4 flex flex-col gap-2.5">
+          {/* Persistent coach identity row */}
+          <div className="flex items-center gap-2.5 h-9 shrink-0">
+            <div className="relative h-9 w-9 shrink-0">
+              <motion.div
+                className="absolute -inset-1 rounded-full"
+                animate={{
+                  background: `conic-gradient(from 180deg, ${accent} 0deg, ${accent}00 140deg, ${accent} 360deg)`,
+                  rotate: reduceMotion ? 0 : 360,
+                }}
+                transition={{
+                  background: { duration: 0.7, ease: DIGITAL_PRODUCT_EASE },
+                  rotate: { duration: 12, repeat: Infinity, ease: 'linear' },
+                }}
+                style={{ opacity: 0.75 }}
+              />
+              <img
+                src={COACH_AVATAR_SRC}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full rounded-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              <span className="absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full bg-black flex items-center justify-center">
+                <motion.span
+                  className="h-2 w-2 rounded-full"
+                  animate={{ background: accent }}
+                  transition={{ duration: 0.6, ease: DIGITAL_PRODUCT_EASE }}
+                />
+              </span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[12px] font-semibold text-white/95 truncate">{copy.coachName}</div>
+              <div className="text-[10px] text-white/55 truncate">{copy.coachRole}</div>
+            </div>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={`badge-${activeIndex}`}
+                initial={reduceMotion ? false : { scale: 0.85, opacity: 0 }}
+                animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+                exit={reduceMotion ? undefined : { scale: 0.85, opacity: 0 }}
+                transition={{ duration: 0.22, ease: DIGITAL_PRODUCT_EASE }}
+                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums shrink-0"
+                style={{
+                  background: `${accent}1f`,
+                  color: accent,
+                  boxShadow: `inset 0 0 0 1px ${accent}55`,
+                }}
+              >
+                {item.badgeLabel}
+              </motion.div>
+            </AnimatePresence>
           </div>
+
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={activeIndex}
+              variants={containerVariants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+              className="flex flex-col gap-2.5 flex-1 min-h-0"
+            >
+              {/* Eyebrow */}
+              <motion.div
+                variants={childVariants}
+                className="flex items-center gap-1.5 text-[10px] font-semibold text-white/85 h-4"
+              >
+                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                  <motion.span
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: accent }}
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : { boxShadow: [`0 0 0 0 ${accent}66`, `0 0 0 5px ${accent}00`] }
+                    }
+                    transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
+                  />
+                </span>
+                <span className="text-white/55 truncate">{item.eyebrow}</span>
+                <span className="text-white/30">·</span>
+                <span className="truncate">{item.meta}</span>
+              </motion.div>
+
+              {/* Center scene */}
+              <motion.div variants={childVariants} className="flex-1 min-h-0">
+                <CoachingScene featureKey={item.key} accent={accent} reduceMotion={reduceMotion} />
+              </motion.div>
+
+              {/* Footer */}
+              <motion.div
+                variants={childVariants}
+                className="flex items-end justify-between gap-3"
+              >
+                <div className="min-w-0">
+                  <h4 className="text-[14px] sm:text-[15px] font-bold leading-[1.15] tracking-tight text-white line-clamp-1">
+                    {item.title}
+                  </h4>
+                  <p className="mt-0.5 text-[11px] leading-[1.35] text-white/55 line-clamp-1">
+                    {item.description}
+                  </p>
+                </div>
+                <motion.div
+                  initial={reduceMotion ? false : { scale: 0.92, opacity: 0 }}
+                  animate={reduceMotion ? undefined : { scale: [0.92, 1.04, 1], opacity: 1 }}
+                  transition={{ delay: 0.35, duration: 0.45, ease: DIGITAL_PRODUCT_EASE }}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold text-[#07111D] shadow-[0_8px_18px_rgba(0,0,0,0.25)]"
+                  style={{ background: accent }}
+                >
+                  <span className="whitespace-nowrap">{item.ctaLabel}</span>
+                  <ArrowRight className="h-3 w-3" strokeWidth={3} />
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type CoachingSceneProps = {
+  accent: string;
+  reduceMotion: boolean;
+};
+
+function CoachingScene({
+  featureKey,
+  accent,
+  reduceMotion,
+}: CoachingSceneProps & { featureKey: CoachingFeatureKey }) {
+  switch (featureKey) {
+    case 'agenda':
+      return <AgendaScene accent={accent} reduceMotion={reduceMotion} />;
+    case 'payment':
+      return <PaymentScene accent={accent} reduceMotion={reduceMotion} />;
+    case 'video':
+      return <VideoCallScene accent={accent} reduceMotion={reduceMotion} />;
+    case 'reminders':
+      return <RemindersScene accent={accent} reduceMotion={reduceMotion} />;
+    case 'reviews':
+      return <ReviewsScene accent={accent} reduceMotion={reduceMotion} />;
+    default:
+      return null;
+  }
+}
+
+function GoogleCalendarIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true">
+      <defs>
+        <clipPath id="gcal-clip">
+          <rect x="6" y="6" width="88" height="88" rx="10" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#gcal-clip)">
+        <rect width="100" height="100" fill="#fff" />
+        <rect x="0" y="0" width="62" height="62" fill="#4285F4" />
+        <rect x="62" y="0" width="38" height="62" fill="#FBBC04" />
+        <rect x="0" y="62" width="62" height="38" fill="#34A853" />
+        <rect x="62" y="62" width="38" height="38" fill="#EA4335" />
+        <rect x="22" y="22" width="40" height="40" fill="#fff" />
+        <text
+          x="42"
+          y="52"
+          fontFamily="Inter,Roboto,Arial,sans-serif"
+          fontWeight="800"
+          fontSize="26"
+          fill="#1A73E8"
+          textAnchor="middle"
+        >
+          31
+        </text>
+      </g>
+    </svg>
+  );
+}
+
+function ZoomBrandIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true">
+      <rect width="100" height="100" rx="22" fill="#2D8CFF" />
+      <path
+        d="M22 38h36c2.2 0 4 1.8 4 4v18c0 2.2-1.8 4-4 4H22c-2.2 0-4-1.8-4-4V42c0-2.2 1.8-4 4-4Zm44 7 14-8c1-.6 2 .2 2 1.4v25.2c0 1.2-1 2-2 1.4l-14-8z"
+        fill="#fff"
+      />
+    </svg>
+  );
+}
+
+function TeamsBrandIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true">
+      <rect width="100" height="100" rx="22" fill="#5059C9" />
+      <text
+        x="50"
+        y="68"
+        fontFamily="Inter,Roboto,Arial,sans-serif"
+        fontWeight="800"
+        fontSize="48"
+        fill="#fff"
+        textAnchor="middle"
+      >
+        T
+      </text>
+    </svg>
+  );
+}
+
+function GoogleMeetBrandIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 100 100" width={size} height={size} aria-hidden="true">
+      <rect width="100" height="100" rx="20" fill="#fff" />
+      <path d="M58 50 80 36v28L58 50z" fill="#FBBC04" />
+      <path d="M16 32h42v36H22a6 6 0 0 1-6-6V32z" fill="#00AC47" />
+      <path d="M22 32h36v8H16v-2a6 6 0 0 1 6-6z" fill="#EA4335" />
+      <rect x="80" y="36" width="6" height="28" rx="2" fill="#4285F4" />
+    </svg>
+  );
+}
+
+function AgendaScene({ accent, reduceMotion }: CoachingSceneProps) {
+  const slots = [
+    { time: '09:30', duration: '30 min', booked: false },
+    { time: '11:00', duration: '45 min', booked: true },
+    { time: '15:30', duration: '30 min', booked: false },
+  ];
+  const bookedAccent = '#22C55E';
+
+  return (
+    <div className="h-full flex flex-col gap-2">
+      {/* Integration chip */}
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: -6 }}
+        animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: DIGITAL_PRODUCT_EASE }}
+        className="flex items-center gap-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] px-2 py-1 self-start"
+      >
+        <GoogleCalendarIcon size={13} />
+        <span className="text-[10px] font-semibold text-white/90">Google Calendar</span>
+        <span className="text-white/20 text-[10px]">·</span>
+        <span className="text-[10px] font-semibold text-[#22C55E]">Conectado</span>
+        <div className="flex items-center gap-0.5 ml-1 pl-1.5 border-l border-white/[0.08]">
+          <ZoomBrandIcon size={11} />
+          <TeamsBrandIcon size={11} />
+        </div>
+      </motion.div>
+
+      {/* Time slots */}
+      <div className="flex flex-col gap-1.5 flex-1 min-h-0 justify-center">
+        {slots.map((s, i) => {
+          const slotAccent = s.booked ? bookedAccent : accent;
+          return (
+            <motion.div
+              key={i}
+              initial={reduceMotion ? false : { x: -14, opacity: 0 }}
+              animate={reduceMotion ? undefined : { x: 0, opacity: 1 }}
+              transition={{ delay: 0.18 + 0.06 * i, duration: 0.36, ease: DIGITAL_PRODUCT_EASE }}
+              className="flex items-center gap-2 rounded-lg px-2.5 py-1.5"
+              style={{
+                background: s.booked ? `${slotAccent}1f` : 'rgba(255,255,255,0.04)',
+                border: s.booked
+                  ? `1px solid ${slotAccent}80`
+                  : '1px solid rgba(255,255,255,0.06)',
+              }}
+            >
+              {s.booked ? (
+                <motion.div
+                  initial={reduceMotion ? false : { scale: 0, rotate: -45 }}
+                  animate={reduceMotion ? undefined : { scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.32, type: 'spring', stiffness: 360, damping: 18 }}
+                  className="h-4 w-4 shrink-0 rounded-full flex items-center justify-center"
+                  style={{ background: slotAccent }}
+                >
+                  <Check className="h-2.5 w-2.5 text-black" strokeWidth={3.5} />
+                </motion.div>
+              ) : (
+                <Calendar
+                  className="h-3 w-3 shrink-0"
+                  style={{ color: 'rgba(255,255,255,0.45)' }}
+                />
+              )}
+              <span className="text-[11px] font-bold tabular-nums text-white/90">{s.time}</span>
+              <span className="text-[10px] text-white/45">{s.duration}</span>
+              {s.booked && (
+                <motion.span
+                  initial={reduceMotion ? false : { scale: 0, opacity: 0 }}
+                  animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.42, type: 'spring', stiffness: 360, damping: 18 }}
+                  className="ml-auto inline-flex items-center rounded-full px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide"
+                  style={{ background: slotAccent, color: '#06140A' }}
+                >
+                  Reservado
+                </motion.span>
+              )}
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PaymentScene({ accent, reduceMotion }: CoachingSceneProps) {
+  return (
+    <div className="h-full flex flex-col items-center justify-center gap-2.5">
+      <div className="relative flex items-center justify-center">
+        <motion.span
+          className="absolute h-14 w-14 rounded-full"
+          style={{ background: `${accent}33` }}
+          animate={reduceMotion ? undefined : { scale: [1, 1.6, 2], opacity: [0.55, 0.18, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeOut' }}
+        />
+        <motion.div
+          initial={reduceMotion ? false : { scale: 0.6, opacity: 0 }}
+          animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, type: 'spring', stiffness: 320, damping: 18 }}
+          className="relative h-12 w-12 rounded-full flex items-center justify-center"
+          style={{
+            background: accent,
+            boxShadow: `0 10px 28px ${accent}55, inset 0 0 0 4px ${accent}33`,
+          }}
+        >
+          <Check className="h-6 w-6 text-[#07111D]" strokeWidth={3} />
+        </motion.div>
+      </div>
+      <motion.div
+        initial={reduceMotion ? false : { y: 8, opacity: 0 }}
+        animate={reduceMotion ? undefined : { y: 0, opacity: 1 }}
+        transition={{ delay: 0.18, duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
+        className="text-center"
+      >
+        <div className="text-[24px] font-bold text-white tabular-nums leading-none">$120 USD</div>
+        <div className="mt-1 text-[9px] uppercase tracking-[0.18em] text-white/50">
+          VISA · ••4242 · Stripe
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function VideoCallScene({ accent, reduceMotion }: CoachingSceneProps) {
+  const tiles = [
+    { initials: 'SM', live: true },
+    { initials: 'JC', live: false },
+  ];
+  const controls = [
+    { Icon: Mic, danger: false },
+    { Icon: Video, danger: false },
+    { Icon: PhoneOff, danger: true },
+  ];
+
+  return (
+    <div className="h-full flex flex-col gap-1.5">
+      {/* Google Meet pill */}
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: -6 }}
+        animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.32, ease: DIGITAL_PRODUCT_EASE }}
+        className="flex items-center gap-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] px-2 py-1 self-start"
+      >
+        <GoogleMeetBrandIcon size={13} />
+        <span className="text-[10px] font-semibold text-white/90">Google Meet</span>
+        <span className="text-white/20 text-[10px]">·</span>
+        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#22C55E]">
+          <motion.span
+            className="h-1 w-1 rounded-full bg-[#22C55E]"
+            animate={reduceMotion ? undefined : { opacity: [0.45, 1, 0.45] }}
+            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          Conectada
+        </span>
+      </motion.div>
+
+      <div className="grid grid-cols-2 gap-1.5 flex-1 min-h-0">
+        {tiles.map((t, i) => (
+          <motion.div
+            key={i}
+            initial={reduceMotion ? false : { scale: 0.92, opacity: 0 }}
+            animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+            transition={{ delay: 0.05 + 0.08 * i, duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
+            className="relative rounded-xl border border-white/10 overflow-hidden flex items-end justify-start p-2"
+            style={{
+              background: `radial-gradient(130% 90% at ${i === 0 ? '30%' : '70%'} 25%, ${accent}38 0%, transparent 65%), linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))`,
+            }}
+          >
+            {t.initials === 'SM' ? (
+              <img
+                src={COACH_AVATAR_SRC}
+                alt=""
+                aria-hidden="true"
+                className="h-7 w-7 rounded-full object-cover ring-1 ring-white/20"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div
+                className="h-7 w-7 rounded-full flex items-center justify-center text-[10px] font-bold text-black"
+                style={{ background: `linear-gradient(135deg, ${accent} 0%, #ffffff 100%)` }}
+              >
+                {t.initials}
+              </div>
+            )}
+            {t.live && (
+              <div className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-black/65 backdrop-blur-sm px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-white">
+                <motion.span
+                  className="h-1 w-1 rounded-full"
+                  style={{ background: '#EF4444' }}
+                  animate={reduceMotion ? undefined : { opacity: [0.45, 1, 0.45] }}
+                  transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                />
+                Live
+              </div>
+            )}
+          </motion.div>
+        ))}
+      </div>
+      <div className="flex items-center justify-center gap-1.5">
+        {controls.map((c, i) => {
+          const Icon = c.Icon;
+          return (
+            <motion.div
+              key={i}
+              initial={reduceMotion ? false : { y: 8, opacity: 0 }}
+              animate={reduceMotion ? undefined : { y: 0, opacity: 1 }}
+              transition={{ delay: 0.22 + 0.05 * i, duration: 0.32, ease: DIGITAL_PRODUCT_EASE }}
+              className="h-7 w-7 rounded-full flex items-center justify-center"
+              style={
+                c.danger
+                  ? { background: '#EF4444', boxShadow: '0 4px 14px rgba(239,68,68,0.5)' }
+                  : {
+                      background: 'rgba(255,255,255,0.06)',
+                      border: '1px solid rgba(255,255,255,0.12)',
+                    }
+              }
+            >
+              <Icon className="h-3 w-3 text-white" strokeWidth={2.4} />
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function RemindersScene({ accent, reduceMotion }: CoachingSceneProps) {
+  const reminders = [
+    { time: '24 h antes', msg: 'Recordatorio enviado', state: 'sent' as const },
+    { time: '1 h antes', msg: 'Tu sesión inicia pronto', state: 'sent' as const },
+    { time: '15 min', msg: 'Conéctate ahora', state: 'live' as const },
+  ];
+
+  return (
+    <div className="h-full flex flex-col gap-1.5 justify-center">
+      {reminders.map((r, i) => {
+        const isLive = r.state === 'live';
+        return (
+          <motion.div
+            key={i}
+            initial={reduceMotion ? false : { x: -16, opacity: 0 }}
+            animate={reduceMotion ? undefined : { x: 0, opacity: 1 }}
+            transition={{ delay: 0.05 + 0.07 * i, duration: 0.42, ease: DIGITAL_PRODUCT_EASE }}
+            className="flex items-center gap-2 rounded-lg px-2.5 py-1.5"
+            style={{
+              background: isLive ? `${accent}1c` : 'rgba(255,255,255,0.04)',
+              border: isLive
+                ? `1px solid ${accent}66`
+                : '1px solid rgba(255,255,255,0.07)',
+            }}
+          >
+            <div
+              className="relative h-6 w-6 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: isLive ? accent : 'rgba(255,255,255,0.08)' }}
+            >
+              <Bell
+                className="h-3 w-3"
+                style={{ color: isLive ? '#07111D' : 'rgba(255,255,255,0.7)' }}
+                strokeWidth={2.4}
+              />
+              {isLive && !reduceMotion && (
+                <motion.span
+                  className="absolute inset-0 rounded-full"
+                  style={{ border: `2px solid ${accent}` }}
+                  animate={{ scale: [1, 1.5], opacity: [0.6, 0] }}
+                  transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
+                />
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[9px] font-bold uppercase tracking-wide text-white/45">
+                {r.time}
+              </div>
+              <div className="text-[11px] font-semibold text-white/90 truncate">{r.msg}</div>
+            </div>
+            {r.state === 'sent' && (
+              <Check className="h-3 w-3 shrink-0" style={{ color: accent }} strokeWidth={3} />
+            )}
+          </motion.div>
         );
       })}
+    </div>
+  );
+}
+
+function ReviewsScene({ accent, reduceMotion }: CoachingSceneProps) {
+  return (
+    <div className="h-full flex flex-col items-center justify-center gap-2 text-center px-3">
+      <div className="flex items-center gap-1">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <motion.div
+            key={i}
+            initial={reduceMotion ? false : { scale: 0, rotate: -45, opacity: 0 }}
+            animate={reduceMotion ? undefined : { scale: 1, rotate: 0, opacity: 1 }}
+            transition={{
+              delay: 0.05 + 0.08 * i,
+              type: 'spring',
+              stiffness: 360,
+              damping: 18,
+            }}
+          >
+            <Star
+              className="h-4 w-4"
+              style={{ color: accent }}
+              fill={accent}
+              strokeWidth={0}
+            />
+          </motion.div>
+        ))}
+      </div>
+      <motion.p
+        initial={reduceMotion ? false : { y: 8, opacity: 0 }}
+        animate={reduceMotion ? undefined : { y: 0, opacity: 1 }}
+        transition={{ delay: 0.45, duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
+        className="text-[12px] leading-[1.35] text-white/85 italic"
+      >
+        «Una sesión increíble, súper recomendada.»
+      </motion.p>
+      <motion.div
+        initial={reduceMotion ? false : { y: 8, opacity: 0 }}
+        animate={reduceMotion ? undefined : { y: 0, opacity: 1 }}
+        transition={{ delay: 0.55, duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
+        className="flex items-center gap-2"
+      >
+        <div
+          className="h-5 w-5 rounded-full"
+          style={{ background: `linear-gradient(135deg, ${accent} 0%, #FF4F8A 100%)` }}
+        />
+        <span className="text-[11px] font-semibold text-white/85">María G.</span>
+        <span className="text-[10px] text-white/45">· hace 2 días</span>
+      </motion.div>
     </div>
   );
 }
@@ -1595,6 +2297,335 @@ function VerifiedBadgePreview() {
         />
         <path d="m9 12 2 2 4-4" />
       </svg>
+    </div>
+  );
+}
+
+type DesignSiteTheme = {
+  id: string;
+  label: { en: string; es: string };
+  swatch: string;
+  bg: string;
+  text: string;
+  subtext: string;
+  cardBg: string;
+  cardBorder: string;
+  glow: string;
+  avatarRing: string;
+};
+
+const DESIGN_SITE_THEMES: DesignSiteTheme[] = [
+  {
+    id: 'onyx',
+    label: { en: 'Onyx Black', es: 'Negro Onyx' },
+    swatch: '#0A0F1A',
+    bg: '#0A0F1A',
+    text: '#FFFFFF',
+    subtext: 'rgba(255,255,255,0.62)',
+    cardBg: 'rgba(255,255,255,0.06)',
+    cardBorder: 'rgba(255,255,255,0.08)',
+    glow: 'radial-gradient(80% 60% at 50% 0%, rgba(90,75,255,0.18) 0%, transparent 60%)',
+    avatarRing: 'rgba(255,255,255,0.18)',
+  },
+  {
+    id: 'ivory',
+    label: { en: 'Ivory Light', es: 'Marfil Claro' },
+    swatch: '#F4F6FB',
+    bg: '#F4F6FB',
+    text: '#0A0F1A',
+    subtext: 'rgba(10,15,26,0.55)',
+    cardBg: 'rgba(255,255,255,0.92)',
+    cardBorder: 'rgba(10,15,26,0.06)',
+    glow: 'radial-gradient(80% 60% at 50% 0%, rgba(255,255,255,0.32) 0%, transparent 60%)',
+    avatarRing: 'rgba(10,15,26,0.10)',
+  },
+  {
+    id: 'bora',
+    label: { en: 'Bora Purple', es: 'Bora Púrpura' },
+    swatch: '#D8CCFB',
+    bg: '#D8CCFB',
+    text: '#1B0F3D',
+    subtext: 'rgba(27,15,61,0.62)',
+    cardBg: 'rgba(255,255,255,0.55)',
+    cardBorder: 'rgba(27,15,61,0.08)',
+    glow: 'radial-gradient(80% 60% at 50% 0%, rgba(167,139,250,0.32) 0%, transparent 60%)',
+    avatarRing: 'rgba(255,255,255,0.7)',
+  },
+  {
+    id: 'blush',
+    label: { en: 'Blush Pink', es: 'Rosa Blush' },
+    swatch: '#FAC8D6',
+    bg: '#FAC8D6',
+    text: '#3D0F22',
+    subtext: 'rgba(61,15,34,0.62)',
+    cardBg: 'rgba(255,255,255,0.6)',
+    cardBorder: 'rgba(61,15,34,0.08)',
+    glow: 'radial-gradient(80% 60% at 50% 0%, rgba(255,170,196,0.34) 0%, transparent 60%)',
+    avatarRing: 'rgba(255,255,255,0.7)',
+  },
+  {
+    id: 'vibrant',
+    label: { en: 'Hooks Vibrant', es: 'Hooks Vibrante' },
+    swatch: 'linear-gradient(135deg, #FF6A4A 0%, #E94A6A 55%, #5A4BFF 100%)',
+    bg: 'linear-gradient(135deg, #FF6A4A 0%, #E94A6A 55%, #5A4BFF 100%)',
+    text: '#FFFFFF',
+    subtext: 'rgba(255,255,255,0.78)',
+    cardBg: 'rgba(255,255,255,0.18)',
+    cardBorder: 'rgba(255,255,255,0.24)',
+    glow: 'radial-gradient(80% 60% at 50% 0%, rgba(255,106,74,0.42) 0%, transparent 60%)',
+    avatarRing: 'rgba(255,255,255,0.55)',
+  },
+];
+
+const DESIGN_SITE_PREVIEW_COPY = {
+  en: {
+    eyebrow: 'Theme',
+    name: 'Julia Ross',
+    handle: '@whereisdonde',
+    links: [
+      { title: 'Book a 1:1 session', icon: 'calendar' as const },
+      { title: 'Master the hooks that grow', icon: 'play' as const },
+      { title: 'Your first $1,000 online', icon: 'compass' as const },
+      { title: 'The art of telling stories that sell', icon: 'bookmark' as const },
+    ],
+  },
+  es: {
+    eyebrow: 'Tema',
+    name: 'Julia Ross',
+    handle: '@whereisdonde',
+    links: [
+      { title: 'Agendar una sesión 1:1', icon: 'calendar' as const },
+      { title: 'Domina los hooks que hacen crecer', icon: 'play' as const },
+      { title: 'Tus primeros $1,000 online', icon: 'compass' as const },
+      { title: 'El arte de contar historias que venden', icon: 'bookmark' as const },
+    ],
+  },
+};
+
+const DESIGN_SITE_ROTATION_MS = 2600;
+const DESIGN_SITE_AVATAR_SRC =
+  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&facepad=3&w=160&q=80';
+
+function DesignSiteLinkIcon({
+  name,
+  color,
+}: {
+  name: 'calendar' | 'play' | 'compass' | 'bookmark';
+  color: string;
+}) {
+  const props = { className: 'h-3 w-3', strokeWidth: 2.4, color } as const;
+  switch (name) {
+    case 'calendar':
+      return <Calendar {...props} />;
+    case 'play':
+      return <Play {...props} fill={color} />;
+    case 'compass':
+      return <Compass {...props} />;
+    case 'bookmark':
+      return <Bookmark {...props} fill={color} />;
+  }
+}
+
+function DesignSiteFeaturePreview() {
+  const { locale } = useLanguage();
+  const copy = DESIGN_SITE_PREVIEW_COPY[locale];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.4 });
+  const reduceMotion = useReducedMotion() ?? false;
+
+  useEffect(() => {
+    if (!isInView) return;
+    const interval = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % DESIGN_SITE_THEMES.length);
+    }, DESIGN_SITE_ROTATION_MS);
+    return () => clearInterval(interval);
+  }, [isInView]);
+
+  const activeTheme = DESIGN_SITE_THEMES[activeIndex];
+  const activeLabel = activeTheme.label[locale];
+
+  const screenTransition = {
+    duration: reduceMotion ? 0 : 0.7,
+    ease: DIGITAL_PRODUCT_EASE,
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
+      aria-hidden="true"
+    >
+      <div className="relative w-full max-w-[360px] h-full max-h-[332px] min-h-[268px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
+        <div className="absolute inset-0 digital-product-grid opacity-45" />
+
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          animate={{ background: activeTheme.glow }}
+          transition={screenTransition}
+        />
+
+        <div className="relative h-full flex flex-col gap-2.5 px-3.5 py-3 sm:px-4 sm:py-3.5">
+          {/* Theme picker strip */}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/55">
+              {copy.eyebrow}
+            </span>
+            <div className="flex items-center gap-1.5">
+              {DESIGN_SITE_THEMES.map((theme, i) => {
+                const isActive = i === activeIndex;
+                return (
+                  <motion.div
+                    key={theme.id}
+                    className="relative h-4 w-4 rounded-[5px] overflow-hidden"
+                    style={{ background: theme.swatch }}
+                    animate={{
+                      scale: isActive && !reduceMotion ? 1.08 : 1,
+                      boxShadow: isActive
+                        ? '0 0 0 1.5px rgba(255,255,255,0.95), 0 4px 10px rgba(0,0,0,0.35)'
+                        : '0 0 0 1px rgba(255,255,255,0.12)',
+                    }}
+                    transition={{ duration: 0.35, ease: DIGITAL_PRODUCT_EASE }}
+                  />
+                );
+              })}
+            </div>
+            <div className="ml-auto min-w-0 flex-1 text-right overflow-hidden">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={activeTheme.id}
+                  className="block truncate text-[9px] font-bold tracking-[0.06em] text-white/85"
+                  initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+                  animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                  exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
+                  transition={{ duration: 0.32, ease: DIGITAL_PRODUCT_EASE }}
+                >
+                  {activeLabel}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Phone mockup */}
+          <div className="relative flex-1 min-h-0 flex items-center justify-center">
+            <div
+              className="relative w-[208px] h-full max-h-[296px] min-h-[244px] rounded-[30px] border border-white/12 overflow-hidden shadow-[0_22px_56px_rgba(0,0,0,0.5)]"
+              style={{ background: '#000' }}
+            >
+              {/* Animated screen background */}
+              <motion.div
+                className="absolute inset-0"
+                animate={{ background: activeTheme.bg }}
+                transition={screenTransition}
+              />
+
+              {/* Notch */}
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 h-1.5 w-14 rounded-full bg-black/45" />
+
+              {/* Soft top vignette to lift the avatar */}
+              <motion.div
+                className="absolute inset-x-0 top-0 h-14 pointer-events-none"
+                animate={{
+                  background:
+                    activeTheme.id === 'ivory' || activeTheme.id === 'bora' || activeTheme.id === 'blush'
+                      ? 'linear-gradient(180deg, rgba(0,0,0,0.04), transparent)'
+                      : 'linear-gradient(180deg, rgba(255,255,255,0.06), transparent)',
+                }}
+                transition={screenTransition}
+              />
+
+              <div className="relative h-full flex flex-col items-center px-3 pt-6 pb-3">
+                {/* Avatar */}
+                <motion.div
+                  className="h-[50px] w-[50px] rounded-full overflow-hidden shrink-0"
+                  animate={{ boxShadow: `0 0 0 2px ${activeTheme.avatarRing}` }}
+                  transition={screenTransition}
+                >
+                  <img
+                    src={DESIGN_SITE_AVATAR_SRC}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    draggable={false}
+                    loading="lazy"
+                  />
+                </motion.div>
+
+                <motion.div
+                  className="mt-2 text-[13px] font-extrabold leading-none tracking-tight"
+                  animate={{ color: activeTheme.text }}
+                  transition={screenTransition}
+                >
+                  {copy.name}
+                </motion.div>
+                <motion.div
+                  className="mt-1 text-[9px] font-semibold leading-none"
+                  animate={{ color: activeTheme.subtext }}
+                  transition={screenTransition}
+                >
+                  {copy.handle}
+                </motion.div>
+
+                {/* Social row */}
+                <div className="mt-2 flex items-center gap-1">
+                  {(
+                    [
+                      { bg: '#000000', glyph: 'TT', fg: '#FFFFFF' },
+                      { bg: '#E94A6A', glyph: 'IG', fg: '#FFFFFF' },
+                      { bg: '#1DA1F2', glyph: 'X', fg: '#FFFFFF' },
+                      { bg: '#1877F2', glyph: 'F', fg: '#FFFFFF' },
+                      { bg: '#0A66C2', glyph: 'in', fg: '#FFFFFF' },
+                      { bg: '#1DB954', glyph: 'S', fg: '#FFFFFF' },
+                    ] as const
+                  ).map((s, i) => (
+                    <div
+                      key={i}
+                      className="h-4 w-4 rounded-full flex items-center justify-center text-[7px] font-extrabold"
+                      style={{ background: s.bg, color: s.fg }}
+                    >
+                      {s.glyph}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Link cards */}
+                <div className="mt-2.5 w-full flex flex-col gap-1.5 overflow-hidden">
+                  {copy.links.map((link, i) => {
+                    const thumbColors = ['#5B7FE0', '#7C5CD7', '#E08C4D', '#FF6A4A'];
+                    return (
+                      <motion.div
+                        key={i}
+                        className="flex items-center gap-2 rounded-[10px] border px-2 py-2"
+                        animate={{
+                          backgroundColor: activeTheme.cardBg,
+                          borderColor: activeTheme.cardBorder,
+                        }}
+                        transition={screenTransition}
+                      >
+                        <div
+                          className="h-6 w-6 rounded-[6px] shrink-0 flex items-center justify-center"
+                          style={{
+                            background: thumbColors[i % thumbColors.length],
+                          }}
+                        >
+                          <DesignSiteLinkIcon name={link.icon} color="#FFFFFF" />
+                        </div>
+                        <motion.div
+                          className="flex-1 min-w-0 text-left text-[9px] font-bold leading-[1.15]"
+                          animate={{ color: activeTheme.text }}
+                          transition={screenTransition}
+                        >
+                          <span className="line-clamp-2">{link.title}</span>
+                        </motion.div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
