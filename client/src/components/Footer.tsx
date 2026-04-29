@@ -24,40 +24,40 @@ export default function Footer() {
       : 'The creator economy platform behind it all.',
     columns: isSpanish
       ? [
-          {
-            title: 'Producto',
-            links: ['Características', 'Herramientas para creadores'],
-          },
-          {
-            title: 'Empresa',
-            links: ['Quiénes somos', 'Contacto'],
-          },
-          {
-            title: 'Recursos',
-            links: ['Centro de ayuda', 'Comunidad'],
-          },
-          {
-            title: 'Legal',
-            links: ['Política de privacidad', 'Términos de servicio', 'Política de cookies'],
-          },
+          // {
+          //   title: 'Producto',
+          //   links: ['Características', 'Herramientas para creadores'],
+          // },
+          // {
+          //   title: 'Empresa',
+          //   links: ['Quiénes somos', 'Contacto'],
+          // },
+          // {
+          //   title: 'Recursos',
+          //   links: ['Centro de ayuda', 'Comunidad'],
+          // },
+          // {
+          //   title: 'Legal',
+          //   links: ['Política de privacidad', 'Términos de servicio', 'Política de cookies'],
+          // },
         ]
       : [
-          {
-            title: 'People',
-            links: ['Features', 'Pricing', 'Templates', 'Integrations', 'Creator Tools'],
-          },
-          {
-            title: 'Company',
-            links: ['About', 'Careers', 'Press', 'Blog', 'Contact'],
-          },
-          {
-            title: 'Resources',
-            links: ['Help Center', 'Community', 'Tutorials', 'API Docs', 'Status'],
-          },
-          {
-            title: 'Legal',
-            links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'DMCA', 'Accessibility'],
-          },
+          // {
+          //   title: 'People',
+          //   links: ['Features', 'Pricing', 'Templates', 'Integrations', 'Creator Tools'],
+          // },
+          // {
+          //   title: 'Company',
+          //   links: ['About', 'Careers', 'Press', 'Blog', 'Contact'],
+          // },
+          // {
+          //   title: 'Resources',
+          //   links: ['Help Center', 'Community', 'Tutorials', 'API Docs', 'Status'],
+          // },
+          // {
+          //   title: 'Legal',
+          //   links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'DMCA', 'Accessibility'],
+          // },
         ],
     rightsReserved: isSpanish ? 'Todos los derechos reservados.' : 'All rights reserved.',
     legalShort: isSpanish ? ['Privacidad', 'Términos', 'Cookies'] : ['Privacy', 'Terms', 'Cookies'],

@@ -16,6 +16,9 @@ export interface Creator {
   color: string;
   accentColor: string;
   image: string;
+  imagePosition?: string;
+  imageScale?: number;
+  imageOffsetY?: string;
   title: string;
   followers: string;
   gridStyle:
@@ -37,8 +40,10 @@ export const CREATORS: Creator[] = [
     name: 'Anya Jensen',
     color: '#007FFF',
     accentColor: '#FFFFFF',
-    image:
-      'https://images.unsplash.com/photo-1600638270210-1fb2dc4ab48a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMHRyYXZlbCUyMGNyZWF0b3IlMjBleHBsb3JlJTIwb3V0ZG9vcnN8ZW58MXx8fHwxNzc2NzYwOTIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: '/images/creator-profiles/anya-jensen.jpg',
+    imagePosition: '55% center',
+    imageScale: 1.16,
+    imageOffsetY: '-5%',
     title: 'Explorando las 7 maravillas.',
     followers: '1.1M',
     gridStyle: 'single-wide',
@@ -76,8 +81,10 @@ export const CREATORS: Creator[] = [
     name: 'Quinn Brax',
     color: '#BF00FF',
     accentColor: '#7DF9FF',
-    image:
-      'https://images.unsplash.com/photo-1695277578924-effbf2f02440?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkaiUyMHNpbmdlciUyMHBlcmZvcm1pbmclMjBzdGFnZSUyMGNvbmNlcnQlMjBsaWdodHN8ZW58MXx8fHwxNzc2NzYwOTIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: '/images/creator-profiles/quinn-brax.jpg',
+    imagePosition: '50% center',
+    imageScale: 1.08,
+    imageOffsetY: '-4%',
     title: 'Himnos del futuro, ahora. Nuevo sencillo.',
     followers: '530K',
     gridStyle: 'mixed-stack',
@@ -175,8 +182,10 @@ export const CREATORS: Creator[] = [
     name: 'The Mindset Podcast',
     color: '#1A1A1A',
     accentColor: '#F3E5DC',
-    image:
-      'https://images.unsplash.com/photo-1655947717064-d856af599bd1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb2RjYXN0JTIwc3R1ZGlvJTIwbWljcm9waG9uZSUyMGhlYWRwaG9uZXMlMjBicm9hZGNhc3R8ZW58MXx8fHwxNzc2NzYwOTIxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: '/images/creator-profiles/mindset-podcast.jpg',
+    imagePosition: '50% center',
+    imageScale: 1,
+    imageOffsetY: '-6%',
     title: 'Análisis profundos sobre rendimiento. Todos mis links aquí abajo.',
     followers: '100K',
     gridStyle: 'balanced',
@@ -236,7 +245,10 @@ export const CREATORS: Creator[] = [
     name: 'Elias Thorne',
     color: '#E2725B',
     accentColor: '#B2AC88',
-    image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=1080',
+    image: '/images/creator-profiles/elias-thorne.jpg',
+    imagePosition: '48% center',
+    imageScale: 1.12,
+    imageOffsetY: '-13%',
     title: 'Recetas gourmet y accesibles. Links aquí abajo.',
     followers: '12.4M',
     gridStyle: 'quad',
@@ -278,12 +290,14 @@ export const CREATORS: Creator[] = [
   },
   {
     id: 'kunalvarez',
-    name: 'Kun Alvarez (Legacy)',
+    name: 'Kun Alvarez',
     color: '#75AADB',
     accentColor: '#FFFFFF',
-    image:
-      'https://images.unsplash.com/photo-1699519638135-a6734c58b361?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2NjZXIlMjBmb290YmFsbCUyMHBsYXllciUyMGZpZWxkJTIwc3RhZGl1bXxlbnwxfHx8fDE3NzY3NjA5MjF8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    title: 'El fútbol es vida. Todos mis links aquí abajo.',
+    image: '/images/creator-profiles/kun-alvarez.jpg',
+    imagePosition: '67% center',
+    imageScale: 1,
+    imageOffsetY: '0%',
+    title: 'Gamer y streamer competitivo de Valorant. Ranked, scrims y torneos aquí.',
     followers: '280K',
     gridStyle: 'mixed-media',
     socials: [
@@ -327,8 +341,10 @@ export const CREATORS: Creator[] = [
     name: 'TechReview HQ',
     color: '#708090',
     accentColor: '#008080',
-    image:
-      'https://images.unsplash.com/photo-1758523670550-223a01cd7764?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW4lMjB2aXJ0dWFsJTIwcmVhbGl0eSUyMGhlYWRzZXR8ZW58MXx8fHwxNzc2Nzc2MjYyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: '/images/creator-profiles/techreview-hq.jpg',
+    imagePosition: '50% center',
+    imageScale: 1,
+    imageOffsetY: '-14%',
     title: 'Datos honestos. Sin sesgos. Tu correo abajo.',
     followers: '21.3M',
     gridStyle: 'lead-gen',
@@ -370,11 +386,13 @@ export const CREATORS: Creator[] = [
   },
   {
     id: 'kaylaharris',
-    name: 'Kayla "The Cage" Harris',
+    name: 'Kayla Harris',
     color: '#36454F',
     accentColor: '#EA4335',
-    image:
-      'https://images.unsplash.com/photo-1636581563711-cd454f1bf99a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMGJveGVyJTIwZmlnaHRlciUyMHJpbmclMjB0cmFpbmluZyUyMGdsb3Zlc3xlbnwxfHx8fDE3NzY3NjA5MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: '/images/creator-profiles/kayla-harris.jpg',
+    imagePosition: '24% center',
+    imageScale: 1,
+    imageOffsetY: '-3%',
     title: 'Peleadora. Campeona. Leyenda. Links aquí abajo.',
     followers: '190K',
     gridStyle: 'carousel',
