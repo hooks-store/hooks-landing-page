@@ -376,15 +376,15 @@ export default function WorldMap() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute bottom-3 left-1/2 z-[8] -translate-x-1/2 md:hidden">
+      <div className="pointer-events-none absolute bottom-3 left-3 z-[8] md:hidden">
         <div
           key={`${activeSale.id}-${pulseCycle}-mobile`}
-          className="world-map-sale-toast-card rounded-lg border border-black/6 bg-white px-3 py-2 shadow-xl"
+          className="world-map-sale-toast-card w-[148px] rounded-lg border border-black/6 bg-white px-3 py-2 shadow-xl"
         >
-          <div className="text-[10px] font-semibold text-gray-600">
+          <div className="truncate text-[10px] font-semibold text-gray-600">
             New sale • {activeSale.flag} {activeSale.city}
           </div>
-          <div className="text-[16px] font-bold leading-tight text-gray-900">
+          <div className="truncate text-[16px] font-bold leading-tight text-gray-900">
             {activeSale.amount}{' '}
             <span className="text-[12px] font-medium text-gray-600">{activeSale.handle}</span>
           </div>

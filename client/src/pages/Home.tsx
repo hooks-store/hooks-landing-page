@@ -16,6 +16,7 @@ import AppIconGrid from '@/components/AppIconGrid';
 import { HooksIcon } from '@/components/HooksIcon';
 import PhoneMockup from '@/components/iphone-mockup/PhoneMockup';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsMobile } from '@/hooks/useMobile';
 import {
   Eye, Globe, ShoppingBag, Lock,
   ChevronDown, BarChart3, Users,
@@ -29,15 +30,20 @@ import {
 const PHONE_GUY_FOR_LATER = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-lifestyle-eAePL9YnBxbQUubnYhm3fa.webp';
 const FEMALE_CREATOR = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/female-creator-KoNNQiTsKfMVtWm8xvoSep.webp';
 const CREATOR_CTA_BG = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-cta-bg-C9mdqCe3aNkVQnH8bbSzUM.webp';
-const HERO_BG_VIDEO_SOURCES = [
-  '/videos/hero/creator-loop-01.mp4',
-  '/videos/hero/creator-loop-02.mp4',
-  '/videos/hero/creator-loop-03.mp4',
-  '/videos/hero/creator-loop-04.mp4',
-  '/videos/hero/creator-loop-05.mp4',
-  '/videos/hero/creator-loop-06.mp4',
-  '/videos/hero/creator-loop-07.mp4',
-  '/videos/hero/creator-loop-08.mp4',
+type HeroBgVideo = {
+  src: string;
+  mobileObjectPosition?: string;
+};
+const HERO_BG_VIDEO_SOURCES: HeroBgVideo[] = [
+  { src: '/videos/hero/showcase.mp4' },
+  { src: '/videos/hero/girlstalkingtocamera.mp4' },
+  { src: '/videos/hero/guysdancing.mp4' },
+  { src: '/videos/hero/cooking.mp4' },
+  { src: '/videos/hero/tiktokgirlsdancing.mp4' },
+  { src: '/videos/hero/guyworkingout.mp4' },
+  { src: '/videos/hero/girlstalking.mp4' },
+  { src: '/videos/hero/jumping.mp4' },
+  { src: '/videos/hero/gamer.mp4' },
 ];
 const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
@@ -773,42 +779,42 @@ export default function Home() {
           <SectionWrapper delay={150}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
               <div className={FEATURE_CARD_CLASS}>
-                <div className={FEATURE_CARD_MEDIA_CLASS}>
+                <div className={`${FEATURE_CARD_MEDIA_CLASS} h-[340px] sm:h-[390px]`}>
                   <WorldMap />
                   {/* Floating stat cards */}
-                  <div className="hidden sm:block absolute top-4 left-4 md:top-6 md:left-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                        <Eye className="w-4 h-4 text-blue-500" />
+                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4 md:top-6 md:left-6 bg-white rounded-xl p-2 sm:p-3 shadow-xl animate-bob z-10">
+                    <div className="flex items-center gap-2 sm:gap-2.5">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                        <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
                       </div>
                       <div>
                         <div className="text-[10px] text-gray-500 font-medium">{copy.analytics.profileViews}</div>
-                        <div className="text-black font-bold text-lg leading-tight">1.2M</div>
+                        <div className="text-black font-bold text-base sm:text-lg leading-tight">1.2M</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="hidden sm:block absolute top-20 left-4 md:top-24 md:left-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10" style={{ animationDelay: '0.5s' }}>
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                        <Globe className="w-4 h-4 text-green-500" />
+                  <div className="absolute top-[76px] left-3 sm:top-20 sm:left-4 md:top-24 md:left-6 bg-white rounded-xl p-2 sm:p-3 shadow-xl animate-bob z-10" style={{ animationDelay: '0.5s' }}>
+                    <div className="flex items-center gap-2 sm:gap-2.5">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-green-100 flex items-center justify-center">
+                        <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" />
                       </div>
                       <div>
                         <div className="text-[10px] text-gray-500 font-medium">{copy.analytics.linkClicks}</div>
-                        <div className="text-black font-bold text-lg leading-tight">14k</div>
+                        <div className="text-black font-bold text-base sm:text-lg leading-tight">14k</div>
                       </div>
                     </div>
                   </div>
 
                   {/* Country breakdown */}
-                  <div className="hidden sm:block absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white rounded-xl p-3 shadow-xl animate-bob z-10" style={{ animationDelay: '1.5s' }}>
-                    <div className="space-y-2.5">
+                  <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 md:bottom-6 md:right-6 bg-white rounded-xl p-2.5 sm:p-3 shadow-xl animate-bob z-10" style={{ animationDelay: '1.5s' }}>
+                    <div className="space-y-1.5 sm:space-y-2.5">
                       {copy.analytics.countries.map((item) => (
-                        <div key={item.rank} className="flex items-center gap-3">
-                          <span className="text-xl">{item.flag}</span>
+                        <div key={item.rank} className="flex items-center gap-2 sm:gap-3">
+                          <span className="text-base sm:text-xl">{item.flag}</span>
                           <div>
-                            <div className="text-black font-bold text-sm">{item.rank}. {item.country}</div>
-                            <div className="text-gray-400 text-[11px]">{item.views}</div>
+                            <div className="text-black font-bold text-xs sm:text-sm leading-tight">{item.rank}. {item.country}</div>
+                            <div className="text-gray-400 text-[10px] sm:text-[11px] leading-tight">{item.views}</div>
                           </div>
                         </div>
                       ))}
@@ -1301,6 +1307,7 @@ function CoursesFeaturePreview() {
 }
 
 function HeroBackgroundVideoLoop() {
+  const isMobile = useIsMobile();
   const [frontSlot, setFrontSlot] = useState<0 | 1>(0);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [slotVideoIndices, setSlotVideoIndices] = useState<[number, number]>([
@@ -1456,15 +1463,19 @@ function HeroBackgroundVideoLoop() {
     };
   }, []);
 
+  const slotAVideo = HERO_BG_VIDEO_SOURCES[slotVideoIndices[0]];
+  const slotBVideo = HERO_BG_VIDEO_SOURCES[slotVideoIndices[1]];
+
   return (
     <div className="relative w-full h-full">
       <video
         ref={videoARef}
-        src={HERO_BG_VIDEO_SOURCES[slotVideoIndices[0]]}
+        src={slotAVideo.src}
         className="absolute inset-0 w-full h-full object-cover transition-opacity ease-out"
         style={{
           opacity: frontSlot === 0 ? 1 : 0,
           transitionDuration: `${HERO_BG_VIDEO_CROSSFADE_MS}ms`,
+          objectPosition: isMobile ? slotAVideo.mobileObjectPosition ?? '50% 50%' : '50% 50%',
         }}
         muted
         playsInline
@@ -1474,11 +1485,12 @@ function HeroBackgroundVideoLoop() {
 
       <video
         ref={videoBRef}
-        src={HERO_BG_VIDEO_SOURCES[slotVideoIndices[1]]}
+        src={slotBVideo.src}
         className="absolute inset-0 w-full h-full object-cover transition-opacity ease-out"
         style={{
           opacity: frontSlot === 1 ? 1 : 0,
           transitionDuration: `${HERO_BG_VIDEO_CROSSFADE_MS}ms`,
+          objectPosition: isMobile ? slotBVideo.mobileObjectPosition ?? '50% 50%' : '50% 50%',
         }}
         muted
         playsInline
@@ -1489,36 +1501,545 @@ function HeroBackgroundVideoLoop() {
   );
 }
 
+type MembershipFeatureKey = 'tiers' | 'newMember' | 'recurring' | 'exclusive';
+
+type MembershipFeatureItem = {
+  key: MembershipFeatureKey;
+  eyebrow: string;
+  meta: string;
+  title: string;
+  description: string;
+  ctaLabel: string;
+  badgeLabel: string;
+  accent: string;
+};
+
+type MembershipPreviewCopy = {
+  brand: string;
+  memberCount: string;
+  items: MembershipFeatureItem[];
+};
+
+const MEMBERSHIPS_PREVIEW_COPY: Record<'en' | 'es', MembershipPreviewCopy> = {
+  es: {
+    brand: 'Círculo de creadores',
+    memberCount: '892 miembros',
+    items: [
+      {
+        key: 'tiers',
+        eyebrow: 'Niveles activos',
+        meta: '3 planes',
+        title: 'Diseña planes que escalan',
+        description: 'Configura precios, beneficios y acceso por nivel.',
+        ctaLabel: 'Suscribir',
+        badgeLabel: 'Popular',
+        accent: '#A855F7',
+      },
+      {
+        key: 'newMember',
+        eyebrow: 'Nuevo miembro',
+        meta: 'Hace 4 segundos',
+        title: 'Maya se acaba de unir',
+        description: 'Alertas en vivo cuando alguien entra a tu comunidad.',
+        ctaLabel: 'Saludar',
+        badgeLabel: '+1',
+        accent: '#22C55E',
+      },
+      {
+        key: 'recurring',
+        eyebrow: 'Cobros del mes',
+        meta: '$3,408 MRR',
+        title: 'Ingresos recurrentes',
+        description: 'Cobra cada mes en automático sin perseguir pagos.',
+        ctaLabel: 'Ver',
+        badgeLabel: 'Auto',
+        accent: '#2563EB',
+      },
+      {
+        key: 'exclusive',
+        eyebrow: 'Contenido exclusivo',
+        meta: 'Solo miembros',
+        title: 'Publica detrás del paywall',
+        description: 'Comparte clases, videos y archivos solo para tu comunidad.',
+        ctaLabel: 'Subir',
+        badgeLabel: 'Premium',
+        accent: '#F59E0B',
+      },
+    ],
+  },
+  en: {
+    brand: 'Creator Circle',
+    memberCount: '892 members',
+    items: [
+      {
+        key: 'tiers',
+        eyebrow: 'Active tiers',
+        meta: '3 plans',
+        title: 'Design plans that scale',
+        description: 'Set pricing, perks and access for every tier.',
+        ctaLabel: 'Subscribe',
+        badgeLabel: 'Popular',
+        accent: '#A855F7',
+      },
+      {
+        key: 'newMember',
+        eyebrow: 'New member',
+        meta: '4 seconds ago',
+        title: 'Maya just joined',
+        description: 'Live alerts whenever someone joins your community.',
+        ctaLabel: 'Greet',
+        badgeLabel: '+1',
+        accent: '#22C55E',
+      },
+      {
+        key: 'recurring',
+        eyebrow: 'Monthly payouts',
+        meta: '$3,408 MRR',
+        title: 'Recurring revenue',
+        description: 'Get paid every month automatically — no chasing.',
+        ctaLabel: 'View',
+        badgeLabel: 'Auto',
+        accent: '#2563EB',
+      },
+      {
+        key: 'exclusive',
+        eyebrow: 'Members-only drop',
+        meta: 'Behind the paywall',
+        title: 'Post behind the paywall',
+        description: 'Share classes, videos and files only for your community.',
+        ctaLabel: 'Upload',
+        badgeLabel: 'Premium',
+        accent: '#F59E0B',
+      },
+    ],
+  },
+};
+
+const MEMBERSHIPS_ROTATION_MS = 3100;
+
 function MembershipsFeaturePreview() {
   const { locale } = useLanguage();
-  const copy = HOME_COPY[locale].memberships;
+  const copy = MEMBERSHIPS_PREVIEW_COPY[locale];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.4 });
+  const reduceMotion = useReducedMotion() ?? false;
+
+  useEffect(() => {
+    if (!isInView) return;
+    const interval = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % copy.items.length);
+    }, MEMBERSHIPS_ROTATION_MS);
+    return () => clearInterval(interval);
+  }, [copy.items.length, isInView]);
+
+  const item = copy.items[activeIndex];
+  const accent = item.accent;
+
+  const containerVariants: Variants = {
+    initial: {},
+    enter: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.07,
+        delayChildren: reduceMotion ? 0 : 0.05,
+      },
+    },
+    exit: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.04,
+        staggerDirection: -1,
+      },
+    },
+  };
+
+  const childVariants: Variants = {
+    initial: { opacity: 0, y: reduceMotion ? 0 : 14 },
+    enter: { opacity: 1, y: 0, transition: { duration: 0.42, ease: DIGITAL_PRODUCT_EASE } },
+    exit: { opacity: 0, y: reduceMotion ? 0 : -10, transition: { duration: 0.22, ease: 'easeIn' } },
+  };
 
   return (
-    <div className="h-full w-full bg-transparent p-5 flex items-center justify-center">
-      <div className="w-[68%] h-[88%] bg-[#F5F8FE] rounded-[22px] overflow-hidden border border-white/70 relative">
-        <div className="h-[27%] bg-gradient-to-r from-[#2B84FF] via-[#5B68FF] to-[#6FDD9E] relative overflow-hidden">
-          <div className="absolute -top-8 left-14 w-40 h-24 rounded-full bg-[#9EF2C8]/45 blur-sm animate-bob" />
-          <div className="absolute top-2 left-28 w-36 h-16 rounded-full bg-[#A2A1FF]/55 blur-sm animate-bob" style={{ animationDelay: '0.5s' }} />
-          <div className="absolute top-8 left-20 w-28 h-12 rounded-full bg-[#4740B8]/45 blur-sm animate-bob" style={{ animationDelay: '0.9s' }} />
-        </div>
-        <div className="px-4 pt-4">
-          <h4 className="text-[#1F2535] text-[14px] font-bold leading-tight">{copy.title}</h4>
-          <p className="text-[#1F2535] text-[13px] font-bold mt-1">$12 <span className="font-medium text-[#5B657E]">{copy.perMonth}</span></p>
-          <div className="flex items-center gap-2 mt-2.5">
-            <div className="w-5 h-5 rounded-full bg-[#E1E7F4]" />
-            <span className="text-[#6E7690] text-[10px]">@creatorstudio</span>
+    <div
+      ref={containerRef}
+      className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
+      aria-hidden="true"
+    >
+      <div className="relative w-full max-w-[360px] h-full max-h-[332px] min-h-[280px] rounded-[26px] border border-white/[0.08] bg-[#07111D] overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
+        <div className="absolute inset-0 digital-product-grid opacity-45" />
+
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          animate={{
+            background: `radial-gradient(120% 70% at 0% 0%, ${accent}30 0%, transparent 65%), radial-gradient(80% 60% at 100% 100%, ${accent}1c 0%, transparent 60%)`,
+          }}
+          transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
+        />
+
+        <div className="relative h-full p-3.5 sm:p-4 flex flex-col gap-2.5">
+          <div className="flex items-center gap-2.5 h-9 shrink-0">
+            <div className="relative h-9 w-9 shrink-0">
+              <motion.div
+                className="absolute -inset-1 rounded-full"
+                animate={{
+                  background: `conic-gradient(from 180deg, ${accent} 0deg, ${accent}00 140deg, ${accent} 360deg)`,
+                  rotate: reduceMotion ? 0 : 360,
+                }}
+                transition={{
+                  background: { duration: 0.7, ease: DIGITAL_PRODUCT_EASE },
+                  rotate: { duration: 14, repeat: Infinity, ease: 'linear' },
+                }}
+                style={{ opacity: 0.7 }}
+              />
+              <motion.div
+                className="absolute inset-0 rounded-full flex items-center justify-center"
+                animate={{ background: `linear-gradient(135deg, ${accent} 0%, ${accent}88 100%)` }}
+                transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
+              >
+                <Lock className="h-4 w-4 text-white" strokeWidth={2.4} />
+              </motion.div>
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[12px] font-semibold text-white/95 truncate">{copy.brand}</div>
+              <div className="text-[10px] text-white/55 truncate">{copy.memberCount}</div>
+            </div>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={`badge-${activeIndex}`}
+                initial={reduceMotion ? false : { scale: 0.85, opacity: 0 }}
+                animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+                exit={reduceMotion ? undefined : { scale: 0.85, opacity: 0 }}
+                transition={{ duration: 0.22, ease: DIGITAL_PRODUCT_EASE }}
+                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums shrink-0"
+                style={{
+                  background: `${accent}1f`,
+                  color: accent,
+                  boxShadow: `inset 0 0 0 1px ${accent}55`,
+                }}
+              >
+                {item.badgeLabel}
+              </motion.div>
+            </AnimatePresence>
           </div>
-          <div className="space-y-1.5 mt-3.5">
-            <div className="h-1.5 rounded-full bg-[#E5EAF6]" />
-            <div className="h-1.5 rounded-full bg-[#E5EAF6] w-[93%]" />
-            <div className="h-1.5 rounded-full bg-[#E5EAF6] w-[88%]" />
-            <div className="h-1.5 rounded-full bg-[#E5EAF6] w-[76%]" />
-          </div>
-        </div>
-        <div className="absolute left-4 right-4 bottom-4 h-9 rounded-xl bg-[#1E2432] flex items-center justify-center">
-          <span className="text-white text-[11px] font-semibold">{copy.cta}</span>
+
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={activeIndex}
+              variants={containerVariants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+              className="flex flex-col gap-2.5 flex-1 min-h-0"
+            >
+              <motion.div
+                variants={childVariants}
+                className="flex items-center gap-1.5 text-[10px] font-semibold text-white/85 h-4"
+              >
+                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                  <motion.span
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: accent }}
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : { boxShadow: [`0 0 0 0 ${accent}66`, `0 0 0 5px ${accent}00`] }
+                    }
+                    transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
+                  />
+                </span>
+                <span className="text-white/55 truncate">{item.eyebrow}</span>
+                <span className="text-white/30">·</span>
+                <span className="truncate">{item.meta}</span>
+              </motion.div>
+
+              <motion.div variants={childVariants} className="flex-1 min-h-0">
+                <MembershipScene
+                  featureKey={item.key}
+                  accent={accent}
+                  reduceMotion={reduceMotion}
+                  locale={locale}
+                />
+              </motion.div>
+
+              <motion.div variants={childVariants} className="flex items-end justify-between gap-3">
+                <div className="min-w-0">
+                  <h4 className="text-[14px] sm:text-[15px] font-bold leading-[1.15] tracking-tight text-white line-clamp-1">
+                    {item.title}
+                  </h4>
+                  <p className="mt-0.5 text-[11px] leading-[1.35] text-white/55 line-clamp-1">
+                    {item.description}
+                  </p>
+                </div>
+                <motion.div
+                  initial={reduceMotion ? false : { scale: 0.92, opacity: 0 }}
+                  animate={reduceMotion ? undefined : { scale: [0.92, 1.04, 1], opacity: 1 }}
+                  transition={{ delay: 0.35, duration: 0.45, ease: DIGITAL_PRODUCT_EASE }}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold text-[#07111D] shadow-[0_8px_18px_rgba(0,0,0,0.25)]"
+                  style={{ background: accent }}
+                >
+                  <span className="whitespace-nowrap">{item.ctaLabel}</span>
+                  <ArrowRight className="h-3 w-3" strokeWidth={3} />
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
+    </div>
+  );
+}
+
+type MembershipSceneProps = {
+  accent: string;
+  reduceMotion: boolean;
+  locale: 'en' | 'es';
+};
+
+function MembershipScene({
+  featureKey,
+  accent,
+  reduceMotion,
+  locale,
+}: MembershipSceneProps & { featureKey: MembershipFeatureKey }) {
+  switch (featureKey) {
+    case 'tiers':
+      return <TiersScene accent={accent} reduceMotion={reduceMotion} locale={locale} />;
+    case 'newMember':
+      return <NewMemberScene accent={accent} reduceMotion={reduceMotion} locale={locale} />;
+    case 'recurring':
+      return <RecurringScene accent={accent} reduceMotion={reduceMotion} locale={locale} />;
+    case 'exclusive':
+      return <ExclusiveScene accent={accent} reduceMotion={reduceMotion} locale={locale} />;
+    default:
+      return null;
+  }
+}
+
+function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
+  const tiers =
+    locale === 'es'
+      ? [
+          { name: 'Básico', price: '$5', perks: '2 beneficios' },
+          { name: 'Pro', price: '$12', perks: '5 beneficios' },
+          { name: 'VIP', price: '$29', perks: '10 beneficios' },
+        ]
+      : [
+          { name: 'Basic', price: '$5', perks: '2 perks' },
+          { name: 'Pro', price: '$12', perks: '5 perks' },
+          { name: 'VIP', price: '$29', perks: '10 perks' },
+        ];
+
+  return (
+    <div className="h-full grid grid-cols-3 gap-1.5">
+      {tiers.map((tier, i) => {
+        const isActive = i === 1;
+        return (
+          <motion.div
+            key={tier.name}
+            initial={reduceMotion ? false : { y: 10, opacity: 0, scale: 0.96 }}
+            animate={
+              reduceMotion
+                ? undefined
+                : { y: 0, opacity: 1, scale: isActive ? 1.04 : 1 }
+            }
+            transition={{
+              delay: i * 0.08,
+              duration: 0.42,
+              ease: DIGITAL_PRODUCT_EASE,
+            }}
+            className="relative rounded-[12px] border flex flex-col justify-between p-2"
+            style={{
+              borderColor: isActive ? accent : 'rgba(255,255,255,0.10)',
+              background: isActive
+                ? `linear-gradient(180deg, ${accent}26 0%, ${accent}08 100%)`
+                : 'rgba(255,255,255,0.04)',
+              boxShadow: isActive ? `0 10px 24px ${accent}33` : 'none',
+            }}
+          >
+            <div>
+              <div
+                className="text-[8.5px] uppercase tracking-[0.14em] font-bold leading-none"
+                style={{ color: isActive ? accent : 'rgba(255,255,255,0.55)' }}
+              >
+                {tier.name}
+              </div>
+              <div className="mt-1.5 text-[14px] font-extrabold text-white tabular-nums leading-none">
+                {tier.price}
+              </div>
+            </div>
+            <div className="text-[8.5px] font-medium text-white/55 mt-1.5">{tier.perks}</div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
+function NewMemberScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
+  const avatarColors = ['#FF6B6B', '#4ECDC4', '#FFD166', '#A8DADC', '#F77F00'];
+  const justJoined = locale === 'es' ? 'Maya se unió' : 'Maya just joined';
+
+  return (
+    <div className="h-full flex flex-col gap-2 items-center justify-center px-1">
+      <div className="flex items-center -space-x-2">
+        {avatarColors.map((c, i) => {
+          const isNew = i === avatarColors.length - 1;
+          return (
+            <motion.div
+              key={i}
+              initial={
+                reduceMotion ? false : { scale: isNew ? 0 : 0.8, opacity: 0 }
+              }
+              animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+              transition={
+                isNew
+                  ? { delay: 0.45, type: 'spring', stiffness: 380, damping: 16 }
+                  : { delay: i * 0.06, duration: 0.35, ease: DIGITAL_PRODUCT_EASE }
+              }
+              className="h-8 w-8 rounded-full border-2"
+              style={{
+                background: `linear-gradient(135deg, ${c}, ${c}aa)`,
+                borderColor: isNew ? accent : '#0B1926',
+                boxShadow: isNew
+                  ? `0 0 0 3px ${accent}33, 0 6px 18px ${accent}55`
+                  : 'none',
+              }}
+            />
+          );
+        })}
+      </div>
+      <motion.div
+        initial={reduceMotion ? false : { y: 10, opacity: 0 }}
+        animate={reduceMotion ? undefined : { y: 0, opacity: 1 }}
+        transition={{ delay: 0.6, duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
+        className="rounded-full px-2.5 py-1 inline-flex items-center gap-1.5 text-[10px] font-semibold"
+        style={{
+          background: `${accent}1f`,
+          color: 'rgba(255,255,255,0.95)',
+          boxShadow: `inset 0 0 0 1px ${accent}55`,
+        }}
+      >
+        <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
+        <span>{justJoined}</span>
+      </motion.div>
+    </div>
+  );
+}
+
+function RecurringScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
+  const rows =
+    locale === 'es'
+      ? [
+          { name: 'Sara M.', plan: 'Pro · Mensual', amount: '+$12' },
+          { name: 'Diego R.', plan: 'VIP · Mensual', amount: '+$29' },
+          { name: 'Lucía P.', plan: 'Pro · Mensual', amount: '+$12' },
+        ]
+      : [
+          { name: 'Sara M.', plan: 'Pro · Monthly', amount: '+$12' },
+          { name: 'Diego R.', plan: 'VIP · Monthly', amount: '+$29' },
+          { name: 'Lucía P.', plan: 'Pro · Monthly', amount: '+$12' },
+        ];
+  const colors = ['#FF6B6B', '#4ECDC4', '#FFD166'];
+
+  return (
+    <div className="h-full flex flex-col gap-1.5 justify-center">
+      {rows.map((row, i) => (
+        <motion.div
+          key={i}
+          initial={reduceMotion ? false : { x: -12, opacity: 0 }}
+          animate={reduceMotion ? undefined : { x: 0, opacity: 1 }}
+          transition={{
+            delay: i * 0.1 + 0.05,
+            duration: 0.4,
+            ease: DIGITAL_PRODUCT_EASE,
+          }}
+          className="flex items-center gap-2 rounded-[10px] border border-white/[0.08] bg-white/[0.03] px-2 py-1.5"
+        >
+          <div
+            className="h-5 w-5 rounded-full shrink-0"
+            style={{
+              background: `linear-gradient(135deg, ${colors[i]}, ${colors[i]}aa)`,
+            }}
+          />
+          <div className="min-w-0 flex-1">
+            <div className="text-[10px] font-semibold text-white/95 truncate leading-tight">
+              {row.name}
+            </div>
+            <div className="text-[8.5px] text-white/50 truncate leading-tight">
+              {row.plan}
+            </div>
+          </div>
+          <motion.div
+            initial={reduceMotion ? false : { scale: 0.8, opacity: 0 }}
+            animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+            transition={{
+              delay: i * 0.1 + 0.22,
+              type: 'spring',
+              stiffness: 360,
+              damping: 18,
+            }}
+            className="text-[10px] font-bold tabular-nums shrink-0"
+            style={{ color: accent }}
+          >
+            {row.amount}
+          </motion.div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function ExclusiveScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
+  const lessonTitle =
+    locale === 'es' ? 'Clase magistral · Hooks virales' : 'Masterclass · Viral Hooks';
+  const meta = locale === 'es' ? '24 min · solo miembros' : '24 min · members only';
+
+  return (
+    <div className="h-full flex items-center justify-center">
+      <motion.div
+        initial={reduceMotion ? false : { scale: 0.94, opacity: 0 }}
+        animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, ease: DIGITAL_PRODUCT_EASE }}
+        className="relative w-full h-full max-h-[124px] rounded-[14px] overflow-hidden border border-white/10"
+        style={{
+          background: `radial-gradient(120% 80% at 30% 25%, ${accent}55 0%, transparent 70%), linear-gradient(135deg, #0E1F36 0%, #06101D 100%)`,
+        }}
+      >
+        <div className="absolute left-2.5 top-2.5 inline-flex items-center gap-1 rounded-full bg-black/45 backdrop-blur-sm px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.14em] text-white/85">
+          <Lock className="h-2.5 w-2.5" style={{ color: accent }} strokeWidth={3} />
+          <span>{locale === 'es' ? 'Premium' : 'Members'}</span>
+        </div>
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center"
+          initial={reduceMotion ? false : { scale: 0.7, opacity: 0 }}
+          animate={reduceMotion ? undefined : { scale: [0.7, 1.08, 1], opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.55, ease: DIGITAL_PRODUCT_EASE }}
+        >
+          <div
+            className="relative h-10 w-10 rounded-full flex items-center justify-center"
+            style={{
+              background: `${accent}28`,
+              boxShadow: `0 0 0 6px ${accent}12, 0 8px 24px rgba(0,0,0,0.35)`,
+            }}
+          >
+            <div
+              className="absolute inset-1.5 rounded-full"
+              style={{ background: accent, opacity: 0.95 }}
+            />
+            <Play
+              className="relative h-3 w-3 text-[#07111D] translate-x-[1px]"
+              fill="#07111D"
+              strokeWidth={0}
+            />
+          </div>
+        </motion.div>
+        <div className="absolute left-2.5 right-2.5 bottom-2 text-left">
+          <div className="text-[10px] font-bold leading-tight text-white line-clamp-1">
+            {lessonTitle}
+          </div>
+          <div className="text-[8.5px] text-white/55 line-clamp-1">{meta}</div>
+        </div>
+      </motion.div>
     </div>
   );
 }
@@ -2456,7 +2977,7 @@ function DesignSiteFeaturePreview() {
       className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
       aria-hidden="true"
     >
-      <div className="relative w-full max-w-[360px] h-full max-h-[332px] min-h-[268px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden">
+      <div className="relative w-full max-w-[360px] mt-2 max-h-[460px] min-h-[368px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
         <div className="absolute inset-0 digital-product-grid opacity-45" />
 
@@ -2510,7 +3031,7 @@ function DesignSiteFeaturePreview() {
           {/* Phone mockup */}
           <div className="relative flex-1 min-h-0 flex items-center justify-center">
             <div
-              className="relative w-[208px] h-full max-h-[296px] min-h-[244px] rounded-[30px] border border-white/12 overflow-hidden shadow-[0_22px_56px_rgba(0,0,0,0.5)]"
+              className="relative w-[208px] h-full max-h-[326px] min-h-[268px] rounded-[30px] border border-white/12 overflow-hidden shadow-[0_22px_56px_rgba(0,0,0,0.5)]"
               style={{ background: '#000' }}
             >
               {/* Animated screen background */}
@@ -2631,16 +3152,620 @@ function DesignSiteFeaturePreview() {
 }
 
 function AnalyticsFeaturePreview() {
+  return <AnalyticsRotatingPreview />;
+}
+
+type AnalyticsFeatureKey = 'weekly' | 'countries' | 'liveClicks' | 'sources';
+
+type AnalyticsFeatureItem = {
+  key: AnalyticsFeatureKey;
+  eyebrow: string;
+  meta: string;
+  title: string;
+  description: string;
+  ctaLabel: string;
+  badgeLabel: string;
+  accent: string;
+};
+
+type AnalyticsPreviewCopy = {
+  brand: string;
+  brandSub: string;
+  items: AnalyticsFeatureItem[];
+};
+
+const ANALYTICS_PREVIEW_COPY: Record<'en' | 'es', AnalyticsPreviewCopy> = {
+  es: {
+    brand: 'Estadísticas en vivo',
+    brandSub: '1.2M visitas · esta semana',
+    items: [
+      {
+        key: 'weekly',
+        eyebrow: 'Vista semanal',
+        meta: 'Últimos 7 días',
+        title: 'Detecta tus picos de tráfico',
+        description: 'Visualiza qué días convierten mejor en tiempo real.',
+        ctaLabel: 'Ver',
+        badgeLabel: '+18%',
+        accent: '#6366F1',
+      },
+      {
+        key: 'countries',
+        eyebrow: 'Países líderes',
+        meta: '23 regiones activas',
+        title: 'Conoce a tu audiencia global',
+        description: 'Saber de dónde vienen te ayuda a crecer mejor.',
+        ctaLabel: 'Mapa',
+        badgeLabel: 'Top 3',
+        accent: '#14B8A6',
+      },
+      {
+        key: 'liveClicks',
+        eyebrow: 'Clics en vivo',
+        meta: 'Hace 1 segundo',
+        title: 'Mide cada toque que convierte',
+        description: 'Mira tu actividad crecer minuto a minuto.',
+        ctaLabel: 'Ver',
+        badgeLabel: 'Live',
+        accent: '#F43F5E',
+      },
+      {
+        key: 'sources',
+        eyebrow: 'Origen del tráfico',
+        meta: 'TikTok lidera',
+        title: 'Sabe dónde enfocar',
+        description: 'Identifica qué canal trae los mejores clics.',
+        ctaLabel: 'Detalle',
+        badgeLabel: 'TikTok',
+        accent: '#8B5CF6',
+      },
+    ],
+  },
+  en: {
+    brand: 'Live insights',
+    brandSub: '1.2M views · this week',
+    items: [
+      {
+        key: 'weekly',
+        eyebrow: 'Weekly view',
+        meta: 'Last 7 days',
+        title: 'Spot your traffic peaks',
+        description: 'See which days convert best in real time.',
+        ctaLabel: 'View',
+        badgeLabel: '+18%',
+        accent: '#6366F1',
+      },
+      {
+        key: 'countries',
+        eyebrow: 'Top countries',
+        meta: '23 active regions',
+        title: 'Know your global audience',
+        description: 'Learning where your fans come from drives growth.',
+        ctaLabel: 'Map',
+        badgeLabel: 'Top 3',
+        accent: '#14B8A6',
+      },
+      {
+        key: 'liveClicks',
+        eyebrow: 'Live clicks',
+        meta: '1 second ago',
+        title: 'Track every converting tap',
+        description: 'Watch your activity climb minute by minute.',
+        ctaLabel: 'View',
+        badgeLabel: 'Live',
+        accent: '#F43F5E',
+      },
+      {
+        key: 'sources',
+        eyebrow: 'Traffic sources',
+        meta: 'TikTok leads',
+        title: 'Know where to invest',
+        description: 'Spot the channels driving your best clicks.',
+        ctaLabel: 'Detail',
+        badgeLabel: 'TikTok',
+        accent: '#8B5CF6',
+      },
+    ],
+  },
+};
+
+const ANALYTICS_ROTATION_MS = 3100;
+
+function AnalyticsRotatingPreview() {
   const { locale } = useLanguage();
+  const copy = ANALYTICS_PREVIEW_COPY[locale];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { amount: 0.4 });
+  const reduceMotion = useReducedMotion() ?? false;
+
+  useEffect(() => {
+    if (!isInView) return;
+    const interval = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % copy.items.length);
+    }, ANALYTICS_ROTATION_MS);
+    return () => clearInterval(interval);
+  }, [copy.items.length, isInView]);
+
+  const item = copy.items[activeIndex];
+  const accent = item.accent;
+
+  const containerVariants: Variants = {
+    initial: {},
+    enter: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.07,
+        delayChildren: reduceMotion ? 0 : 0.05,
+      },
+    },
+    exit: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.04,
+        staggerDirection: -1,
+      },
+    },
+  };
+
+  const childVariants: Variants = {
+    initial: { opacity: 0, y: reduceMotion ? 0 : 14 },
+    enter: { opacity: 1, y: 0, transition: { duration: 0.42, ease: DIGITAL_PRODUCT_EASE } },
+    exit: { opacity: 0, y: reduceMotion ? 0 : -10, transition: { duration: 0.22, ease: 'easeIn' } },
+  };
 
   return (
-    <iframe
-      src="/videos/features/premium_analytics_loop_v2.html"
-      className="w-full h-full border-0 pointer-events-none"
-      loading="lazy"
-      title={HOME_COPY[locale].analytics.frameTitle}
-      tabIndex={-1}
+    <div
+      ref={containerRef}
+      className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
       aria-hidden="true"
-    />
+    >
+      <div className="relative w-full max-w-[360px] h-full max-h-[332px] min-h-[280px] rounded-[26px] border border-white/[0.08] bg-[#07111D] overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
+        <div className="absolute inset-0 digital-product-grid opacity-45" />
+
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          animate={{
+            background: `radial-gradient(120% 70% at 0% 0%, ${accent}30 0%, transparent 65%), radial-gradient(80% 60% at 100% 100%, ${accent}1c 0%, transparent 60%)`,
+          }}
+          transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
+        />
+
+        <div className="relative h-full p-3.5 sm:p-4 flex flex-col gap-2.5">
+          <div className="flex items-center gap-2.5 h-9 shrink-0">
+            <div className="relative h-9 w-9 shrink-0 flex items-center justify-center">
+              <motion.div
+                className="absolute inset-0 rounded-[10px]"
+                animate={{ background: `linear-gradient(135deg, ${accent} 0%, ${accent}88 100%)` }}
+                transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
+              />
+              <motion.div
+                className="absolute -inset-1 rounded-[12px] pointer-events-none"
+                animate={{ boxShadow: `0 0 0 1px ${accent}38, 0 0 18px ${accent}44` }}
+                transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
+              />
+              <BarChart3 className="relative h-4 w-4 text-white" strokeWidth={2.4} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[12px] font-semibold text-white/95 truncate">{copy.brand}</div>
+              <div className="flex items-center gap-1 text-[10px] text-white/55 truncate">
+                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                  <motion.span
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: '#22C55E' }}
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : {
+                            boxShadow: [
+                              '0 0 0 0 rgba(34,197,94,0.6)',
+                              '0 0 0 5px rgba(34,197,94,0)',
+                            ],
+                          }
+                    }
+                    transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
+                  />
+                </span>
+                <span className="truncate">{copy.brandSub}</span>
+              </div>
+            </div>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={`badge-${activeIndex}`}
+                initial={reduceMotion ? false : { scale: 0.85, opacity: 0 }}
+                animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+                exit={reduceMotion ? undefined : { scale: 0.85, opacity: 0 }}
+                transition={{ duration: 0.22, ease: DIGITAL_PRODUCT_EASE }}
+                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums shrink-0"
+                style={{
+                  background: `${accent}1f`,
+                  color: accent,
+                  boxShadow: `inset 0 0 0 1px ${accent}55`,
+                }}
+              >
+                {item.badgeLabel}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={activeIndex}
+              variants={containerVariants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+              className="flex flex-col gap-2.5 flex-1 min-h-0"
+            >
+              <motion.div
+                variants={childVariants}
+                className="flex items-center gap-1.5 text-[10px] font-semibold text-white/85 h-4"
+              >
+                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                  <motion.span
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: accent }}
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : { boxShadow: [`0 0 0 0 ${accent}66`, `0 0 0 5px ${accent}00`] }
+                    }
+                    transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
+                  />
+                </span>
+                <span className="text-white/55 truncate">{item.eyebrow}</span>
+                <span className="text-white/30">·</span>
+                <span className="truncate">{item.meta}</span>
+              </motion.div>
+
+              <motion.div variants={childVariants} className="flex-1 min-h-0">
+                <AnalyticsScene
+                  featureKey={item.key}
+                  accent={accent}
+                  reduceMotion={reduceMotion}
+                  locale={locale}
+                />
+              </motion.div>
+
+              <motion.div variants={childVariants} className="flex items-end justify-between gap-3">
+                <div className="min-w-0">
+                  <h4 className="text-[14px] sm:text-[15px] font-bold leading-[1.15] tracking-tight text-white line-clamp-1">
+                    {item.title}
+                  </h4>
+                  <p className="mt-0.5 text-[11px] leading-[1.35] text-white/55 line-clamp-1">
+                    {item.description}
+                  </p>
+                </div>
+                <motion.div
+                  initial={reduceMotion ? false : { scale: 0.92, opacity: 0 }}
+                  animate={reduceMotion ? undefined : { scale: [0.92, 1.04, 1], opacity: 1 }}
+                  transition={{ delay: 0.35, duration: 0.45, ease: DIGITAL_PRODUCT_EASE }}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold text-[#07111D] shadow-[0_8px_18px_rgba(0,0,0,0.25)]"
+                  style={{ background: accent }}
+                >
+                  <span className="whitespace-nowrap">{item.ctaLabel}</span>
+                  <ArrowRight className="h-3 w-3" strokeWidth={3} />
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type AnalyticsSceneProps = {
+  accent: string;
+  reduceMotion: boolean;
+  locale: 'en' | 'es';
+};
+
+function AnalyticsScene({
+  featureKey,
+  accent,
+  reduceMotion,
+  locale,
+}: AnalyticsSceneProps & { featureKey: AnalyticsFeatureKey }) {
+  switch (featureKey) {
+    case 'weekly':
+      return <WeeklyBarsScene accent={accent} reduceMotion={reduceMotion} locale={locale} />;
+    case 'countries':
+      return <CountriesScene accent={accent} reduceMotion={reduceMotion} locale={locale} />;
+    case 'liveClicks':
+      return <LiveClicksScene accent={accent} reduceMotion={reduceMotion} locale={locale} />;
+    case 'sources':
+      return <SourcesScene accent={accent} reduceMotion={reduceMotion} locale={locale} />;
+    default:
+      return null;
+  }
+}
+
+function WeeklyBarsScene({ accent, reduceMotion, locale }: AnalyticsSceneProps) {
+  const heights = [0.32, 0.55, 0.42, 0.7, 0.5, 0.85, 0.95];
+  const labels =
+    locale === 'es'
+      ? ['L', 'M', 'X', 'J', 'V', 'S', 'D']
+      : ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  const peakIndex = 6;
+
+  return (
+    <div className="h-full flex items-end gap-1 pb-1">
+      {heights.map((h, i) => {
+        const isPeak = i === peakIndex;
+        return (
+          <div key={i} className="flex-1 h-full flex flex-col justify-end items-center gap-1">
+            <div className="relative w-full flex-1">
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 rounded-[3px]"
+                style={{
+                  background: isPeak
+                    ? `linear-gradient(180deg, ${accent} 0%, ${accent}88 100%)`
+                    : 'linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06))',
+                  boxShadow: isPeak ? `0 0 14px ${accent}66` : 'none',
+                }}
+                initial={reduceMotion ? false : { height: 0 }}
+                animate={reduceMotion ? undefined : { height: `${h * 100}%` }}
+                transition={{
+                  delay: i * 0.06 + 0.05,
+                  duration: 0.55,
+                  ease: DIGITAL_PRODUCT_EASE,
+                }}
+              />
+            </div>
+            <span
+              className="text-[8.5px] font-bold tabular-nums leading-none"
+              style={{ color: isPeak ? accent : 'rgba(255,255,255,0.42)' }}
+            >
+              {labels[i]}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function LiveClicksScene({ accent, reduceMotion, locale }: AnalyticsSceneProps) {
+  const todayLabel = locale === 'es' ? 'hoy' : 'today';
+  const vsYesterday = locale === 'es' ? 'vs ayer' : 'vs yesterday';
+  const clicksLabel = locale === 'es' ? 'clics' : 'clicks';
+  const gradId = `spark-${accent.replace('#', '')}`;
+
+  return (
+    <div className="h-full flex flex-col items-center justify-center gap-0.5">
+      <motion.div
+        className="text-[28px] font-extrabold leading-none tracking-tight tabular-nums text-white"
+        initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+        animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
+      >
+        1,247
+      </motion.div>
+      <div className="text-[9.5px] font-semibold text-white/55 tracking-wide">
+        {clicksLabel} · {todayLabel}
+      </div>
+      <svg viewBox="0 0 120 32" className="w-[150px] h-7 mt-0.5" aria-hidden="true">
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={accent} stopOpacity="0.5" />
+            <stop offset="100%" stopColor={accent} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <motion.path
+          d="M0,24 L15,20 L30,22 L45,16 L60,18 L75,12 L90,14 L105,8 L120,4 L120,32 L0,32 Z"
+          fill={`url(#${gradId})`}
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={reduceMotion ? undefined : { opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5, ease: DIGITAL_PRODUCT_EASE }}
+        />
+        <motion.path
+          d="M0,24 L15,20 L30,22 L45,16 L60,18 L75,12 L90,14 L105,8 L120,4"
+          fill="none"
+          stroke={accent}
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          initial={reduceMotion ? false : { pathLength: 0 }}
+          animate={reduceMotion ? undefined : { pathLength: 1 }}
+          transition={{ delay: 0.15, duration: 0.9, ease: DIGITAL_PRODUCT_EASE }}
+        />
+        <motion.circle
+          cx="120"
+          cy="4"
+          r="2.5"
+          fill={accent}
+          initial={reduceMotion ? false : { scale: 0, opacity: 0 }}
+          animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+          transition={{ delay: 0.95, duration: 0.3 }}
+          style={{ filter: `drop-shadow(0 0 4px ${accent})` }}
+        />
+      </svg>
+      <motion.div
+        className="text-[9.5px] font-bold tabular-nums mt-0.5"
+        style={{ color: accent }}
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={reduceMotion ? undefined : { opacity: 1 }}
+        transition={{ delay: 0.85, duration: 0.3 }}
+      >
+        +12% {vsYesterday}
+      </motion.div>
+    </div>
+  );
+}
+
+function SourcesScene({ accent, reduceMotion, locale }: AnalyticsSceneProps) {
+  const sources = [
+    { name: 'TikTok', pct: 62, color: accent },
+    { name: 'Instagram', pct: 22, color: '#FF6B9D' },
+    { name: 'YouTube', pct: 11, color: '#FF4D4D' },
+    { name: locale === 'es' ? 'Otros' : 'Other', pct: 5, color: 'rgba(255,255,255,0.32)' },
+  ];
+
+  let cumulative = 0;
+  const segments = sources.map((s) => {
+    const fraction = s.pct / 100;
+    const result = { ...s, fraction, start: cumulative };
+    cumulative += fraction;
+    return result;
+  });
+
+  return (
+    <div className="h-full flex items-center gap-3 px-1">
+      <motion.div
+        className="relative h-[78px] w-[78px] shrink-0"
+        initial={reduceMotion ? false : { scale: 0.85, opacity: 0 }}
+        animate={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
+        transition={{ duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
+      >
+        <svg viewBox="0 0 60 60" className="absolute inset-0 -rotate-90">
+          <circle
+            cx="30"
+            cy="30"
+            r="22"
+            fill="none"
+            stroke="rgba(255,255,255,0.06)"
+            strokeWidth="6"
+          />
+          {segments.map((seg, i) => (
+            <motion.circle
+              key={i}
+              cx="30"
+              cy="30"
+              r="22"
+              fill="none"
+              stroke={seg.color}
+              strokeWidth="6"
+              strokeLinecap="butt"
+              pathLength={1}
+              strokeDashoffset={-seg.start}
+              initial={reduceMotion ? false : { strokeDasharray: '0 1' }}
+              animate={
+                reduceMotion ? undefined : { strokeDasharray: `${seg.fraction} ${1 - seg.fraction}` }
+              }
+              transition={{
+                delay: i * 0.12 + 0.08,
+                duration: 0.7,
+                ease: DIGITAL_PRODUCT_EASE,
+              }}
+              style={{ filter: i === 0 ? `drop-shadow(0 0 5px ${accent}88)` : 'none' }}
+            />
+          ))}
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div
+            className="text-[14px] font-extrabold tabular-nums leading-none"
+            style={{ color: accent }}
+          >
+            62%
+          </div>
+          <div className="text-[7.5px] font-semibold uppercase tracking-[0.12em] text-white/50 mt-0.5 leading-none">
+            TikTok
+          </div>
+        </div>
+      </motion.div>
+      <div className="flex-1 min-w-0 flex flex-col gap-1">
+        {sources.map((s, i) => (
+          <motion.div
+            key={s.name}
+            initial={reduceMotion ? false : { x: -8, opacity: 0 }}
+            animate={reduceMotion ? undefined : { x: 0, opacity: 1 }}
+            transition={{
+              delay: i * 0.06 + 0.25,
+              duration: 0.35,
+              ease: DIGITAL_PRODUCT_EASE,
+            }}
+            className="flex items-center gap-1.5"
+          >
+            <span
+              className="h-1.5 w-1.5 rounded-full shrink-0"
+              style={{ background: s.color }}
+            />
+            <span className="text-[10px] font-medium text-white/85 truncate flex-1">
+              {s.name}
+            </span>
+            <span className="text-[10px] font-bold tabular-nums text-white/65 shrink-0">
+              {s.pct}%
+            </span>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CountriesScene({ accent, reduceMotion, locale }: AnalyticsSceneProps) {
+  const data = [
+    {
+      flag: 'BR',
+      name: locale === 'es' ? 'Brasil' : 'Brazil',
+      value: '307k',
+      width: 1,
+      gradient: 'linear-gradient(135deg, #009C3B 0%, #FFDF00 100%)',
+    },
+    {
+      flag: 'US',
+      name: locale === 'es' ? 'EE. UU.' : 'USA',
+      value: '198k',
+      width: 0.62,
+      gradient: 'linear-gradient(135deg, #B22234 0%, #3C3B6E 100%)',
+    },
+    {
+      flag: 'PT',
+      name: 'Portugal',
+      value: '117k',
+      width: 0.4,
+      gradient: 'linear-gradient(135deg, #006233 0%, #FF0000 100%)',
+    },
+  ];
+
+  return (
+    <div className="h-full flex flex-col gap-2 justify-center">
+      {data.map((row, i) => (
+        <motion.div
+          key={i}
+          initial={reduceMotion ? false : { x: -10, opacity: 0 }}
+          animate={reduceMotion ? undefined : { x: 0, opacity: 1 }}
+          transition={{
+            delay: i * 0.08 + 0.05,
+            duration: 0.4,
+            ease: DIGITAL_PRODUCT_EASE,
+          }}
+          className="flex items-center gap-2"
+        >
+          <div
+            className="h-4 w-5 rounded-[3px] shrink-0 flex items-center justify-center text-[7px] font-extrabold text-white/95 shadow-[0_0_0_1px_rgba(255,255,255,0.12)]"
+            style={{ background: row.gradient }}
+          >
+            {row.flag}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-semibold text-white/95 truncate">
+                {row.name}
+              </span>
+              <span className="text-[9.5px] font-bold tabular-nums text-white/65 shrink-0">
+                {row.value}
+              </span>
+            </div>
+            <div className="mt-1 relative h-1.5 rounded-full overflow-hidden bg-white/[0.06]">
+              <motion.div
+                className="absolute inset-y-0 left-0 rounded-full"
+                style={{
+                  background: `linear-gradient(90deg, ${accent} 0%, ${accent}aa 100%)`,
+                  boxShadow: `0 0 10px ${accent}44`,
+                }}
+                initial={reduceMotion ? false : { width: 0 }}
+                animate={reduceMotion ? undefined : { width: `${row.width * 100}%` }}
+                transition={{
+                  delay: i * 0.08 + 0.18,
+                  duration: 0.7,
+                  ease: DIGITAL_PRODUCT_EASE,
+                }}
+              />
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
   );
 }

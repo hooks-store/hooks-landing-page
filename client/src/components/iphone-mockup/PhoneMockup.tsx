@@ -20,7 +20,6 @@ import {
   Youtube,
 } from 'lucide-react';
 import { CREATORS } from './data';
-import { ConnectBar } from './ConnectBar';
 
 type CardPosition = 'center' | 'left' | 'right' | 'hiddenLeft' | 'hiddenRight';
 
@@ -391,7 +390,7 @@ export default function PhoneMockup() {
               />
 
               <motion.div variants={innerContentVariants} transition={activeCardTransition} className="absolute inset-0 z-20">
-                <div className="absolute bottom-[calc(50%+60px)] left-0 right-0 px-6 flex flex-col items-center text-center z-30">
+                <div className="absolute bottom-[calc(50%+43px)] left-0 right-0 px-6 flex flex-col items-center text-center z-30">
                   <motion.div className="flex items-center justify-center gap-1.5 mb-1 w-full">
                     <motion.h3
                       className="text-[18px] font-medium text-white tracking-tight leading-none"
@@ -481,12 +480,6 @@ export default function PhoneMockup() {
                     </motion.p>
 
                     <div className="flex-1 w-full overflow-y-auto flex flex-col [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                      {(creator.gridStyle === 'lead-gen' || creator.id === 'eliasthorne') && (
-                        <div className="w-full mb-3">
-                          <ConnectBar />
-                        </div>
-                      )}
-
                       <div
                         className={`gap-3 ${
                           creator.gridStyle === 'single-wide'
