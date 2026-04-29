@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion, type Transition } from 'framer-motion';
 import {
   Activity,
   Brush,
@@ -23,6 +23,11 @@ import { CREATORS } from './data';
 import { ConnectBar } from './ConnectBar';
 
 type CardPosition = 'center' | 'left' | 'right' | 'hiddenLeft' | 'hiddenRight';
+
+interface ImageMotionSettings {
+  scale: number;
+  y: string;
+}
 
 interface IconRendererProps {
   name: string;
@@ -179,7 +184,34 @@ function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
   }
 }
 
-const transition = { duration: 0.9, ease: [0.65, 0, 0.35, 1] as [number, number, number, number] };
+// Critically damped spring — no overshoot, so cards don't linger in the
+// collision zone after passing each other.
+const cardSpring: Transition = {
+  type: 'spring',
+  stiffness: 170,
+  damping: 30,
+  mass: 0.85,
+  restDelta: 0.0008,
+};
+
+// All transform properties ride the same spring so the card moves as a
+// single coherent body — no staggered rotation/depth trails that read as
+// "lazy" tilt. Opacity uses a smooth, slightly longer ease so cards don't
+// pop in/out of visibility while their transform is still resolving.
+const cardTransition: Transition = {
+  default: cardSpring,
+  opacity: { duration: 0.55, ease: [0.42, 0, 0.58, 1] },
+};
+
+const imageTransition: Transition = {
+  type: 'spring',
+  stiffness: 90,
+  damping: 26,
+  mass: 1,
+};
+
+const reducedTransition: Transition = { duration: 0 };
+
 const AUTOPLAY_INTERVAL_MS = 3500;
 const AUTOPLAY_INITIAL_DELAY_MS = 1500;
 const NAVIGATION_GUARD_MS = 650;
@@ -193,12 +225,28 @@ const PROFILE_SOCIAL_ICON_SIZE_OVERRIDES: Record<string, number> = {
   'youtube-official': 16,
 };
 
+// IMPORTANT: a page-level ancestor (the app shell) has `overflow-x: hidden`.
+// If hidden cards translate far off-screen, they get clipped by the viewport
+// edge — and during the transit between hidden and side, you see only a
+// thin vertical strip of the card emerge from / disappear into the clip
+// boundary. That's the "vertical line / flashing" artifact.
+//
+// Fix: park hidden states ~10% past the side position (still inside the
+// visible area, just at opacity 0). The slide between hidden ↔ side becomes
+// a tiny movement and opacity does the meaningful work. The card never
+// crosses the viewport's clip boundary at non-zero opacity.
+//
+// Side cards: scale 0.66 + opacity 0.5 + rotateY ±22° + z -120 puts them
+// clearly behind the center card so cross-collision during center↔side
+// reads as different depth planes, not "two solid cards melting through".
 const cardVariants = {
-  center: { x: '0%', scale: 1, opacity: 1, zIndex: 10, y: 0, rotateY: 0 },
-  left: { x: '-34%', scale: 0.72, opacity: 1, zIndex: 5, y: 0, rotateY: 0 },
-  right: { x: '34%', scale: 0.72, opacity: 1, zIndex: 5, y: 0, rotateY: 0 },
-  hiddenLeft: { x: '-86%', scale: 0.58, opacity: 0, zIndex: 0, y: 0, rotateY: 0, pointerEvents: 'none' },
-  hiddenRight: { x: '86%', scale: 0.58, opacity: 0, zIndex: 0, y: 0, rotateY: 0, pointerEvents: 'none' },
+  center: { x: '0%', scale: 1, opacity: 1, zIndex: 10, y: 0, rotateY: 0, z: 0 },
+  left: { x: '-40%', scale: 0.66, opacity: 0.5, zIndex: 5, y: 0, rotateY: -22, z: -120 },
+  right: { x: '40%', scale: 0.66, opacity: 0.5, zIndex: 5, y: 0, rotateY: 22, z: -120 },
+  // Hidden states share the SAME scale/rotateY/z as side states; differ only
+  // by a small x offset and opacity 0. No morph, no clip-edge sliver.
+  hiddenLeft: { x: '-50%', scale: 0.66, opacity: 0, zIndex: 0, y: 0, rotateY: -22, z: -120, pointerEvents: 'none' },
+  hiddenRight: { x: '50%', scale: 0.66, opacity: 0, zIndex: 0, y: 0, rotateY: 22, z: -120, pointerEvents: 'none' },
 } as const;
 
 const innerContentVariants = {
@@ -209,18 +257,24 @@ const innerContentVariants = {
   hiddenRight: { y: 0, opacity: 0 },
 } as const;
 
+// Inner image gets a subtle counter-shift on side cards so the photo behaves
+// like it has its own depth plane behind the card surface (parallax).
 const imageVariants = {
-  center: { y: 0, scale: 1 },
-  left: { y: 0, scale: 1.06 },
-  right: { y: 0, scale: 1.06 },
-  hiddenLeft: { y: 0, scale: 1.12 },
-  hiddenRight: { y: 0, scale: 1.12 },
+  center: ({ scale, y }: ImageMotionSettings) => ({ x: 0, y, scale }),
+  left: ({ scale, y }: ImageMotionSettings) => ({ x: '6%', y, scale: scale * 1.1 }),
+  right: ({ scale, y }: ImageMotionSettings) => ({ x: '-6%', y, scale: scale * 1.1 }),
+  hiddenLeft: ({ scale, y }: ImageMotionSettings) => ({ x: '10%', y, scale: scale * 1.16 }),
+  hiddenRight: ({ scale, y }: ImageMotionSettings) => ({ x: '-10%', y, scale: scale * 1.16 }),
 } as const;
 
 export default function PhoneMockup() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoplayStarted, setAutoplayStarted] = useState(false);
   const lastNavigationAtRef = useRef(0);
+  const prefersReducedMotion = useReducedMotion();
+
+  const activeCardTransition = prefersReducedMotion ? reducedTransition : cardTransition;
+  const activeImageTransition = prefersReducedMotion ? reducedTransition : imageTransition;
 
   const activeCreator = useMemo(() => CREATORS[activeIndex], [activeIndex]);
 
@@ -267,7 +321,7 @@ export default function PhoneMockup() {
   }, [autoplayStarted, activeIndex, navigate]);
 
   return (
-    <div className="relative w-[255px] h-[525.3px] sm:w-[280.5px] sm:h-[576.3px] md:w-[306px] md:h-[629px]" style={{ perspective: 1200 }}>
+    <div className="relative w-[255px] h-[525.3px] sm:w-[280.5px] sm:h-[576.3px] md:w-[306px] md:h-[629px]" style={{ perspective: 1400 }}>
       <motion.div
         className="absolute inset-8 rounded-full blur-[60px] opacity-30 pointer-events-none"
         animate={{ backgroundColor: activeCreator.color }}
@@ -284,19 +338,32 @@ export default function PhoneMockup() {
               initial={false}
               animate={position}
               variants={cardVariants}
-              transition={transition}
+              transition={activeCardTransition}
               className="absolute inset-0 rounded-[42px] overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.35)] pointer-events-none"
-              style={{ willChange: 'transform' }}
+              style={{
+                willChange: 'transform',
+                transformPerspective: 1400,
+                transformStyle: 'preserve-3d',
+                backfaceVisibility: 'hidden',
+                isolation: 'isolate',
+                // Force a real mask buffer so the rounded clip is honored on the GPU
+                // compositing layer during 3D transforms — without this, Chrome/Safari
+                // leak a 1–2px halo along the rounded edge while the card animates.
+                maskImage: 'linear-gradient(#000, #000)',
+                WebkitMaskImage: 'linear-gradient(#000, #000)',
+              }}
             >
               <div className="absolute inset-0 w-full h-full overflow-hidden">
                 <motion.img
                   src={creator.image}
                   alt={creator.name}
-                  className="absolute inset-0 w-full h-full object-cover object-center"
+                  className="absolute inset-0 w-full h-full object-cover"
                   variants={imageVariants}
-                  transition={transition}
+                  custom={{ scale: creator.imageScale ?? 1, y: creator.imageOffsetY ?? '0%' }}
+                  transition={activeImageTransition}
                   loading="lazy"
                   decoding="async"
+                  style={{ objectPosition: creator.imagePosition ?? 'center' }}
                 />
               </div>
 
@@ -316,7 +383,14 @@ export default function PhoneMockup() {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/60 to-[#050505]/95" />
               </div>
 
-              <motion.div variants={innerContentVariants} transition={transition} className="absolute inset-0 z-20">
+              <div
+                className="absolute bottom-0 left-0 right-0 h-12 z-40 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(to bottom, rgba(5,5,5,0) 0%, #050505 70%, #050505 100%)',
+                }}
+              />
+
+              <motion.div variants={innerContentVariants} transition={activeCardTransition} className="absolute inset-0 z-20">
                 <div className="absolute bottom-[calc(50%+60px)] left-0 right-0 px-6 flex flex-col items-center text-center z-30">
                   <motion.div className="flex items-center justify-center gap-1.5 mb-1 w-full">
                     <motion.h3
