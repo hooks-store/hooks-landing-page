@@ -613,7 +613,7 @@ const HOME_COPY = {
       line1: 'Crea tu perfil.',
       line2: 'Comparte tu link.',
       line3: 'Empieza a cobrar.',
-      primaryCta: 'Empieza gratis — solo pagas cuando vendes',
+      primaryCta: 'Crear gratis',
       trust1: 'Sin tarjeta de crédito',
       trust2: 'Perfil verificado incluido',
       trust3: 'Optimizado para tráfico desde TikTok',
