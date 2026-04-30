@@ -97,6 +97,16 @@ const DIGITAL_PRODUCT_KIND_ICON: Record<DigitalProductKind, LucideIcon> = {
   newsletter: Mail,
 };
 
+const DIGITAL_PRODUCT_KIND_IMAGE: Record<DigitalProductKind, string> = {
+  membership: '/images/digital-products/vip-community.png',
+  guide: '/images/digital-products/first-1000-investing.png',
+  masterclass: '/images/digital-products/conversational-english.png',
+  bundle: '/images/digital-products/mobile-photography-pack.png',
+  audio: '/images/digital-products/sleep-meditations.png',
+  service: '/images/digital-products/instagram-audit.png',
+  newsletter: '/images/digital-products/investment-letter.png',
+};
+
 const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
   en: {
     liveLabel: 'Live',
@@ -111,7 +121,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
     items: [
       {
         kind: 'membership',
-        badge: 'Membership · monthly',
+        badge: 'Membership',
         category: 'Membership',
         title: 'VIP Community: weekly keto recipes',
         price: '$9/mo',
@@ -121,7 +131,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'guide',
-        badge: 'PDF · 47 pages',
+        badge: 'PDF',
         category: 'Guide',
         title: 'Invest your first $1,000 without mistakes',
         price: '$35',
@@ -131,7 +141,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'masterclass',
-        badge: 'Live · 90 days',
+        badge: 'Live',
         category: 'Live masterclass',
         title: 'Conversational English in 90 days',
         price: '$25',
@@ -141,7 +151,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'bundle',
-        badge: 'Bundle · 3 courses',
+        badge: 'Bundle',
         category: 'Bundle',
         title: 'Mobile photography pack (3 courses + presets)',
         price: '$97',
@@ -151,7 +161,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'audio',
-        badge: 'Audio · 12 tracks',
+        badge: 'Audio',
         category: 'Audio',
         title: 'Guided meditations to sleep better',
         price: '$15',
@@ -161,7 +171,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'service',
-        badge: 'Service · 60 min',
+        badge: 'Service',
         category: 'Service',
         title: 'Instagram audit (PDF + Loom)',
         price: '$120',
@@ -171,7 +181,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'newsletter',
-        badge: 'Newsletter · weekly',
+        badge: 'Newsletter',
         category: 'Paid newsletter',
         title: 'Weekly investment letter',
         price: '$5/mo',
@@ -194,7 +204,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
     items: [
       {
         kind: 'membership',
-        badge: 'Membresía · mensual',
+        badge: 'Membresía',
         category: 'Membresía',
         title: 'Comunidad VIP: recetas keto semanales',
         price: '$9/mes',
@@ -204,7 +214,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'guide',
-        badge: 'PDF · 47 págs',
+        badge: 'PDF',
         category: 'Guía',
         title: 'Invierte tus primeros $1.000 sin equivocarte',
         price: '$35',
@@ -214,7 +224,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'masterclass',
-        badge: 'En vivo · 90 días',
+        badge: 'Vivo',
         category: 'Masterclass en vivo',
         title: 'Inglés conversacional en 90 días',
         price: '$25',
@@ -224,8 +234,8 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'bundle',
-        badge: 'Bundle · 3 cursos',
-        category: 'Bundle',
+        badge: 'Paquete',
+        category: 'Paquete',
         title: 'Pack completo de fotografía móvil (3 cursos + presets)',
         price: '$97',
         cta: 'Obtener pack',
@@ -234,7 +244,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'audio',
-        badge: 'Audio · 12 pistas',
+        badge: 'Audio',
         category: 'Audio',
         title: 'Meditaciones guiadas para dormir mejor',
         price: '$15',
@@ -244,7 +254,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'service',
-        badge: 'Servicio · 60 min',
+        badge: 'Servicio',
         category: 'Servicio',
         title: 'Auditoría de tu Instagram (PDF + Loom)',
         price: '$120',
@@ -254,7 +264,7 @@ const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
       },
       {
         kind: 'newsletter',
-        badge: 'Newsletter · semanal',
+        badge: 'Newsletter',
         category: 'Newsletter de pago',
         title: 'Carta semanal de inversión',
         price: '$5/mes',
@@ -270,6 +280,8 @@ type CoursePreviewItem = {
   category: string;
   title: string;
   desc: string;
+  imageUrl: string;
+  imagePosition?: string;
   price?: string;
   oldPrice?: string;
   rating?: string;
@@ -280,6 +292,11 @@ type CoursePreviewItem = {
   buyer: string;
 };
 
+const COURSE_IMAGE_SHORT_FORM_VIDEO = 'https://images.unsplash.com/photo-1753005329524-f2f26aa6e5ad?auto=format&fit=crop&fm=jpg&q=72&w=900';
+const COURSE_IMAGE_MONETIZATION = 'https://images.unsplash.com/photo-1751257983922-a627088d4c21?auto=format&fit=crop&fm=jpg&q=72&w=900';
+const COURSE_IMAGE_PERSONAL_FINANCE = 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&fm=jpg&q=72&w=900';
+const COURSE_IMAGE_FITNESS = 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&fm=jpg&q=72&w=900';
+
 const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: CoursePreviewItem[] }> = {
   en: {
     eyebrow: 'Just sold',
@@ -288,6 +305,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Short-form video',
         title: 'Short-Form Video Accelerator',
         desc: 'Create scroll-stopping TikToks, Reels, and Shorts that grow your audience fast.',
+        imageUrl: COURSE_IMAGE_SHORT_FORM_VIDEO,
+        imagePosition: 'center',
         price: '$79.99',
         oldPrice: '$159.98',
         rating: '4.9',
@@ -300,6 +319,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Monetization',
         title: 'Creator Monetization Bootcamp',
         desc: 'Turn content into income with digital products, communities, and sponsorships.',
+        imageUrl: COURSE_IMAGE_MONETIZATION,
+        imagePosition: 'center 72%',
         durationLabel: '10 min preview',
         cta: 'Watch now',
         accent: '#FFB14F',
@@ -309,6 +330,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Personal finance',
         title: 'Personal Finance Blueprint',
         desc: 'Budget, invest, and build long-term wealth with simple, creator-friendly systems.',
+        imageUrl: COURSE_IMAGE_PERSONAL_FINANCE,
+        imagePosition: 'center 45%',
         price: '$89.99',
         oldPrice: '$179.98',
         rating: '4.8',
@@ -321,6 +344,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Fitness',
         title: 'Lean Body Transformation',
         desc: 'Build strength, lose fat, and create a sustainable routine without endless gym hours.',
+        imageUrl: COURSE_IMAGE_FITNESS,
+        imagePosition: 'center 42%',
         price: '$74.99',
         oldPrice: '$149.98',
         rating: '4.9',
@@ -338,6 +363,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Videos cortos',
         title: 'Acelerador de videos cortos',
         desc: 'Crea TikToks, Reels y Shorts que detienen el scroll y hacen crecer tu audiencia.',
+        imageUrl: COURSE_IMAGE_SHORT_FORM_VIDEO,
+        imagePosition: 'center',
         price: '$79.99',
         oldPrice: '$159.98',
         rating: '4.9',
@@ -350,6 +377,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Monetización',
         title: 'Bootcamp de monetización',
         desc: 'Convierte tu contenido en ingresos con productos digitales, comunidades y patrocinios.',
+        imageUrl: COURSE_IMAGE_MONETIZATION,
+        imagePosition: 'center 72%',
         durationLabel: 'Vista previa · 10 min',
         cta: 'Ver ahora',
         accent: '#FFB14F',
@@ -359,6 +388,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Finanzas',
         title: 'Plan de finanzas personales',
         desc: 'Aprende a presupuestar, invertir y construir riqueza con sistemas simples para creadores.',
+        imageUrl: COURSE_IMAGE_PERSONAL_FINANCE,
+        imagePosition: 'center 45%',
         price: '$89.99',
         oldPrice: '$179.98',
         rating: '4.8',
@@ -371,6 +402,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Fitness',
         title: 'Transformación corporal lean',
         desc: 'Gana fuerza, pierde grasa y arma una rutina sostenible sin pasar horas en el gimnasio.',
+        imageUrl: COURSE_IMAGE_FITNESS,
+        imagePosition: 'center 42%',
         price: '$74.99',
         oldPrice: '$149.98',
         rating: '4.9',
@@ -1071,6 +1104,7 @@ function DigitalProductCover({
   variant: DigitalProductSlot;
 }) {
   const Icon = DIGITAL_PRODUCT_KIND_ICON[kind];
+  const imageSrc = DIGITAL_PRODUCT_KIND_IMAGE[kind];
   const isFeature = variant === 'feature';
   const isWide = variant === 'wide';
 
@@ -1081,78 +1115,29 @@ function DigitalProductCover({
         background: `linear-gradient(135deg, ${accent}38 0%, ${accentSoft} 38%, rgba(7, 17, 29, 0) 92%)`,
       }}
     >
+      <img
+        src={imageSrc}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{
+          filter: 'brightness(0.94) saturate(1.08)',
+          opacity: isWide ? 0.76 : 0.94,
+        }}
+      />
       <div
         className="absolute inset-0"
         style={{
-          background: `radial-gradient(120% 80% at 100% 0%, ${accent}30 0%, transparent 60%)`,
+          background: `linear-gradient(180deg, rgba(5, 9, 19, 0.04) 0%, rgba(5, 9, 19, 0.68) 100%), radial-gradient(120% 80% at 100% 0%, ${accent}22 0%, transparent 60%)`,
         }}
       />
 
       {kind === 'masterclass' && !isWide && (
         <>
-          <div className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-black/40 px-1.5 py-[3px] text-[8.5px] font-bold uppercase tracking-[0.1em] text-white">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inset-0 rounded-full bg-[#FF624F] animate-ping" />
-              <span className="absolute inset-0 rounded-full bg-[#FF624F]" />
-            </span>
-            LIVE
-          </div>
           <div
             className="absolute -right-3 -bottom-3 h-16 w-16 rounded-full opacity-50"
             style={{ background: `radial-gradient(circle, ${accent}66 0%, transparent 70%)` }}
           />
         </>
-      )}
-
-      {kind === 'audio' && !isWide && (
-        <div className="absolute inset-x-2 bottom-2 flex items-end gap-[3px] h-7 opacity-80">
-          {[10, 18, 26, 14, 30, 22, 12, 28, 16, 24, 18, 10].map((h, i) => (
-            <span
-              key={i}
-              className="flex-1 rounded-full"
-              style={{ height: `${h}px`, background: `linear-gradient(180deg, ${accent}, ${accent}55)` }}
-            />
-          ))}
-        </div>
-      )}
-
-      {kind === 'bundle' && !isWide && (
-        <div className="absolute right-2 bottom-2 flex flex-col items-end gap-0.5">
-          <div
-            className="h-2 w-10 rounded-[3px] opacity-50"
-            style={{ background: `linear-gradient(135deg, ${accent}99, ${accent}33)` }}
-          />
-          <div
-            className="h-2 w-12 rounded-[3px] opacity-70"
-            style={{ background: `linear-gradient(135deg, ${accent}cc, ${accent}55)` }}
-          />
-          <div
-            className="h-3 w-14 rounded-[3px]"
-            style={{ background: `linear-gradient(135deg, ${accent}, ${accent}88)` }}
-          />
-        </div>
-      )}
-
-      {kind === 'membership' && !isWide && (
-        <div className="absolute right-2 bottom-2 flex -space-x-1.5">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="h-4 w-4 rounded-full border border-[#0A1726]"
-              style={{
-                background: `linear-gradient(135deg, ${accent}${i === 0 ? 'ff' : i === 1 ? 'cc' : '88'}, ${accent}55)`,
-              }}
-            />
-          ))}
-        </div>
-      )}
-
-      {kind === 'guide' && !isWide && (
-        <div className="absolute right-2 bottom-2 flex flex-col gap-[3px] items-end">
-          <span className="h-[2px] w-8 rounded-full" style={{ background: `${accent}aa` }} />
-          <span className="h-[2px] w-10 rounded-full" style={{ background: `${accent}cc` }} />
-          <span className="h-[2px] w-6 rounded-full" style={{ background: `${accent}66` }} />
-        </div>
       )}
 
       {kind === 'newsletter' && !isWide && (
@@ -1307,12 +1292,14 @@ function DigitalProductsFeaturePreview() {
         >
             {!isWide && (
               <div
-                className={`absolute inline-flex items-center gap-1 rounded-full border border-white/15 bg-black/45 backdrop-blur-sm ${
-                  isFeature ? 'left-3 top-3 px-2 py-1' : 'right-2 top-2 px-1.5 py-[3px]'
+                className={`absolute inline-flex min-w-0 items-center gap-1 overflow-hidden rounded-full border border-white/15 bg-black/45 backdrop-blur-sm ${
+                  isFeature
+                    ? 'left-3 top-3 max-w-[calc(100%-4rem)] px-2 py-1'
+                    : 'right-2 top-2 max-w-[calc(100%-4.25rem)] px-1.5 py-[3px]'
                 }`}
               >
                 <span
-                  className={`${isFeature ? 'text-[9px]' : 'text-[8px]'} font-bold uppercase tracking-[0.1em] text-white/85 whitespace-nowrap`}
+                  className={`${isFeature ? 'text-[9px]' : 'text-[8px]'} block min-w-0 truncate whitespace-nowrap font-bold uppercase tracking-[0.1em] text-white/85`}
                 >
                   {item.badge}
                 </span>
@@ -1350,7 +1337,7 @@ function DigitalProductsFeaturePreview() {
                 <div className="mt-2 flex items-center justify-between gap-2">
                   <span className="text-[16px] font-bold tabular-nums text-white">{item.price}</span>
                   <span
-                    className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold text-[#0A1726] transition-transform duration-200"
+                    className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-bold text-[#0A1726] transition-transform duration-200"
                     style={{
                       background: item.accent,
                       transform: isHovered && !reduceMotion ? 'scale(1.05)' : 'scale(1)',
@@ -1478,6 +1465,14 @@ function CoursesFeaturePreview() {
   const reduceMotion = useReducedMotion() ?? false;
 
   useEffect(() => {
+    copy.items.forEach((course) => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = course.imageUrl;
+    });
+  }, [copy.items]);
+
+  useEffect(() => {
     if (!isInView) return;
     const interval = setInterval(() => {
       setActiveIndex((current) => (current + 1) % copy.items.length);
@@ -1572,11 +1567,28 @@ function CoursesFeaturePreview() {
               {/* Thumbnail */}
               <motion.div
                 variants={childVariants}
-                className="relative h-[104px] rounded-[18px] overflow-hidden border border-white/10"
+                className="relative h-[104px] rounded-[18px] overflow-hidden border border-white/10 bg-[#06101D]"
                 style={{
                   background: `radial-gradient(120% 80% at 30% 20%, ${accent}55 0%, transparent 65%), linear-gradient(135deg, #0E1F36 0%, #06101D 100%)`,
                 }}
               >
+                <img
+                  src={activeCourse.imageUrl}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: activeCourse.imagePosition ?? 'center' }}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(0,0,0,0.1)_0%,_rgba(0,0,0,0.34)_100%)]" />
+                <motion.div
+                  className="absolute inset-0 mix-blend-color"
+                  style={{ background: accent, opacity: 0.16 }}
+                  animate={{ background: accent }}
+                  transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
+                />
+
                 {/* category badge */}
                 <div className="absolute left-3 top-3 inline-flex items-center rounded-full bg-black/45 backdrop-blur-sm px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white/85">
                   {activeCourse.category}
@@ -1992,6 +2004,32 @@ const MEMBERSHIPS_PREVIEW_COPY: Record<'en' | 'es', MembershipPreviewCopy> = {
 };
 
 const MEMBERSHIPS_ROTATION_MS = 3100;
+const MEMBERSHIP_MEMBER_IMAGES = {
+  sara: {
+    src: 'https://images.unsplash.com/photo-1542596594-ae13eaf915cd?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    position: 'center 30%',
+  },
+  diego: {
+    src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    position: 'center 32%',
+  },
+  lucia: {
+    src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    position: 'center 30%',
+  },
+  maya: {
+    src: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    position: 'center 30%',
+  },
+};
+const MEMBERSHIP_MEMBER_STACK_IMAGES = [
+  MEMBERSHIP_MEMBER_IMAGES.sara,
+  MEMBERSHIP_MEMBER_IMAGES.diego,
+  MEMBERSHIP_MEMBER_IMAGES.lucia,
+  MEMBERSHIP_MEMBER_IMAGES.maya,
+];
+const MEMBERSHIP_CLASS_IMAGE =
+  'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&fm=jpg&q=72&w=900';
 
 function MembershipsFeaturePreview() {
   const { locale } = useLanguage();
@@ -2195,14 +2233,72 @@ function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
   const tiers =
     locale === 'es'
       ? [
-          { name: 'Básico', price: '$5', perks: '2 beneficios' },
-          { name: 'Pro', price: '$12', perks: '5 beneficios' },
-          { name: 'VIP', price: '$29', perks: '10 beneficios' },
+          {
+            name: 'Básico',
+            price: '$5',
+            cadence: '/mes',
+            benefits: ['Contenido base', 'Comunidad'],
+            perks: '2 beneficios',
+          },
+          {
+            name: 'Pro',
+            price: '$12',
+            cadence: '/mes',
+            benefits: ['Todo Básico', 'Clases semanales', 'Plantillas', 'Chat privado', 'Replays'],
+            perks: '5 beneficios',
+          },
+          {
+            name: 'VIP',
+            price: '$29',
+            cadence: '/mes',
+            benefits: [
+              'Todo Pro',
+              'Mentoría mensual',
+              'Feedback directo',
+              'Recursos VIP',
+              'Eventos privados',
+              'Q&A en vivo',
+              'Descuentos',
+              'Prioridad',
+              'Vota temas',
+              'Archivo completo',
+            ],
+            perks: '10 beneficios',
+          },
         ]
       : [
-          { name: 'Basic', price: '$5', perks: '2 perks' },
-          { name: 'Pro', price: '$12', perks: '5 perks' },
-          { name: 'VIP', price: '$29', perks: '10 perks' },
+          {
+            name: 'Basic',
+            price: '$5',
+            cadence: '/mo',
+            benefits: ['Core content', 'Community'],
+            perks: '2 perks',
+          },
+          {
+            name: 'Pro',
+            price: '$12',
+            cadence: '/mo',
+            benefits: ['Everything Basic', 'Weekly classes', 'Templates', 'Private chat', 'Replays'],
+            perks: '5 perks',
+          },
+          {
+            name: 'VIP',
+            price: '$29',
+            cadence: '/mo',
+            benefits: [
+              'Everything Pro',
+              'Monthly mentoring',
+              'Direct feedback',
+              'VIP resources',
+              'Private events',
+              'Live Q&A',
+              'Discounts',
+              'Priority',
+              'Vote topics',
+              'Full archive',
+            ],
+            perks: '10 perks',
+          },
         ];
 
   return (
@@ -2241,8 +2337,20 @@ function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
               </div>
               <div className="mt-1.5 text-[14px] font-extrabold text-white tabular-nums leading-none">
                 {tier.price}
+                <span className="ml-0.5 text-[7.5px] font-bold text-white/45">{tier.cadence}</span>
               </div>
             </div>
+            <ul className="my-2 space-y-0.5 text-[7px] font-medium leading-[1.15] text-white/52">
+              {tier.benefits.map((benefit) => (
+                <li key={benefit} className="flex items-start gap-1">
+                  <span
+                    className="mt-[3px] h-1 w-1 shrink-0 rounded-full"
+                    style={{ background: isActive ? accent : 'rgba(255,255,255,0.35)' }}
+                  />
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
             <div className="text-[8.5px] font-medium text-white/55 mt-1.5">{tier.perks}</div>
           </motion.div>
         );
@@ -2252,14 +2360,13 @@ function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
 }
 
 function NewMemberScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
-  const avatarColors = ['#FF6B6B', '#4ECDC4', '#FFD166', '#A8DADC', '#F77F00'];
   const justJoined = locale === 'es' ? 'Maya se unió' : 'Maya just joined';
 
   return (
     <div className="h-full flex flex-col gap-2 items-center justify-center px-1">
       <div className="flex items-center -space-x-2">
-        {avatarColors.map((c, i) => {
-          const isNew = i === avatarColors.length - 1;
+        {MEMBERSHIP_MEMBER_STACK_IMAGES.map((image, i) => {
+          const isNew = i === MEMBERSHIP_MEMBER_STACK_IMAGES.length - 1;
           return (
             <motion.div
               key={i}
@@ -2274,13 +2381,19 @@ function NewMemberScene({ accent, reduceMotion, locale }: MembershipSceneProps) 
               }
               className="h-8 w-8 rounded-full border-2"
               style={{
-                background: `linear-gradient(135deg, ${c}, ${c}aa)`,
                 borderColor: isNew ? accent : '#0B1926',
                 boxShadow: isNew
                   ? `0 0 0 3px ${accent}33, 0 6px 18px ${accent}55`
                   : 'none',
               }}
-            />
+            >
+              <img
+                src={image.src}
+                alt=""
+                className="h-full w-full rounded-full object-cover"
+                style={{ objectPosition: image.position }}
+              />
+            </motion.div>
           );
         })}
       </div>
@@ -2315,7 +2428,11 @@ function RecurringScene({ accent, reduceMotion, locale }: MembershipSceneProps) 
           { name: 'Diego R.', plan: 'VIP · Monthly', amount: '+$29' },
           { name: 'Lucía P.', plan: 'Pro · Monthly', amount: '+$12' },
         ];
-  const colors = ['#FF6B6B', '#4ECDC4', '#FFD166'];
+  const rowImages = [
+    MEMBERSHIP_MEMBER_IMAGES.sara,
+    MEMBERSHIP_MEMBER_IMAGES.diego,
+    MEMBERSHIP_MEMBER_IMAGES.lucia,
+  ];
 
   return (
     <div className="h-full flex flex-col gap-1.5 justify-center">
@@ -2331,11 +2448,11 @@ function RecurringScene({ accent, reduceMotion, locale }: MembershipSceneProps) 
           }}
           className="flex items-center gap-2 rounded-[10px] border border-white/[0.08] bg-white/[0.03] px-2 py-1.5"
         >
-          <div
-            className="h-5 w-5 rounded-full shrink-0"
-            style={{
-              background: `linear-gradient(135deg, ${colors[i]}, ${colors[i]}aa)`,
-            }}
+          <img
+            src={rowImages[i].src}
+            alt=""
+            className="h-5 w-5 rounded-full object-cover shrink-0 ring-1 ring-white/10"
+            style={{ objectPosition: rowImages[i].position }}
           />
           <div className="min-w-0 flex-1">
             <div className="text-[10px] font-semibold text-white/95 truncate leading-tight">
@@ -2381,6 +2498,13 @@ function ExclusiveScene({ accent, reduceMotion, locale }: MembershipSceneProps) 
           background: `radial-gradient(120% 80% at 30% 25%, ${accent}55 0%, transparent 70%), linear-gradient(135deg, #0E1F36 0%, #06101D 100%)`,
         }}
       >
+        <img
+          src={MEMBERSHIP_CLASS_IMAGE}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
+          style={{ objectPosition: 'center 44%' }}
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(7,17,29,0.22)_0%,_rgba(7,17,29,0.40)_48%,_rgba(7,17,29,0.86)_100%),linear-gradient(90deg,_rgba(7,17,29,0.38)_0%,_rgba(7,17,29,0.06)_55%,_rgba(7,17,29,0.32)_100%)]" />
         <div className="absolute left-2.5 top-2.5 inline-flex items-center gap-1 rounded-full bg-black/45 backdrop-blur-sm px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.14em] text-white/85">
           <Lock className="h-2.5 w-2.5" style={{ color: accent }} strokeWidth={3} />
           <span>{locale === 'es' ? 'Premium' : 'Members'}</span>
@@ -2559,6 +2683,8 @@ const COACHING_PREVIEW_COPY: Record<'en' | 'es', CoachingPreviewCopy> = {
 
 const COACHING_ROTATION_MS = 2900;
 const COACH_AVATAR_SRC = '/images/coach-avatar.jpg';
+const COACHING_CALLER_AVATAR_SRC = '/images/creator-profiles/kun-alvarez.jpg';
+const COACHING_REVIEWER_AVATAR_SRC = '/images/creator-profiles/anya-jensen.jpg';
 
 function CoachingCallsFeaturePreview() {
   const { locale } = useLanguage();
@@ -3016,12 +3142,15 @@ function VideoCallScene({ accent, reduceMotion }: CoachingSceneProps) {
                 decoding="async"
               />
             ) : (
-              <div
-                className="h-7 w-7 rounded-full flex items-center justify-center text-[10px] font-bold text-black"
-                style={{ background: `linear-gradient(135deg, ${accent} 0%, #ffffff 100%)` }}
-              >
-                {t.initials}
-              </div>
+              <img
+                src={COACHING_CALLER_AVATAR_SRC}
+                alt=""
+                aria-hidden="true"
+                className="h-7 w-7 rounded-full object-cover ring-1 ring-white/20"
+                style={{ objectPosition: 'center 42%' }}
+                loading="lazy"
+                decoding="async"
+              />
             )}
             {t.live && (
               <div className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-black/65 backdrop-blur-sm px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-white">
@@ -3163,9 +3292,14 @@ function ReviewsScene({ accent, reduceMotion }: CoachingSceneProps) {
         transition={{ delay: 0.55, duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
         className="flex items-center gap-2"
       >
-        <div
-          className="h-5 w-5 rounded-full"
-          style={{ background: `linear-gradient(135deg, ${accent} 0%, #FF4F8A 100%)` }}
+        <img
+          src={COACHING_REVIEWER_AVATAR_SRC}
+          alt=""
+          aria-hidden="true"
+          className="h-5 w-5 rounded-full object-cover ring-1 ring-white/15"
+          style={{ objectPosition: 'center 28%' }}
+          loading="lazy"
+          decoding="async"
         />
         <span className="text-[11px] font-semibold text-white/85">María G.</span>
         <span className="text-[10px] text-white/45">· hace 2 días</span>
