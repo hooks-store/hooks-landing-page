@@ -14,6 +14,11 @@ const socialLinks = [
   },
 ];
 
+type FooterColumn = {
+  title: string;
+  links: string[];
+};
+
 export default function Footer() {
   const { locale } = useLanguage();
   const isSpanish = locale === 'es';
@@ -22,7 +27,7 @@ export default function Footer() {
     brandSentence: isSpanish
       ? 'Hooks es la plataforma para creadores que quieren vender, crecer y monetizar desde un solo link.'
       : 'The creator economy platform behind it all.',
-    columns: isSpanish
+    columns: (isSpanish
       ? [
           // {
           //   title: 'Producto',
@@ -58,8 +63,9 @@ export default function Footer() {
           //   title: 'Legal',
           //   links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'DMCA', 'Accessibility'],
           // },
-        ],
+        ]) as FooterColumn[],
     rightsReserved: isSpanish ? 'Todos los derechos reservados.' : 'All rights reserved.',
+    contactLabel: isSpanish ? 'Contacto' : 'Contact',
     legalShort: isSpanish ? ['Privacidad', 'Términos', 'Cookies'] : ['Privacy', 'Terms', 'Cookies'],
   };
 
@@ -72,6 +78,12 @@ export default function Footer() {
             <p className="text-[#8A8F98] text-sm mt-4 max-w-[200px] leading-relaxed">
               {copy.brandSentence}
             </p>
+            <a
+              href="mailto:equipo@hooks.store"
+              className="text-[#8A8F98] text-sm mt-4 inline-block hover:text-white transition-colors"
+            >
+              {copy.contactLabel}: equipo@hooks.store
+            </a>
             {/* Social icons */}
             <div className="flex gap-3 mt-6">
               {socialLinks.map((social) => (

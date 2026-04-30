@@ -47,7 +47,7 @@ const HERO_BG_VIDEO_SOURCES: HeroBgVideo[] = [
 ];
 const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
-const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide.mov';
+const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide-screen-recording.mp4';
 const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
 const SECTION_HEADLINE_CLASS = 'text-[30px] sm:text-[40px] md:text-[48px] lg:text-[clamp(36px,3.6vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] lg:whitespace-nowrap';
 const FEATURE_CARD_CLASS = 'bg-[linear-gradient(180deg,_#0B1926_0%,_#0A0A0A_76%)] border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-all duration-300 group';
@@ -742,16 +742,24 @@ export default function Home() {
 
               <div className={FEATURE_CARD_CLASS}>
                 <div className={FEATURE_CARD_MEDIA_CLASS}>
-                  <video
-                    src={FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE}
-                    className="relative z-10 w-full h-full object-contain bg-transparent"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    aria-label={copy.tiktokStore.browserVideoLabel}
-                  />
+                  <div className="relative z-10 flex h-full w-full items-center justify-center px-6 py-6 sm:px-10 sm:py-8">
+                    <div className="relative h-full max-h-[350px] w-auto translate-y-[100px] scale-[1.7] aspect-[9/19.5] rounded-[28px] bg-[#050505] p-1.5 shadow-[0_24px_70px_rgba(0,0,0,0.38),inset_0_0_0_1px_rgba(255,255,255,0.16)]">
+                      <div className="absolute -left-0.5 top-[92px] h-12 w-0.5 rounded-l-full bg-[#151515]" />
+                      <div className="absolute -right-0.5 top-[118px] h-16 w-0.5 rounded-r-full bg-[#151515]" />
+                      <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-black">
+                        <video
+                          src={FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE}
+                          className="h-full w-full -translate-y-2 object-contain"
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          preload="metadata"
+                          aria-label={copy.tiktokStore.browserVideoLabel}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className={FEATURE_CARD_BODY_CLASS}>
