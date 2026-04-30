@@ -23,7 +23,9 @@ import {
   Instagram, Facebook, Youtube, Music2, Check,
   Play, Star, ArrowRight,
   Calendar, Video, Bell, Mic, PhoneOff,
-  Bookmark, Compass
+  Bookmark, Compass,
+  Crown, BookOpen, Headphones, Briefcase, Mail, Package, Radio,
+  type LucideIcon
 } from 'lucide-react';
 
 // Image URLs
@@ -47,7 +49,7 @@ const HERO_BG_VIDEO_SOURCES: HeroBgVideo[] = [
 ];
 const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
-const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide.mov';
+const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide-screen-recording.mp4';
 const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
 const SECTION_HEADLINE_CLASS = 'text-[30px] sm:text-[40px] md:text-[48px] lg:text-[clamp(36px,3.6vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] lg:whitespace-nowrap';
 const FEATURE_CARD_CLASS = 'bg-[linear-gradient(180deg,_#0B1926_0%,_#0A0A0A_76%)] border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-all duration-300 group';
@@ -57,73 +59,229 @@ const FEATURE_CARD_TITLE_CLASS = 'text-white text-[24px] font-semibold mb-2';
 const FEATURE_CARD_TEXT_CLASS = 'text-[#8A8F98] text-[15px] leading-[1.6]';
 const FEATURE_CARD_CONTENT_CLASS = 'relative z-10 h-full w-full';
 
-const DIGITAL_PRODUCT_PREVIEW_COPY = {
+type DigitalProductKind =
+  | 'membership'
+  | 'guide'
+  | 'masterclass'
+  | 'bundle'
+  | 'audio'
+  | 'service'
+  | 'newsletter';
+
+type DigitalProductItem = {
+  kind: DigitalProductKind;
+  badge: string;
+  category: string;
+  title: string;
+  price: string;
+  cta: string;
+  accent: string;
+  accentSoft: string;
+};
+
+type DigitalProductCopy = {
+  liveLabel: string;
+  activityVerb: string;
+  timeAgo: (minutes: number) => string;
+  activityFeed: { name: string; productKind: DigitalProductKind; minutesAgo: number }[];
+  items: DigitalProductItem[];
+};
+
+const DIGITAL_PRODUCT_KIND_ICON: Record<DigitalProductKind, LucideIcon> = {
+  membership: Crown,
+  guide: BookOpen,
+  masterclass: Video,
+  bundle: Package,
+  audio: Headphones,
+  service: Briefcase,
+  newsletter: Mail,
+};
+
+const DIGITAL_PRODUCT_KIND_IMAGE: Record<DigitalProductKind, string> = {
+  membership: '/images/digital-products/vip-community.png',
+  guide: '/images/digital-products/first-1000-investing.png',
+  masterclass: '/images/digital-products/conversational-english.png',
+  bundle: '/images/digital-products/mobile-photography-pack.png',
+  audio: '/images/digital-products/sleep-meditations.png',
+  service: '/images/digital-products/instagram-audit.png',
+  newsletter: '/images/digital-products/investment-letter.png',
+};
+
+const DIGITAL_PRODUCT_PREVIEW_COPY: Record<'en' | 'es', DigitalProductCopy> = {
   en: {
-    statusLabel: 'Sale ready',
-    checkoutLabel: 'Instant checkout',
+    liveLabel: 'Live',
+    activityVerb: 'just bought',
+    timeAgo: (minutes) => (minutes <= 1 ? 'just now' : `${minutes} min ago`),
+    activityFeed: [
+      { name: 'Camila', productKind: 'bundle', minutesAgo: 2 },
+      { name: 'Jordan', productKind: 'masterclass', minutesAgo: 4 },
+      { name: 'Sofía', productKind: 'audio', minutesAgo: 6 },
+      { name: 'Liam', productKind: 'guide', minutesAgo: 1 },
+    ],
     items: [
       {
-        label: 'Ebook',
-        title: 'Hook Loop Kit',
-        subtitle: 'Creator blueprint',
-        price: '$29.99',
-        imageSrc: '/images/digital-products/ebook.svg',
-        accent: '#23B26D',
+        kind: 'membership',
+        badge: 'Membership',
+        category: 'Membership',
+        title: 'VIP Community: weekly keto recipes',
+        price: '$9/mo',
+        cta: 'Join',
+        accent: '#51E29A',
+        accentSoft: 'rgba(81, 226, 154, 0.18)',
       },
       {
-        label: 'Template',
-        title: 'Launch OS',
-        subtitle: 'Notion workspace',
-        price: '$49',
-        imageSrc: '/images/digital-products/template.svg',
-        accent: '#FF784F',
+        kind: 'guide',
+        badge: 'PDF',
+        category: 'Guide',
+        title: 'Invest your first $1,000 without mistakes',
+        price: '$35',
+        cta: 'Buy guide',
+        accent: '#5AB7FF',
+        accentSoft: 'rgba(90, 183, 255, 0.18)',
       },
       {
-        label: 'Guide',
-        title: 'Viral Scripts',
-        subtitle: '30 ready prompts',
-        price: '$19',
-        imageSrc: '/images/digital-products/guide.svg',
-        accent: '#5A78FF',
+        kind: 'masterclass',
+        badge: 'Live',
+        category: 'Live masterclass',
+        title: 'Conversational English in 90 days',
+        price: '$25',
+        cta: 'Reserve seat',
+        accent: '#FF624F',
+        accentSoft: 'rgba(255, 98, 79, 0.2)',
+      },
+      {
+        kind: 'bundle',
+        badge: 'Bundle',
+        category: 'Bundle',
+        title: 'Mobile photography pack (3 courses + presets)',
+        price: '$97',
+        cta: 'Get pack',
+        accent: '#B58CFF',
+        accentSoft: 'rgba(181, 140, 255, 0.2)',
+      },
+      {
+        kind: 'audio',
+        badge: 'Audio',
+        category: 'Audio',
+        title: 'Guided meditations to sleep better',
+        price: '$15',
+        cta: 'Listen now',
+        accent: '#FFC859',
+        accentSoft: 'rgba(255, 200, 89, 0.2)',
+      },
+      {
+        kind: 'service',
+        badge: 'Service',
+        category: 'Service',
+        title: 'Instagram audit (PDF + Loom)',
+        price: '$120',
+        cta: 'Request audit',
+        accent: '#FF8AC2',
+        accentSoft: 'rgba(255, 138, 194, 0.2)',
+      },
+      {
+        kind: 'newsletter',
+        badge: 'Newsletter',
+        category: 'Paid newsletter',
+        title: 'Weekly investment letter',
+        price: '$5/mo',
+        cta: 'Subscribe',
+        accent: '#6BD3FF',
+        accentSoft: 'rgba(107, 211, 255, 0.18)',
       },
     ],
   },
   es: {
-    statusLabel: 'Venta lista',
-    checkoutLabel: 'Checkout inmediato',
+    liveLabel: 'En vivo',
+    activityVerb: 'acaba de comprar',
+    timeAgo: (minutes) => (minutes <= 1 ? 'ahora' : `hace ${minutes} min`),
+    activityFeed: [
+      { name: 'Camila', productKind: 'bundle', minutesAgo: 2 },
+      { name: 'Diego', productKind: 'masterclass', minutesAgo: 4 },
+      { name: 'Sofía', productKind: 'audio', minutesAgo: 6 },
+      { name: 'Lucía', productKind: 'guide', minutesAgo: 1 },
+    ],
     items: [
       {
-        label: 'Ebook',
-        title: 'Kit de Hooks',
-        subtitle: 'Guía para creadores',
-        price: '$29.99',
-        imageSrc: '/images/digital-products/ebook.svg',
-        accent: '#23B26D',
+        kind: 'membership',
+        badge: 'Membresía',
+        category: 'Membresía',
+        title: 'Comunidad VIP: recetas keto semanales',
+        price: '$9/mes',
+        cta: 'Unirme',
+        accent: '#51E29A',
+        accentSoft: 'rgba(81, 226, 154, 0.18)',
       },
       {
-        label: 'Plantilla',
-        title: 'Launch OS',
-        subtitle: 'Workspace en Notion',
-        price: '$49',
-        imageSrc: '/images/digital-products/template.svg',
-        accent: '#FF784F',
+        kind: 'guide',
+        badge: 'PDF',
+        category: 'Guía',
+        title: 'Invierte tus primeros $1.000 sin equivocarte',
+        price: '$35',
+        cta: 'Comprar guía',
+        accent: '#5AB7FF',
+        accentSoft: 'rgba(90, 183, 255, 0.18)',
       },
       {
-        label: 'Guía',
-        title: 'Scripts virales',
-        subtitle: '30 prompts listos',
-        price: '$19',
-        imageSrc: '/images/digital-products/guide.svg',
-        accent: '#5A78FF',
+        kind: 'masterclass',
+        badge: 'Vivo',
+        category: 'Masterclass en vivo',
+        title: 'Inglés conversacional en 90 días',
+        price: '$25',
+        cta: 'Reservar',
+        accent: '#FF624F',
+        accentSoft: 'rgba(255, 98, 79, 0.2)',
+      },
+      {
+        kind: 'bundle',
+        badge: 'Paquete',
+        category: 'Paquete',
+        title: 'Pack completo de fotografía móvil (3 cursos + presets)',
+        price: '$97',
+        cta: 'Obtener pack',
+        accent: '#B58CFF',
+        accentSoft: 'rgba(181, 140, 255, 0.2)',
+      },
+      {
+        kind: 'audio',
+        badge: 'Audio',
+        category: 'Audio',
+        title: 'Meditaciones guiadas para dormir mejor',
+        price: '$15',
+        cta: 'Escuchar ahora',
+        accent: '#FFC859',
+        accentSoft: 'rgba(255, 200, 89, 0.2)',
+      },
+      {
+        kind: 'service',
+        badge: 'Servicio',
+        category: 'Servicio',
+        title: 'Auditoría de tu Instagram (PDF + Loom)',
+        price: '$120',
+        cta: 'Solicitar auditoría',
+        accent: '#FF8AC2',
+        accentSoft: 'rgba(255, 138, 194, 0.2)',
+      },
+      {
+        kind: 'newsletter',
+        badge: 'Newsletter',
+        category: 'Newsletter de pago',
+        title: 'Carta semanal de inversión',
+        price: '$5/mes',
+        cta: 'Suscribirme',
+        accent: '#6BD3FF',
+        accentSoft: 'rgba(107, 211, 255, 0.18)',
       },
     ],
   },
-} as const;
+};
 
 type CoursePreviewItem = {
   category: string;
   title: string;
   desc: string;
+  imageUrl: string;
+  imagePosition?: string;
   price?: string;
   oldPrice?: string;
   rating?: string;
@@ -134,6 +292,11 @@ type CoursePreviewItem = {
   buyer: string;
 };
 
+const COURSE_IMAGE_SHORT_FORM_VIDEO = 'https://images.unsplash.com/photo-1753005329524-f2f26aa6e5ad?auto=format&fit=crop&fm=jpg&q=72&w=900';
+const COURSE_IMAGE_MONETIZATION = 'https://images.unsplash.com/photo-1751257983922-a627088d4c21?auto=format&fit=crop&fm=jpg&q=72&w=900';
+const COURSE_IMAGE_PERSONAL_FINANCE = 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&fm=jpg&q=72&w=900';
+const COURSE_IMAGE_FITNESS = 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&fm=jpg&q=72&w=900';
+
 const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: CoursePreviewItem[] }> = {
   en: {
     eyebrow: 'Just sold',
@@ -142,6 +305,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Short-form video',
         title: 'Short-Form Video Accelerator',
         desc: 'Create scroll-stopping TikToks, Reels, and Shorts that grow your audience fast.',
+        imageUrl: COURSE_IMAGE_SHORT_FORM_VIDEO,
+        imagePosition: 'center',
         price: '$79.99',
         oldPrice: '$159.98',
         rating: '4.9',
@@ -154,6 +319,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Monetization',
         title: 'Creator Monetization Bootcamp',
         desc: 'Turn content into income with digital products, communities, and sponsorships.',
+        imageUrl: COURSE_IMAGE_MONETIZATION,
+        imagePosition: 'center 72%',
         durationLabel: '10 min preview',
         cta: 'Watch now',
         accent: '#FFB14F',
@@ -163,6 +330,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Personal finance',
         title: 'Personal Finance Blueprint',
         desc: 'Budget, invest, and build long-term wealth with simple, creator-friendly systems.',
+        imageUrl: COURSE_IMAGE_PERSONAL_FINANCE,
+        imagePosition: 'center 45%',
         price: '$89.99',
         oldPrice: '$179.98',
         rating: '4.8',
@@ -175,6 +344,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Fitness',
         title: 'Lean Body Transformation',
         desc: 'Build strength, lose fat, and create a sustainable routine without endless gym hours.',
+        imageUrl: COURSE_IMAGE_FITNESS,
+        imagePosition: 'center 42%',
         price: '$74.99',
         oldPrice: '$149.98',
         rating: '4.9',
@@ -192,6 +363,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Videos cortos',
         title: 'Acelerador de videos cortos',
         desc: 'Crea TikToks, Reels y Shorts que detienen el scroll y hacen crecer tu audiencia.',
+        imageUrl: COURSE_IMAGE_SHORT_FORM_VIDEO,
+        imagePosition: 'center',
         price: '$79.99',
         oldPrice: '$159.98',
         rating: '4.9',
@@ -204,6 +377,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Monetización',
         title: 'Bootcamp de monetización',
         desc: 'Convierte tu contenido en ingresos con productos digitales, comunidades y patrocinios.',
+        imageUrl: COURSE_IMAGE_MONETIZATION,
+        imagePosition: 'center 72%',
         durationLabel: 'Vista previa · 10 min',
         cta: 'Ver ahora',
         accent: '#FFB14F',
@@ -213,6 +388,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Finanzas',
         title: 'Plan de finanzas personales',
         desc: 'Aprende a presupuestar, invertir y construir riqueza con sistemas simples para creadores.',
+        imageUrl: COURSE_IMAGE_PERSONAL_FINANCE,
+        imagePosition: 'center 45%',
         price: '$89.99',
         oldPrice: '$179.98',
         rating: '4.8',
@@ -225,6 +402,8 @@ const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: Course
         category: 'Fitness',
         title: 'Transformación corporal lean',
         desc: 'Gana fuerza, pierde grasa y arma una rutina sostenible sin pasar horas en el gimnasio.',
+        imageUrl: COURSE_IMAGE_FITNESS,
+        imagePosition: 'center 42%',
         price: '$74.99',
         oldPrice: '$149.98',
         rating: '4.9',
@@ -323,7 +502,7 @@ const HOME_COPY = {
       line1: 'Build your store.',
       line2: 'Share your links.',
       line3: 'Get paid.',
-      primaryCta: 'Start for free',
+      primaryCta: 'Start free — only pay when you sell',
       trust1: 'No card required',
       trust2: 'Verified profile included',
       trust3: 'Optimized for TikTok traffic',
@@ -742,16 +921,24 @@ export default function Home() {
 
               <div className={FEATURE_CARD_CLASS}>
                 <div className={FEATURE_CARD_MEDIA_CLASS}>
-                  <video
-                    src={FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE}
-                    className="relative z-10 w-full h-full object-contain bg-transparent"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    aria-label={copy.tiktokStore.browserVideoLabel}
-                  />
+                  <div className="relative z-10 flex h-full w-full items-center justify-center px-6 py-6 sm:px-10 sm:py-8">
+                    <div className="relative h-full max-h-[350px] w-auto translate-y-[100px] scale-[1.7] aspect-[9/19.5] rounded-[28px] bg-[#050505] p-1.5 shadow-[0_24px_70px_rgba(0,0,0,0.38),inset_0_0_0_1px_rgba(255,255,255,0.16)]">
+                      <div className="absolute -left-0.5 top-[92px] h-12 w-0.5 rounded-l-full bg-[#151515]" />
+                      <div className="absolute -right-0.5 top-[118px] h-16 w-0.5 rounded-r-full bg-[#151515]" />
+                      <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-black">
+                        <video
+                          src={FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE}
+                          className="h-full w-full -translate-y-2 object-contain"
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          preload="metadata"
+                          aria-label={copy.tiktokStore.browserVideoLabel}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className={FEATURE_CARD_BODY_CLASS}>
@@ -865,7 +1052,7 @@ export default function Home() {
 
               <button
                 type="button"
-                className="mt-10 sm:mt-12 w-full sm:w-auto min-w-[164px] bg-white text-black text-[16px] font-semibold px-8 py-3 rounded-full hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="mt-10 sm:mt-12 w-full sm:w-auto min-w-[164px] bg-white text-black text-[15px] sm:text-[16px] font-semibold leading-tight px-6 sm:px-8 py-3 sm:py-3.5 rounded-full whitespace-normal sm:whitespace-nowrap hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 {copy.finalCta.primaryCta}
               </button>
@@ -897,195 +1084,371 @@ export default function Home() {
 
 // ===== SUB-COMPONENTS =====
 
-const DIGITAL_PRODUCT_ROTATION_MS = 2200;
+const DIGITAL_PRODUCT_ROTATION_MS = 2800;
 const DIGITAL_PRODUCT_EASE = [0.22, 1, 0.36, 1] as const;
+const DIGITAL_PRODUCT_ACTIVITY_INTERVAL_MS = 7200;
+const DIGITAL_PRODUCT_ACTIVITY_VISIBLE_MS = 3200;
+const DIGITAL_PRODUCT_STAGGER_S = 0.07;
+
+type DigitalProductSlot = 'feature' | 'side1' | 'side2' | 'wide';
+
+function DigitalProductCover({
+  kind,
+  accent,
+  accentSoft,
+  variant,
+}: {
+  kind: DigitalProductKind;
+  accent: string;
+  accentSoft: string;
+  variant: DigitalProductSlot;
+}) {
+  const Icon = DIGITAL_PRODUCT_KIND_ICON[kind];
+  const imageSrc = DIGITAL_PRODUCT_KIND_IMAGE[kind];
+  const isFeature = variant === 'feature';
+  const isWide = variant === 'wide';
+
+  return (
+    <div
+      className="absolute inset-0 overflow-hidden"
+      style={{
+        background: `linear-gradient(135deg, ${accent}38 0%, ${accentSoft} 38%, rgba(7, 17, 29, 0) 92%)`,
+      }}
+    >
+      <img
+        src={imageSrc}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{
+          filter: 'brightness(0.94) saturate(1.08)',
+          opacity: isWide ? 0.76 : 0.94,
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `linear-gradient(180deg, rgba(5, 9, 19, 0.04) 0%, rgba(5, 9, 19, 0.68) 100%), radial-gradient(120% 80% at 100% 0%, ${accent}22 0%, transparent 60%)`,
+        }}
+      />
+
+      {kind === 'masterclass' && !isWide && (
+        <>
+          <div
+            className="absolute -right-3 -bottom-3 h-16 w-16 rounded-full opacity-50"
+            style={{ background: `radial-gradient(circle, ${accent}66 0%, transparent 70%)` }}
+          />
+        </>
+      )}
+
+      {kind === 'newsletter' && !isWide && (
+        <div className="absolute right-2 bottom-2 rounded-[5px] border border-white/15 bg-black/30 px-1.5 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.08em] text-white/80">
+          NEW
+        </div>
+      )}
+
+      {kind === 'service' && !isWide && (
+        <div className="absolute right-2 bottom-2 flex flex-col gap-[3px] items-end">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="flex items-center gap-1">
+              <Check className="h-2 w-2" style={{ color: accent }} />
+              <span className="h-[2px] w-7 rounded-full" style={{ background: `${accent}55` }} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Icon
+        className={`absolute ${isFeature ? 'right-3 top-3 h-5 w-5' : isWide ? 'left-3 top-1/2 -translate-y-1/2 h-4 w-4' : 'left-2.5 top-2.5 h-3.5 w-3.5'}`}
+        style={{ color: accent }}
+        strokeWidth={2.2}
+      />
+    </div>
+  );
+}
 
 function DigitalProductsFeaturePreview() {
   const { locale } = useLanguage();
   const copy = DIGITAL_PRODUCT_PREVIEW_COPY[locale];
-  const [activeProduct, setActiveProduct] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { amount: 0.4 });
+  const isInView = useInView(containerRef, { amount: 0.35 });
   const reduceMotion = useReducedMotion() ?? false;
 
+  const itemCount = copy.items.length;
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [hoveredKind, setHoveredKind] = useState<DigitalProductKind | null>(null);
+  const [activityIndex, setActivityIndex] = useState(0);
+  const [showActivity, setShowActivity] = useState(false);
+
+  // Reset on locale change so the cycle re-stars cleanly.
   useEffect(() => {
-    if (!isInView) return;
+    setFeaturedIndex(0);
+    setActivityIndex(0);
+    setShowActivity(false);
+  }, [locale]);
+
+  // Featured card rotation. Pauses on hover and when prefers-reduced-motion.
+  useEffect(() => {
+    if (!isInView || reduceMotion || hoveredKind !== null) return;
     const interval = setInterval(() => {
-      setActiveProduct((current) => (current + 1) % copy.items.length);
+      setFeaturedIndex((current) => (current + 1) % itemCount);
     }, DIGITAL_PRODUCT_ROTATION_MS);
     return () => clearInterval(interval);
-  }, [copy.items.length, isInView]);
+  }, [isInView, reduceMotion, hoveredKind, itemCount]);
 
-  const activeItem = copy.items[activeProduct];
+  // Live activity toast cycle.
+  useEffect(() => {
+    if (!isInView || reduceMotion) {
+      setShowActivity(false);
+      return;
+    }
+    let cancelled = false;
+    let hideTimer: ReturnType<typeof setTimeout> | null = null;
+    const tick = () => {
+      if (cancelled) return;
+      setShowActivity(true);
+      hideTimer = setTimeout(() => {
+        if (cancelled) return;
+        setShowActivity(false);
+        setActivityIndex((c) => (c + 1) % copy.activityFeed.length);
+      }, DIGITAL_PRODUCT_ACTIVITY_VISIBLE_MS);
+    };
+    const initialTimer = setTimeout(tick, 1400);
+    const cycleInterval = setInterval(tick, DIGITAL_PRODUCT_ACTIVITY_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearTimeout(initialTimer);
+      if (hideTimer) clearTimeout(hideTimer);
+      clearInterval(cycleInterval);
+    };
+  }, [isInView, reduceMotion, copy.activityFeed.length]);
 
-  const copyContainerVariants: Variants = {
-    enter: {
-      transition: { staggerChildren: reduceMotion ? 0 : 0.06, delayChildren: reduceMotion ? 0 : 0.04 },
-    },
-    exit: {
-      transition: { staggerChildren: reduceMotion ? 0 : 0.03, staggerDirection: -1 },
-    },
-  };
+  const featuredItem = copy.items[featuredIndex % itemCount];
+  const sideItem1 = copy.items[(featuredIndex + 1) % itemCount];
+  const sideItem2 = copy.items[(featuredIndex + 2) % itemCount];
+  const wideItem = copy.items[(featuredIndex + 3) % itemCount];
 
-  const copyChildVariants: Variants = {
-    initial: { opacity: 0, y: reduceMotion ? 0 : 8 },
-    enter: { opacity: 1, y: 0, transition: { duration: 0.42, ease: DIGITAL_PRODUCT_EASE } },
-    exit: { opacity: 0, y: reduceMotion ? 0 : -6, transition: { duration: 0.22, ease: 'easeIn' } },
+  const activity = copy.activityFeed[activityIndex];
+  const activityProduct =
+    copy.items.find((it) => it.kind === activity.productKind) ?? copy.items[0];
+
+  const renderCard = (
+    item: DigitalProductItem,
+    slot: DigitalProductSlot,
+    delay: number,
+  ) => {
+    const isHovered = hoveredKind === item.kind;
+    const isFeature = slot === 'feature';
+    const isWide = slot === 'wide';
+
+    const cardClass = [
+      'relative overflow-hidden rounded-[16px] border border-white/10 bg-[#0B1A2A]',
+      'transition-shadow duration-300',
+      isWide ? 'h-full' : 'h-full',
+    ].join(' ');
+
+    return (
+      <motion.div
+        initial={false}
+        animate={
+          isInView
+            ? { opacity: 1, y: 0, scale: 1 }
+            : { opacity: 0, y: reduceMotion ? 0 : 14, scale: reduceMotion ? 1 : 0.97 }
+        }
+        transition={{ duration: 0.5, delay: reduceMotion ? 0 : delay, ease: DIGITAL_PRODUCT_EASE }}
+        whileHover={reduceMotion ? undefined : { scale: 1.025, y: -2 }}
+        onHoverStart={() => setHoveredKind(item.kind)}
+        onHoverEnd={() => setHoveredKind(null)}
+        onTapStart={() => setHoveredKind(item.kind)}
+        onTap={() => setHoveredKind((current) => (current === item.kind ? null : item.kind))}
+        className={cardClass}
+        style={{
+          boxShadow: isHovered
+            ? `0 12px 28px rgba(0, 0, 0, 0.45), 0 0 0 1px ${item.accent}66, 0 0 24px ${item.accent}33`
+            : '0 4px 14px rgba(0, 0, 0, 0.25)',
+        }}
+      >
+        <div
+          key={`${slot}-cover-${item.kind}`}
+          className="absolute inset-0 digital-product-card-fade"
+        >
+          <DigitalProductCover
+            kind={item.kind}
+            accent={item.accent}
+            accentSoft={item.accentSoft}
+            variant={slot}
+          />
+        </div>
+
+        {/* Card content */}
+        <div
+          key={`${slot}-content-${item.kind}`}
+          className={`digital-product-card-fade ${
+            isWide
+              ? 'absolute inset-0 z-10 flex items-center gap-3 pl-9 pr-3'
+              : isFeature
+                ? 'absolute inset-0 z-10 flex flex-col justify-end p-3'
+                : 'absolute inset-0 z-10 flex flex-col justify-end p-2.5'
+          }`}
+        >
+            {!isWide && (
+              <div
+                className={`absolute inline-flex min-w-0 items-center gap-1 overflow-hidden rounded-full border border-white/15 bg-black/45 backdrop-blur-sm ${
+                  isFeature
+                    ? 'left-3 top-3 max-w-[calc(100%-4rem)] px-2 py-1'
+                    : 'right-2 top-2 max-w-[calc(100%-4.25rem)] px-1.5 py-[3px]'
+                }`}
+              >
+                <span
+                  className={`${isFeature ? 'text-[9px]' : 'text-[8px]'} block min-w-0 truncate whitespace-nowrap font-bold uppercase tracking-[0.1em] text-white/85`}
+                >
+                  {item.badge}
+                </span>
+              </div>
+            )}
+            {isWide ? (
+              <>
+                <div className="min-w-0 flex-1">
+                  <div
+                    className="text-[8.5px] font-bold uppercase tracking-[0.14em] truncate"
+                    style={{ color: item.accent }}
+                  >
+                    {item.badge}
+                  </div>
+                  <div className="mt-0.5 text-[12px] font-semibold leading-tight text-white truncate">
+                    {item.title}
+                  </div>
+                </div>
+                <div className="flex shrink-0 items-center gap-2">
+                  <span className="text-[13px] font-bold tabular-nums text-white">{item.price}</span>
+                  <span
+                    className="inline-flex items-center gap-0.5 rounded-full px-2 py-1 text-[9.5px] font-bold uppercase tracking-[0.08em] text-[#0A1726]"
+                    style={{ background: item.accent }}
+                  >
+                    {item.cta}
+                    <ArrowRight className="h-2.5 w-2.5" strokeWidth={3} />
+                  </span>
+                </div>
+              </>
+            ) : isFeature ? (
+              <>
+                <h4 className="text-[14px] font-bold leading-[1.15] text-white line-clamp-2">
+                  {item.title}
+                </h4>
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <span className="text-[16px] font-bold tabular-nums text-white">{item.price}</span>
+                  <span
+                    className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-bold text-[#0A1726] transition-transform duration-200"
+                    style={{
+                      background: item.accent,
+                      transform: isHovered && !reduceMotion ? 'scale(1.05)' : 'scale(1)',
+                    }}
+                  >
+                    {item.cta}
+                    <ArrowRight className="h-3 w-3" strokeWidth={3} />
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-[10px] font-semibold leading-tight text-white/95 line-clamp-2">
+                  {item.title}
+                </div>
+                <div className="mt-1 text-[12px] font-bold tabular-nums text-white">
+                  {item.price}
+                </div>
+              </>
+            )}
+        </div>
+      </motion.div>
+    );
   };
 
   return (
     <div
       ref={containerRef}
-      className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
-      aria-hidden="true"
+      className="h-full w-full overflow-hidden bg-transparent px-3 py-4 sm:px-4 sm:py-5 flex items-center justify-center"
     >
-      {/* Preload off-screen product images so the first cycles don't flash blank */}
-      <div className="hidden">
-        {copy.items.map((item) => (
-          <link key={item.imageSrc} rel="preload" as="image" href={item.imageSrc} />
-        ))}
-      </div>
-
-      <div className="digital-product-preview-frame relative w-full max-w-[360px] h-full max-h-[332px] min-h-[268px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
+      <div
+        className="digital-product-preview-frame relative w-full max-w-[360px] h-full max-h-[332px] min-h-[268px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden"
+        onMouseLeave={() => setHoveredKind(null)}
+      >
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.06),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
         <div className="absolute inset-0 digital-product-grid opacity-45" />
 
-        {/* Left: product image with cross-fade + blur travel */}
-        <div className="absolute left-4 top-5 bottom-[74px] w-[40%] max-w-[136px]">
-          <AnimatePresence mode="popLayout" initial={false}>
+        {/* Live activity toast — pops over the wide bottom row's right side */}
+        <AnimatePresence initial={false}>
+          {showActivity && !reduceMotion && (
             <motion.div
-              key={activeItem.title}
-              className="absolute inset-0 rounded-[18px] border border-white/18 overflow-hidden"
-              initial={
-                reduceMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, filter: 'blur(6px)', x: -8, y: 10, scale: 0.96 }
-              }
-              animate={
-                reduceMotion
-                  ? { opacity: 1 }
-                  : { opacity: 1, filter: 'blur(0px)', x: 0, y: 0, scale: 1 }
-              }
-              exit={
-                reduceMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, filter: 'blur(6px)', x: 8, y: -8, scale: 0.97 }
-              }
-              transition={{ duration: 0.62, ease: DIGITAL_PRODUCT_EASE }}
+              key={`activity-${activityIndex}`}
+              initial={{ opacity: 0, y: 6, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 4, scale: 0.97 }}
+              transition={{ duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
+              className="absolute top-2.5 right-2.5 z-30 flex max-w-[60%] items-center gap-1.5 rounded-full border border-white/18 bg-[#0B1A2A]/95 px-2 py-1 backdrop-blur-md shadow-[0_6px_18px_rgba(0,0,0,0.5)]"
             >
-              <img
-                src={activeItem.imageSrc}
-                alt=""
-                className="h-full w-full object-cover"
-                draggable={false}
-              />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Right: staggered copy block + type pills */}
-        <div className="absolute right-4 top-5 left-[48%] bottom-[74px] min-w-0">
-          <div className="h-full rounded-[20px] border border-white/10 bg-white/[0.075] p-3.5 sm:p-4">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={`copy-${activeProduct}`}
-                className="min-w-0"
-                variants={copyContainerVariants}
-                initial="initial"
-                animate="enter"
-                exit="exit"
+              <span
+                className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full"
+                style={{ background: `${activityProduct.accent}26` }}
               >
-                <motion.div
-                  className="flex items-center justify-between gap-2"
-                  variants={copyChildVariants}
-                >
-                  <div className="inline-flex min-w-0 items-center rounded-full bg-white/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white/62">
-                    <span className="truncate">{activeItem.label}</span>
-                  </div>
-                  <div className="shrink-0 text-[14px] sm:text-[16px] font-bold leading-none text-white tabular-nums">
-                    {activeItem.price}
-                  </div>
-                </motion.div>
-                <motion.h4
-                  className="mt-2 text-[17px] sm:text-[19px] font-bold leading-[1.03] tracking-tight text-white"
-                  variants={copyChildVariants}
-                >
-                  {activeItem.title}
-                </motion.h4>
-                <motion.p
-                  className="mt-1 hidden sm:block truncate text-[11px] leading-tight text-white/52"
-                  variants={copyChildVariants}
-                >
-                  {activeItem.subtitle}
-                </motion.p>
-              </motion.div>
-            </AnimatePresence>
+                <span
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{
+                    background: activityProduct.accent,
+                    boxShadow: `0 0 0 2px ${activityProduct.accent}33`,
+                  }}
+                />
+              </span>
+              <span className="min-w-0 truncate text-[9.5px] leading-none text-white/85">
+                <span className="font-semibold text-white">{activity.name}</span>
+                <span className="text-white/45"> · </span>
+                <span style={{ color: activityProduct.accent }}>{activityProduct.category}</span>
+                <span className="text-white/45"> · </span>
+                <span className="text-white/55">{copy.timeAgo(activity.minutesAgo)}</span>
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-            <div className="absolute left-3.5 right-3.5 bottom-3.5 space-y-1">
-              {copy.items.map((item, index) => {
-                const isActive = index === activeProduct;
-                return (
-                  <motion.div
-                    key={`type-${item.title}`}
-                    className="h-6 rounded-[9px] border bg-white/[0.045] px-1.5 flex items-center gap-1.5"
-                    animate={{
-                      borderColor: isActive ? `${item.accent}80` : 'rgba(255, 255, 255, 0.1)',
-                      backgroundColor: isActive ? `${item.accent}18` : 'rgba(255, 255, 255, 0)',
-                      scale: isActive && !reduceMotion ? [1, 1.015, 1] : 1,
-                    }}
-                    transition={{
-                      borderColor: { duration: 0.45, ease: 'easeOut' },
-                      backgroundColor: { duration: 0.45, ease: 'easeOut' },
-                      scale: { duration: 0.55, ease: DIGITAL_PRODUCT_EASE },
-                    }}
-                  >
-                    <img
-                      src={item.imageSrc}
-                      alt=""
-                      className="h-4 w-4 shrink-0 rounded-[5px] object-cover"
-                      draggable={false}
-                    />
-                    <span className="min-w-0 truncate text-[8px] font-bold uppercase tracking-[0.1em] text-white/62">
-                      {item.label}
-                    </span>
-                  </motion.div>
-                );
-              })}
-            </div>
+        {/* Bento grid */}
+        <div
+          className="relative z-10 h-full w-full p-3 sm:p-3.5 grid gap-2"
+          style={{
+            gridTemplateColumns: '1.35fr 1fr',
+            gridTemplateRows: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.62fr)',
+            gridTemplateAreas: `"feature side1" "feature side2" "wide wide"`,
+          }}
+        >
+          <div style={{ gridArea: 'feature' }}>{renderCard(featuredItem, 'feature', 0)}</div>
+          <div style={{ gridArea: 'side1' }}>
+            {renderCard(sideItem1, 'side1', DIGITAL_PRODUCT_STAGGER_S)}
+          </div>
+          <div style={{ gridArea: 'side2' }}>
+            {renderCard(sideItem2, 'side2', DIGITAL_PRODUCT_STAGGER_S * 2)}
+          </div>
+          <div style={{ gridArea: 'wide' }}>
+            {renderCard(wideItem, 'wide', DIGITAL_PRODUCT_STAGGER_S * 3)}
           </div>
         </div>
 
-        {/* Receipt: stays mounted; only progress bar restarts each cycle */}
-        <div className="absolute left-4 right-4 bottom-4 h-[50px] rounded-[18px] border border-white/10 bg-[#091522]/92 px-4 flex items-center justify-between">
-          <div className="min-w-0">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#51E29A]">
-              {copy.statusLabel}
-            </div>
-            <div className="mt-1 text-[11px] text-white/52 truncate">{copy.checkoutLabel}</div>
-          </div>
-          <motion.div
-            key={`check-${activeProduct}`}
-            className="ml-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#51E29A]/14"
-            initial={reduceMotion ? false : { scale: 0.85 }}
-            animate={reduceMotion ? undefined : { scale: [0.85, 1.08, 1] }}
-            transition={{ duration: 0.5, ease: DIGITAL_PRODUCT_EASE }}
-          >
-            <Check className="h-4 w-4 text-[#51E29A]" />
-          </motion.div>
-          <div className="absolute left-4 right-4 bottom-0 h-px overflow-hidden bg-white/10">
+        {/* Cycle progress hairline (signals "more incoming") */}
+        {!reduceMotion && (
+          <div className="pointer-events-none absolute inset-x-3 bottom-1.5 z-20 h-px overflow-hidden bg-white/5">
             <motion.div
-              key={`progress-${activeProduct}`}
-              className="h-full bg-[#51E29A]"
-              style={{ transformOrigin: 'left center' }}
+              key={`progress-${featuredIndex}-${hoveredKind ?? 'idle'}`}
+              className="h-full"
+              style={{
+                background: `linear-gradient(90deg, transparent, ${featuredItem.accent}, transparent)`,
+                transformOrigin: 'right center',
+              }}
               initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
+              animate={{ scaleX: hoveredKind ? 0 : 1 }}
               transition={{
-                duration: reduceMotion ? 0 : DIGITAL_PRODUCT_ROTATION_MS / 1000,
+                duration: hoveredKind ? 0.2 : DIGITAL_PRODUCT_ROTATION_MS / 1000,
                 ease: 'linear',
               }}
             />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -1100,6 +1463,14 @@ function CoursesFeaturePreview() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { amount: 0.4 });
   const reduceMotion = useReducedMotion() ?? false;
+
+  useEffect(() => {
+    copy.items.forEach((course) => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = course.imageUrl;
+    });
+  }, [copy.items]);
 
   useEffect(() => {
     if (!isInView) return;
@@ -1196,11 +1567,28 @@ function CoursesFeaturePreview() {
               {/* Thumbnail */}
               <motion.div
                 variants={childVariants}
-                className="relative h-[104px] rounded-[18px] overflow-hidden border border-white/10"
+                className="relative h-[104px] rounded-[18px] overflow-hidden border border-white/10 bg-[#06101D]"
                 style={{
                   background: `radial-gradient(120% 80% at 30% 20%, ${accent}55 0%, transparent 65%), linear-gradient(135deg, #0E1F36 0%, #06101D 100%)`,
                 }}
               >
+                <img
+                  src={activeCourse.imageUrl}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: activeCourse.imagePosition ?? 'center' }}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(0,0,0,0.1)_0%,_rgba(0,0,0,0.34)_100%)]" />
+                <motion.div
+                  className="absolute inset-0 mix-blend-color"
+                  style={{ background: accent, opacity: 0.16 }}
+                  animate={{ background: accent }}
+                  transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
+                />
+
                 {/* category badge */}
                 <div className="absolute left-3 top-3 inline-flex items-center rounded-full bg-black/45 backdrop-blur-sm px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white/85">
                   {activeCourse.category}
@@ -1616,6 +2004,32 @@ const MEMBERSHIPS_PREVIEW_COPY: Record<'en' | 'es', MembershipPreviewCopy> = {
 };
 
 const MEMBERSHIPS_ROTATION_MS = 3100;
+const MEMBERSHIP_MEMBER_IMAGES = {
+  sara: {
+    src: 'https://images.unsplash.com/photo-1542596594-ae13eaf915cd?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    position: 'center 30%',
+  },
+  diego: {
+    src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    position: 'center 32%',
+  },
+  lucia: {
+    src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    position: 'center 30%',
+  },
+  maya: {
+    src: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    position: 'center 30%',
+  },
+};
+const MEMBERSHIP_MEMBER_STACK_IMAGES = [
+  MEMBERSHIP_MEMBER_IMAGES.sara,
+  MEMBERSHIP_MEMBER_IMAGES.diego,
+  MEMBERSHIP_MEMBER_IMAGES.lucia,
+  MEMBERSHIP_MEMBER_IMAGES.maya,
+];
+const MEMBERSHIP_CLASS_IMAGE =
+  'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&fm=jpg&q=72&w=900';
 
 function MembershipsFeaturePreview() {
   const { locale } = useLanguage();
@@ -1819,14 +2233,72 @@ function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
   const tiers =
     locale === 'es'
       ? [
-          { name: 'Básico', price: '$5', perks: '2 beneficios' },
-          { name: 'Pro', price: '$12', perks: '5 beneficios' },
-          { name: 'VIP', price: '$29', perks: '10 beneficios' },
+          {
+            name: 'Básico',
+            price: '$5',
+            cadence: '/mes',
+            benefits: ['Contenido base', 'Comunidad'],
+            perks: '2 beneficios',
+          },
+          {
+            name: 'Pro',
+            price: '$12',
+            cadence: '/mes',
+            benefits: ['Todo Básico', 'Clases semanales', 'Plantillas', 'Chat privado', 'Replays'],
+            perks: '5 beneficios',
+          },
+          {
+            name: 'VIP',
+            price: '$29',
+            cadence: '/mes',
+            benefits: [
+              'Todo Pro',
+              'Mentoría mensual',
+              'Feedback directo',
+              'Recursos VIP',
+              'Eventos privados',
+              'Q&A en vivo',
+              'Descuentos',
+              'Prioridad',
+              'Vota temas',
+              'Archivo completo',
+            ],
+            perks: '10 beneficios',
+          },
         ]
       : [
-          { name: 'Basic', price: '$5', perks: '2 perks' },
-          { name: 'Pro', price: '$12', perks: '5 perks' },
-          { name: 'VIP', price: '$29', perks: '10 perks' },
+          {
+            name: 'Basic',
+            price: '$5',
+            cadence: '/mo',
+            benefits: ['Core content', 'Community'],
+            perks: '2 perks',
+          },
+          {
+            name: 'Pro',
+            price: '$12',
+            cadence: '/mo',
+            benefits: ['Everything Basic', 'Weekly classes', 'Templates', 'Private chat', 'Replays'],
+            perks: '5 perks',
+          },
+          {
+            name: 'VIP',
+            price: '$29',
+            cadence: '/mo',
+            benefits: [
+              'Everything Pro',
+              'Monthly mentoring',
+              'Direct feedback',
+              'VIP resources',
+              'Private events',
+              'Live Q&A',
+              'Discounts',
+              'Priority',
+              'Vote topics',
+              'Full archive',
+            ],
+            perks: '10 perks',
+          },
         ];
 
   return (
@@ -1865,8 +2337,20 @@ function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
               </div>
               <div className="mt-1.5 text-[14px] font-extrabold text-white tabular-nums leading-none">
                 {tier.price}
+                <span className="ml-0.5 text-[7.5px] font-bold text-white/45">{tier.cadence}</span>
               </div>
             </div>
+            <ul className="my-2 space-y-0.5 text-[7px] font-medium leading-[1.15] text-white/52">
+              {tier.benefits.map((benefit) => (
+                <li key={benefit} className="flex items-start gap-1">
+                  <span
+                    className="mt-[3px] h-1 w-1 shrink-0 rounded-full"
+                    style={{ background: isActive ? accent : 'rgba(255,255,255,0.35)' }}
+                  />
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
             <div className="text-[8.5px] font-medium text-white/55 mt-1.5">{tier.perks}</div>
           </motion.div>
         );
@@ -1876,14 +2360,13 @@ function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
 }
 
 function NewMemberScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
-  const avatarColors = ['#FF6B6B', '#4ECDC4', '#FFD166', '#A8DADC', '#F77F00'];
   const justJoined = locale === 'es' ? 'Maya se unió' : 'Maya just joined';
 
   return (
     <div className="h-full flex flex-col gap-2 items-center justify-center px-1">
       <div className="flex items-center -space-x-2">
-        {avatarColors.map((c, i) => {
-          const isNew = i === avatarColors.length - 1;
+        {MEMBERSHIP_MEMBER_STACK_IMAGES.map((image, i) => {
+          const isNew = i === MEMBERSHIP_MEMBER_STACK_IMAGES.length - 1;
           return (
             <motion.div
               key={i}
@@ -1898,13 +2381,19 @@ function NewMemberScene({ accent, reduceMotion, locale }: MembershipSceneProps) 
               }
               className="h-8 w-8 rounded-full border-2"
               style={{
-                background: `linear-gradient(135deg, ${c}, ${c}aa)`,
                 borderColor: isNew ? accent : '#0B1926',
                 boxShadow: isNew
                   ? `0 0 0 3px ${accent}33, 0 6px 18px ${accent}55`
                   : 'none',
               }}
-            />
+            >
+              <img
+                src={image.src}
+                alt=""
+                className="h-full w-full rounded-full object-cover"
+                style={{ objectPosition: image.position }}
+              />
+            </motion.div>
           );
         })}
       </div>
@@ -1939,7 +2428,11 @@ function RecurringScene({ accent, reduceMotion, locale }: MembershipSceneProps) 
           { name: 'Diego R.', plan: 'VIP · Monthly', amount: '+$29' },
           { name: 'Lucía P.', plan: 'Pro · Monthly', amount: '+$12' },
         ];
-  const colors = ['#FF6B6B', '#4ECDC4', '#FFD166'];
+  const rowImages = [
+    MEMBERSHIP_MEMBER_IMAGES.sara,
+    MEMBERSHIP_MEMBER_IMAGES.diego,
+    MEMBERSHIP_MEMBER_IMAGES.lucia,
+  ];
 
   return (
     <div className="h-full flex flex-col gap-1.5 justify-center">
@@ -1955,11 +2448,11 @@ function RecurringScene({ accent, reduceMotion, locale }: MembershipSceneProps) 
           }}
           className="flex items-center gap-2 rounded-[10px] border border-white/[0.08] bg-white/[0.03] px-2 py-1.5"
         >
-          <div
-            className="h-5 w-5 rounded-full shrink-0"
-            style={{
-              background: `linear-gradient(135deg, ${colors[i]}, ${colors[i]}aa)`,
-            }}
+          <img
+            src={rowImages[i].src}
+            alt=""
+            className="h-5 w-5 rounded-full object-cover shrink-0 ring-1 ring-white/10"
+            style={{ objectPosition: rowImages[i].position }}
           />
           <div className="min-w-0 flex-1">
             <div className="text-[10px] font-semibold text-white/95 truncate leading-tight">
@@ -2005,6 +2498,13 @@ function ExclusiveScene({ accent, reduceMotion, locale }: MembershipSceneProps) 
           background: `radial-gradient(120% 80% at 30% 25%, ${accent}55 0%, transparent 70%), linear-gradient(135deg, #0E1F36 0%, #06101D 100%)`,
         }}
       >
+        <img
+          src={MEMBERSHIP_CLASS_IMAGE}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
+          style={{ objectPosition: 'center 44%' }}
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(7,17,29,0.22)_0%,_rgba(7,17,29,0.40)_48%,_rgba(7,17,29,0.86)_100%),linear-gradient(90deg,_rgba(7,17,29,0.38)_0%,_rgba(7,17,29,0.06)_55%,_rgba(7,17,29,0.32)_100%)]" />
         <div className="absolute left-2.5 top-2.5 inline-flex items-center gap-1 rounded-full bg-black/45 backdrop-blur-sm px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-[0.14em] text-white/85">
           <Lock className="h-2.5 w-2.5" style={{ color: accent }} strokeWidth={3} />
           <span>{locale === 'es' ? 'Premium' : 'Members'}</span>
@@ -2183,6 +2683,8 @@ const COACHING_PREVIEW_COPY: Record<'en' | 'es', CoachingPreviewCopy> = {
 
 const COACHING_ROTATION_MS = 2900;
 const COACH_AVATAR_SRC = '/images/coach-avatar.jpg';
+const COACHING_CALLER_AVATAR_SRC = '/images/creator-profiles/kun-alvarez.jpg';
+const COACHING_REVIEWER_AVATAR_SRC = '/images/creator-profiles/anya-jensen.jpg';
 
 function CoachingCallsFeaturePreview() {
   const { locale } = useLanguage();
@@ -2640,12 +3142,15 @@ function VideoCallScene({ accent, reduceMotion }: CoachingSceneProps) {
                 decoding="async"
               />
             ) : (
-              <div
-                className="h-7 w-7 rounded-full flex items-center justify-center text-[10px] font-bold text-black"
-                style={{ background: `linear-gradient(135deg, ${accent} 0%, #ffffff 100%)` }}
-              >
-                {t.initials}
-              </div>
+              <img
+                src={COACHING_CALLER_AVATAR_SRC}
+                alt=""
+                aria-hidden="true"
+                className="h-7 w-7 rounded-full object-cover ring-1 ring-white/20"
+                style={{ objectPosition: 'center 42%' }}
+                loading="lazy"
+                decoding="async"
+              />
             )}
             {t.live && (
               <div className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-black/65 backdrop-blur-sm px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-white">
@@ -2787,9 +3292,14 @@ function ReviewsScene({ accent, reduceMotion }: CoachingSceneProps) {
         transition={{ delay: 0.55, duration: 0.4, ease: DIGITAL_PRODUCT_EASE }}
         className="flex items-center gap-2"
       >
-        <div
-          className="h-5 w-5 rounded-full"
-          style={{ background: `linear-gradient(135deg, ${accent} 0%, #FF4F8A 100%)` }}
+        <img
+          src={COACHING_REVIEWER_AVATAR_SRC}
+          alt=""
+          aria-hidden="true"
+          className="h-5 w-5 rounded-full object-cover ring-1 ring-white/15"
+          style={{ objectPosition: 'center 28%' }}
+          loading="lazy"
+          decoding="async"
         />
         <span className="text-[11px] font-semibold text-white/85">María G.</span>
         <span className="text-[10px] text-white/45">· hace 2 días</span>
