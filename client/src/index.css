@@ -298,6 +298,21 @@ html {
   mask-image: linear-gradient(180deg, transparent, black 24%, black 76%, transparent);
 }
 
+@keyframes digital-product-card-fade {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.digital-product-card-fade {
+  animation: digital-product-card-fade 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .digital-product-card-fade {
+    animation: none !important;
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up,
