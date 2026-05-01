@@ -756,8 +756,8 @@
   // Periodic reporting
   setInterval(reportLogs, CONFIG.reportInterval);
 
-  // Report on page unload
-  window.addEventListener("beforeunload", function () {
+  // Report when the page is being hidden or moved into the back-forward cache.
+  function reportLogsOnPageExit() {
     var consoleLogs = store.consoleLogs;
     var networkRequests = store.networkRequests;
     var uiEvents = store.uiEvents;
@@ -795,9 +795,16 @@
         };
         payloadStr = JSON.stringify(truncatedPayload);
       }
-      navigator.sendBeacon(CONFIG.reportEndpoint, payloadStr);
+
+      if (navigator.sendBeacon(CONFIG.reportEndpoint, payloadStr)) {
+        store.consoleLogs.splice(0);
+        store.networkRequests.splice(0);
+        store.uiEvents.splice(0);
+      }
     }
-  });
+  }
+
+  window.addEventListener("pagehide", reportLogsOnPageExit);
 
   // ==========================================================================
   // Initialization

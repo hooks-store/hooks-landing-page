@@ -27,6 +27,8 @@ export default function UrlInputBar() {
         <HooksIcon size={20} />
         <span className="text-gray-900 text-[13px] sm:text-base font-semibold select-none shrink-0 whitespace-nowrap">hooks.store/</span>
         <input
+          id="hooks-store-slug"
+          name="hooks-store-slug"
           type="text"
           value={slug}
           onChange={(e) => setSlug(e.target.value)}

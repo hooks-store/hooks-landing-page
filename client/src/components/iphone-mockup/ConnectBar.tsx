@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 interface ConnectBarProps {
   placeholder?: string;
@@ -6,6 +6,7 @@ interface ConnectBarProps {
 }
 
 export function ConnectBar({ placeholder = 'tu@email.com', onConnect }: ConnectBarProps) {
+  const inputId = useId();
   const [value, setValue] = useState('');
 
   return (
@@ -21,6 +22,8 @@ export function ConnectBar({ placeholder = 'tu@email.com', onConnect }: ConnectB
       }}
     >
       <input
+        id={inputId}
+        name="connect-email"
         type="email"
         value={value}
         onChange={(event) => setValue(event.target.value)}

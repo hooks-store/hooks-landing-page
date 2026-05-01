@@ -263,7 +263,7 @@ export const CREATORS: Creator[] = [
         icon: 'merch',
         url: '#',
         image:
-          '/images/local-photos/photo-1589156229687-496a31ad1d1f-640-bc99c4d3.jpg',
+          '/images/local-photos/pexels-anthonyshkraba-production-8902114.jpg',
       },
       {
         title: 'Masterclass',

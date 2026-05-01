@@ -77,11 +77,13 @@ export default function EarningsCalculator() {
 
             <div className="mb-8">
               <div className="flex justify-between mb-3">
-                <span className="text-[#8A8F98] text-sm">Sell it for:</span>
+                <label htmlFor="sell-price-range" className="text-[#8A8F98] text-sm">Sell it for:</label>
                 <span className="bg-white/10 text-white text-sm px-3 py-1 rounded-full font-medium">${price}</span>
               </div>
               <div className="relative">
                 <input
+                  id="sell-price-range"
+                  name="sell-price"
                   type="range"
                   min="10"
                   max="100"
@@ -97,11 +99,13 @@ export default function EarningsCalculator() {
 
             <div className="mb-8">
               <div className="flex justify-between mb-3">
-                <span className="text-[#8A8F98] text-sm">Daily sales:</span>
+                <label htmlFor="daily-sales-range" className="text-[#8A8F98] text-sm">Daily sales:</label>
                 <span className="bg-white/10 text-white text-sm px-3 py-1 rounded-full font-medium">{dailySales}</span>
               </div>
               <div className="relative">
                 <input
+                  id="daily-sales-range"
+                  name="daily-sales"
                   type="range"
                   min="1"
                   max="200"

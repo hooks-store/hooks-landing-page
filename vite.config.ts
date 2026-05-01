@@ -150,7 +150,43 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+function replaceDeprecatedUnloadListeners(source: string) {
+  return source.replaceAll('addEventListener("unload"', 'addEventListener("pagehide"');
+}
+
+function vitePluginManusRuntimeWithoutDeprecatedUnload(): Plugin {
+  const plugin = vitePluginManusRuntime();
+  const transformIndexHtml = plugin.transformIndexHtml;
+
+  if (typeof transformIndexHtml !== "function") {
+    return plugin;
+  }
+
+  return {
+    ...plugin,
+    name: "vite-plugin-manus-runtime-without-deprecated-unload",
+    transformIndexHtml(html, context) {
+      const result = transformIndexHtml.call(this, html, context);
+
+      if (Array.isArray(result)) {
+        return result.map((tag) => {
+          if (typeof tag.children !== "string") {
+            return tag;
+          }
+
+          return {
+            ...tag,
+            children: replaceDeprecatedUnloadListeners(tag.children),
+          };
+        });
+      }
+
+      return typeof result === "string" ? replaceDeprecatedUnloadListeners(result) : result;
+    },
+  };
+}
+
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntimeWithoutDeprecatedUnload(), vitePluginManusDebugCollector()];
 
 export default defineConfig({
   plugins,
