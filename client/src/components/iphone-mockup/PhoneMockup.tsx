@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent } from 'react';
 import { motion, useReducedMotion, type Transition } from 'framer-motion';
 import {
   Activity,
@@ -19,7 +19,7 @@ import {
   Video,
   Youtube,
 } from 'lucide-react';
-import { CREATORS } from './data';
+import { CREATORS, type Creator, type CreatorSocial } from './data';
 
 type CardPosition = 'center' | 'left' | 'right' | 'hiddenLeft' | 'hiddenRight';
 
@@ -32,6 +32,9 @@ interface IconRendererProps {
   name: string;
   size?: number;
   className?: string;
+  imageRef?: (element: HTMLImageElement | null) => void;
+  onImageLoad?: (event: SyntheticEvent<HTMLImageElement>) => void;
+  onImageError?: () => void;
 }
 
 const INSTAGRAM_GLYPH_WHITE_SRC = '/images/icons/instagram-glyph-white.svg';
@@ -41,7 +44,7 @@ const X_LOGO_SRC = '/images/icons/x-logo.svg';
 const FACEBOOK_LOGO_PRIMARY_SRC = '/images/icons/facebook-logo-primary.png';
 const SPOTIFY_PRIMARY_LOGO_RGB_BLACK_SRC = '/images/icons/spotify-primary-logo-rgb-green.png';
 
-function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
+function IconRenderer({ name, size = 20, className = '', imageRef, onImageLoad, onImageError }: IconRendererProps) {
   switch (name) {
     case 'badge-check':
       return (
@@ -74,8 +77,11 @@ function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
           width={size}
           height={size}
           className={className}
-          loading="lazy"
+          loading="eager"
           decoding="async"
+          ref={imageRef}
+          onLoad={onImageLoad}
+          onError={onImageError}
           aria-hidden="true"
         />
       );
@@ -89,8 +95,11 @@ function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
           width={size}
           height={size}
           className={className}
-          loading="lazy"
+          loading="eager"
           decoding="async"
+          ref={imageRef}
+          onLoad={onImageLoad}
+          onError={onImageError}
           aria-hidden="true"
         />
       );
@@ -102,8 +111,11 @@ function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
           width={size}
           height={size}
           className={className}
-          loading="lazy"
+          loading="eager"
           decoding="async"
+          ref={imageRef}
+          onLoad={onImageLoad}
+          onError={onImageError}
           aria-hidden="true"
         />
       );
@@ -115,8 +127,11 @@ function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
           width={size}
           height={size}
           className={className}
-          loading="lazy"
+          loading="eager"
           decoding="async"
+          ref={imageRef}
+          onLoad={onImageLoad}
+          onError={onImageError}
           aria-hidden="true"
         />
       );
@@ -128,8 +143,11 @@ function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
           width={size}
           height={size}
           className={className}
-          loading="lazy"
+          loading="eager"
           decoding="async"
+          ref={imageRef}
+          onLoad={onImageLoad}
+          onError={onImageError}
           aria-hidden="true"
         />
       );
@@ -141,8 +159,11 @@ function IconRenderer({ name, size = 20, className = '' }: IconRendererProps) {
           width={size}
           height={size}
           className={className}
-          loading="lazy"
+          loading="eager"
           decoding="async"
+          ref={imageRef}
+          onLoad={onImageLoad}
+          onError={onImageError}
           aria-hidden="true"
         />
       );
@@ -223,6 +244,51 @@ const PROFILE_SOCIAL_ICON_SIZE_OVERRIDES: Record<string, number> = {
   'x-official': 14,
   'youtube-official': 16,
 };
+const PROFILE_SOCIAL_LOGO_SOURCES: Record<string, string> = {
+  instagram: INSTAGRAM_GLYPH_WHITE_SRC,
+  youtube: YOUTUBE_ICON_WHITE_DIGITAL_SRC,
+  tiktok: TIKTOK_SOCIAL_ICON_CIRCLE_BLACK_SRC,
+  facebook: FACEBOOK_LOGO_PRIMARY_SRC,
+  spotify: SPOTIFY_PRIMARY_LOGO_RGB_BLACK_SRC,
+  twitter: X_LOGO_SRC,
+};
+
+const getNavigationTargetIndex = (index: number, direction: 'next' | 'prev') => {
+  if (direction === 'next') return (index + 1) % CREATORS.length;
+  return (index - 1 + CREATORS.length) % CREATORS.length;
+};
+
+const getProfileSocials = (creator: Creator): CreatorSocial[] => [
+  ...creator.socials,
+  ...REQUIRED_PROFILE_SOCIALS.filter((icon) => !creator.socials.some((social) => social.icon === icon)).map((icon) => ({
+    icon,
+    url: '#',
+  })),
+];
+
+const getCreatorAssetSources = (creator: Creator) => {
+  const sources = new Set<string>([creator.image]);
+  creator.links.forEach((link) => {
+    if (link.image) sources.add(link.image);
+  });
+  getProfileSocials(creator).forEach((social) => {
+    const logoSource = PROFILE_SOCIAL_LOGO_SOURCES[social.icon];
+    if (logoSource) sources.add(logoSource);
+  });
+
+  return Array.from(sources);
+};
+
+const afterImagePaint = (callback: () => void) => {
+  if (typeof window === 'undefined') {
+    callback();
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(callback);
+  });
+};
 
 // IMPORTANT: a page-level ancestor (the app shell) has `overflow-x: hidden`.
 // If hidden cards translate far off-screen, they get clipped by the viewport
@@ -279,6 +345,64 @@ export default function PhoneMockup() {
   const activeImageTransition = prefersReducedMotion ? reducedTransition : imageTransition;
 
   const activeCreator = useMemo(() => CREATORS[activeIndex], [activeIndex]);
+  const loadedImageSourcesRef = useRef(new Set<string>());
+  const creatorReadyWaitersRef = useRef(new Map<number, Set<() => void>>());
+
+  const areCreatorAssetsLoaded = useCallback((creator: Creator) => {
+    return getCreatorAssetSources(creator).every((source) => loadedImageSourcesRef.current.has(source));
+  }, []);
+
+  const resolveCreatorReadyWaiters = useCallback(() => {
+    creatorReadyWaitersRef.current.forEach((resolvers, creatorIndex) => {
+      if (!areCreatorAssetsLoaded(CREATORS[creatorIndex])) return;
+      resolvers.forEach((resolve) => resolve());
+      creatorReadyWaitersRef.current.delete(creatorIndex);
+    });
+  }, [areCreatorAssetsLoaded]);
+
+  const markImageSourceReady = useCallback((source: string) => {
+    if (loadedImageSourcesRef.current.has(source)) return;
+    loadedImageSourcesRef.current.add(source);
+    resolveCreatorReadyWaiters();
+  }, [resolveCreatorReadyWaiters]);
+
+  const markImageElementReady = useCallback((source: string, image: HTMLImageElement) => {
+    const settle = () => afterImagePaint(() => markImageSourceReady(source));
+
+    if (typeof image.decode !== 'function') {
+      settle();
+      return;
+    }
+
+    image.decode().catch(() => undefined).finally(settle);
+  }, [markImageSourceReady]);
+
+  const trackImageElement = useCallback((source: string, image: HTMLImageElement | null) => {
+    if (!image || loadedImageSourcesRef.current.has(source) || !image.complete) return;
+
+    if (image.naturalWidth === 0 && image.naturalHeight === 0) {
+      markImageSourceReady(source);
+      return;
+    }
+
+    markImageElementReady(source, image);
+  }, [markImageElementReady, markImageSourceReady]);
+
+  const handleTrackedImageLoad = useCallback((source: string, event: SyntheticEvent<HTMLImageElement>) => {
+    markImageElementReady(source, event.currentTarget);
+  }, [markImageElementReady]);
+
+  const waitForCreatorAssets = useCallback((creatorIndex: number) => {
+    if (areCreatorAssetsLoaded(CREATORS[creatorIndex])) {
+      return Promise.resolve();
+    }
+
+    return new Promise<void>((resolve) => {
+      const existingResolvers = creatorReadyWaitersRef.current.get(creatorIndex) ?? new Set<() => void>();
+      existingResolvers.add(resolve);
+      creatorReadyWaitersRef.current.set(creatorIndex, existingResolvers);
+    });
+  }, [areCreatorAssetsLoaded]);
 
   const getPosition = (index: number): CardPosition => {
     const length = CREATORS.length;
@@ -298,10 +422,7 @@ export default function PhoneMockup() {
   const navigate = useCallback((direction: 'next' | 'prev') => {
     if (!canNavigate()) return false;
     lastNavigationAtRef.current = Date.now();
-    setActiveIndex((prev) => {
-      if (direction === 'next') return (prev + 1) % CREATORS.length;
-      return (prev - 1 + CREATORS.length) % CREATORS.length;
-    });
+    setActiveIndex((prev) => getNavigationTargetIndex(prev, direction));
     return true;
   }, [canNavigate]);
 
@@ -315,12 +436,21 @@ export default function PhoneMockup() {
 
   useEffect(() => {
     if (!autoplayStarted) return;
+    let isCancelled = false;
     const autoplayTimer = setTimeout(() => {
-      navigate('next');
+      const nextIndex = getNavigationTargetIndex(activeIndex, 'next');
+      void waitForCreatorAssets(nextIndex).then(() => {
+        if (!isCancelled) {
+          navigate('next');
+        }
+      });
     }, AUTOPLAY_INTERVAL_MS);
 
-    return () => clearTimeout(autoplayTimer);
-  }, [autoplayStarted, activeIndex, navigate]);
+    return () => {
+      isCancelled = true;
+      clearTimeout(autoplayTimer);
+    };
+  }, [autoplayStarted, activeIndex, navigate, waitForCreatorAssets]);
 
   return (
     <div className="relative w-[255px] h-[525.3px] sm:w-[280.5px] sm:h-[576.3px] md:w-[306px] md:h-[629px]" style={{ perspective: 1400 }}>
@@ -334,7 +464,7 @@ export default function PhoneMockup() {
         {CREATORS.map((creator, index) => {
           const position = getPosition(index);
           const shouldLoadImages = isVisibleCardPosition(position);
-          const isPriorityCard = position === 'center';
+          const isPriorityCard = position === 'center' || position === 'right';
           const imageFetchPriority = isPriorityCard ? 'high' : 'low';
 
           return (
@@ -377,6 +507,9 @@ export default function PhoneMockup() {
                     loading="eager"
                     decoding="async"
                     fetchPriority={imageFetchPriority}
+                    ref={(image) => trackImageElement(creator.image, image)}
+                    onLoad={(event) => handleTrackedImageLoad(creator.image, event)}
+                    onError={() => markImageSourceReady(creator.image)}
                     style={{ objectPosition: creator.imagePosition ?? 'center' }}
                   />
                 )}
@@ -423,13 +556,7 @@ export default function PhoneMockup() {
                 </div>
 
                 <div className="absolute bottom-[50%] pb-2 left-0 right-0 flex gap-2 justify-center w-full z-40">
-                  {[
-                    ...creator.socials,
-                    ...REQUIRED_PROFILE_SOCIALS.filter((icon) => !creator.socials.some((social) => social.icon === icon)).map((icon) => ({
-                      icon,
-                      url: '#',
-                    })),
-                  ].map((social, idx) => {
+                  {getProfileSocials(creator).map((social, idx) => {
                     const brandColors: Record<string, string> = {
                       youtube: '#FF0000',
                       instagram: '#E1306C',
@@ -459,6 +586,7 @@ export default function PhoneMockup() {
                     const iconSize = isFullBadgeLogo
                       ? PROFILE_SOCIAL_ICON_SIZE
                       : PROFILE_SOCIAL_ICON_SIZE_OVERRIDES[iconName] ?? PROFILE_SOCIAL_GLYPH_SIZE;
+                    const logoSource = PROFILE_SOCIAL_LOGO_SOURCES[social.icon];
                     return (
                       <div
                         key={`${social.icon}-${idx}`}
@@ -473,6 +601,9 @@ export default function PhoneMockup() {
                           name={iconName}
                           size={iconSize}
                           className="text-white"
+                          imageRef={logoSource ? (image) => trackImageElement(logoSource, image) : undefined}
+                          onImageLoad={logoSource ? (event) => handleTrackedImageLoad(logoSource, event) : undefined}
+                          onImageError={logoSource ? () => markImageSourceReady(logoSource) : undefined}
                         />
                       </div>
                     );
@@ -550,6 +681,7 @@ export default function PhoneMockup() {
                           } else {
                             itemClasses += 'aspect-square';
                           }
+                          const linkImage = link.image;
 
                           return (
                             <div key={`${link.title}-${idx}`} className={itemClasses}>
@@ -559,14 +691,17 @@ export default function PhoneMockup() {
                                   backgroundColor: creator.id === 'anyajensen' ? 'rgba(255,255,255,0.18)' : `${creator.color}1A`,
                                 }}
                               >
-                                {shouldLoadImages && link.image && (
+                                {shouldLoadImages && linkImage && (
                                   <img
-                                    src={link.image}
+                                    src={linkImage}
                                     alt=""
                                     className="absolute inset-0 w-full h-full object-cover"
                                     loading="eager"
                                     decoding="async"
                                     fetchPriority={imageFetchPriority}
+                                    ref={(image) => trackImageElement(linkImage, image)}
+                                    onLoad={(event) => handleTrackedImageLoad(linkImage, event)}
+                                    onError={() => markImageSourceReady(linkImage)}
                                     aria-hidden="true"
                                   />
                                 )}
