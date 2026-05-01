@@ -1700,10 +1700,13 @@ function HeroBackgroundVideoLoop() {
   ]);
   const [isCrossfading, setIsCrossfading] = useState(false);
   const [canPreloadNextVideo, setCanPreloadNextVideo] = useState(false);
+  const [isWaitingForNextVideo, setIsWaitingForNextVideo] = useState(false);
   const videoARef = useRef<HTMLVideoElement | null>(null);
   const videoBRef = useRef<HTMLVideoElement | null>(null);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const crossfadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isWaitingForNextVideoRef = useRef(false);
+  const pendingCanPlayCleanupRef = useRef<(() => void) | null>(null);
 
   const getBackSlot = (slot: 0 | 1): 0 | 1 => (slot === 0 ? 1 : 0);
   const getVideoBySlot = (slot: 0 | 1) => (slot === 0 ? videoARef.current : videoBRef.current);
@@ -1722,6 +1725,18 @@ function HeroBackgroundVideoLoop() {
     }
   };
 
+  const clearPendingCanPlay = () => {
+    if (pendingCanPlayCleanupRef.current) {
+      pendingCanPlayCleanupRef.current();
+      pendingCanPlayCleanupRef.current = null;
+    }
+  };
+
+  const setWaitingForNextVideo = (isWaiting: boolean) => {
+    isWaitingForNextVideoRef.current = isWaiting;
+    setIsWaitingForNextVideo(isWaiting);
+  };
+
   const safePlay = (videoEl: HTMLVideoElement) => {
     const playPromise = videoEl.play();
     if (playPromise) {
@@ -1730,12 +1745,13 @@ function HeroBackgroundVideoLoop() {
   };
 
   const advanceToNextVideo = () => {
-    if (isCrossfading || HERO_BG_VIDEO_SOURCES.length <= 1) {
+    if (isCrossfading || isWaitingForNextVideoRef.current || HERO_BG_VIDEO_SOURCES.length <= 1) {
       return;
     }
 
     clearAdvanceTimer();
     clearCrossfadeTimer();
+    clearPendingCanPlay();
 
     const nextVideoIndex = (activeVideoIndex + 1) % HERO_BG_VIDEO_SOURCES.length;
     const nextFrontSlot = getBackSlot(frontSlot);
@@ -1746,6 +1762,11 @@ function HeroBackgroundVideoLoop() {
     }
 
     const beginCrossfade = () => {
+      const currentFrontVideoEl = getVideoBySlot(frontSlot);
+      if (currentFrontVideoEl) {
+        currentFrontVideoEl.loop = false;
+      }
+      setWaitingForNextVideo(false);
       nextFrontVideoEl.currentTime = 0;
       safePlay(nextFrontVideoEl);
       setIsCrossfading(true);
@@ -1779,11 +1800,23 @@ function HeroBackgroundVideoLoop() {
     }
 
     const onCanPlay = () => {
-      nextFrontVideoEl.removeEventListener('canplay', onCanPlay);
+      clearPendingCanPlay();
       beginCrossfade();
     };
 
     nextFrontVideoEl.addEventListener('canplay', onCanPlay);
+    pendingCanPlayCleanupRef.current = () => {
+      nextFrontVideoEl.removeEventListener('canplay', onCanPlay);
+    };
+    setWaitingForNextVideo(true);
+    const activeVideoEl = getVideoBySlot(frontSlot);
+    if (activeVideoEl) {
+      activeVideoEl.loop = true;
+      if (activeVideoEl.ended || activeVideoEl.paused) {
+        activeVideoEl.currentTime = 0;
+        safePlay(activeVideoEl);
+      }
+    }
     nextFrontVideoEl.load();
   };
 
@@ -1798,7 +1831,7 @@ function HeroBackgroundVideoLoop() {
       setCanPreloadNextVideo(true);
     }
 
-    if (!canPreloadNextVideo || isCrossfading || HERO_BG_VIDEO_SOURCES.length <= 1) {
+    if (!canPreloadNextVideo || isCrossfading || isWaitingForNextVideo || HERO_BG_VIDEO_SOURCES.length <= 1) {
       return;
     }
 
@@ -1810,7 +1843,7 @@ function HeroBackgroundVideoLoop() {
     return () => {
       clearAdvanceTimer();
     };
-  }, [frontSlot, activeVideoIndex, isCrossfading, canPreloadNextVideo]);
+  }, [frontSlot, activeVideoIndex, isCrossfading, canPreloadNextVideo, isWaitingForNextVideo]);
 
   useEffect(() => {
     if (isCrossfading || !canPreloadNextVideo) {
@@ -1835,6 +1868,11 @@ function HeroBackgroundVideoLoop() {
     }
 
     const onEnded = () => {
+      if (isWaitingForNextVideoRef.current) {
+        activeVideoEl.currentTime = 0;
+        safePlay(activeVideoEl);
+        return;
+      }
       advanceToNextVideo();
     };
 
@@ -1848,6 +1886,7 @@ function HeroBackgroundVideoLoop() {
     return () => {
       clearAdvanceTimer();
       clearCrossfadeTimer();
+      clearPendingCanPlay();
     };
   }, []);
 
@@ -1855,6 +1894,8 @@ function HeroBackgroundVideoLoop() {
   const slotBVideo = HERO_BG_VIDEO_SOURCES[slotVideoIndices[1]];
   const slotAPreload = frontSlot === 0 || canPreloadNextVideo ? 'auto' : 'none';
   const slotBPreload = frontSlot === 1 || canPreloadNextVideo ? 'auto' : 'none';
+  const slotALoop = frontSlot === 0 && isWaitingForNextVideo;
+  const slotBLoop = frontSlot === 1 && isWaitingForNextVideo;
 
   return (
     <div className="relative w-full h-full">
@@ -1869,6 +1910,7 @@ function HeroBackgroundVideoLoop() {
           objectPosition: isMobile ? slotAVideo.mobileObjectPosition ?? '50% 50%' : '50% 50%',
         }}
         autoPlay={frontSlot === 0}
+        loop={slotALoop}
         muted
         playsInline
         preload={slotAPreload}
@@ -1887,6 +1929,7 @@ function HeroBackgroundVideoLoop() {
           objectPosition: isMobile ? slotBVideo.mobileObjectPosition ?? '50% 50%' : '50% 50%',
         }}
         autoPlay={frontSlot === 1}
+        loop={slotBLoop}
         muted
         playsInline
         preload={slotBPreload}
