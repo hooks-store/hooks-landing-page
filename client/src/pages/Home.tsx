@@ -12,15 +12,13 @@ import SectionWrapper from '@/components/SectionWrapper';
 import UrlInputBar from '@/components/UrlInputBar';
 import CreatorCarousel from '@/components/CreatorCarousel';
 import WorldMap from '@/components/WorldMap';
-import AppIconGrid from '@/components/AppIconGrid';
-import { HooksIcon } from '@/components/HooksIcon';
 import PhoneMockup from '@/components/iphone-mockup/PhoneMockup';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/useMobile';
 import {
   Eye, Globe, ShoppingBag, Lock,
-  ChevronDown, BarChart3, Users,
-  Instagram, Facebook, Youtube, Music2, Check,
+  BarChart3, Users,
+  Instagram, Facebook, Youtube, Check,
   Play, Star, ArrowRight,
   Calendar, Video, Bell, Mic, PhoneOff,
   Bookmark, Compass,
@@ -28,15 +26,12 @@ import {
   type LucideIcon
 } from 'lucide-react';
 
-// Image URLs
-const PHONE_GUY_FOR_LATER = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-lifestyle-eAePL9YnBxbQUubnYhm3fa.webp';
-const FEMALE_CREATOR = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/female-creator-KoNNQiTsKfMVtWm8xvoSep.webp';
-const CREATOR_CTA_BG = 'https://d2xsxph8kpxj0f.cloudfront.net/114840784/P2WDXiBGiZM6dWndJHD2aB/creator-cta-bg-C9mdqCe3aNkVQnH8bbSzUM.webp';
 type HeroBgVideo = {
   src: string;
   mobileObjectPosition?: string;
 };
 const HERO_BG_VIDEO_SOURCES: HeroBgVideo[] = [
+  { src: '/videos/hero/jumping.mp4' },
   { src: '/videos/hero/showcase.mp4' },
   { src: '/videos/hero/girlstalkingtocamera.mp4' },
   { src: '/videos/hero/guysdancing.mp4' },
@@ -44,7 +39,6 @@ const HERO_BG_VIDEO_SOURCES: HeroBgVideo[] = [
   { src: '/videos/hero/tiktokgirlsdancing.mp4' },
   { src: '/videos/hero/guyworkingout.mp4' },
   { src: '/videos/hero/girlstalking.mp4' },
-  { src: '/videos/hero/jumping.mp4' },
   { src: '/videos/hero/gamer.mp4' },
 ];
 const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
@@ -1865,6 +1859,7 @@ function HeroBackgroundVideoLoop() {
           transitionDuration: `${HERO_BG_VIDEO_CROSSFADE_MS}ms`,
           objectPosition: isMobile ? slotAVideo.mobileObjectPosition ?? '50% 50%' : '50% 50%',
         }}
+        autoPlay={frontSlot === 0}
         muted
         playsInline
         preload="auto"
@@ -1880,6 +1875,7 @@ function HeroBackgroundVideoLoop() {
           transitionDuration: `${HERO_BG_VIDEO_CROSSFADE_MS}ms`,
           objectPosition: isMobile ? slotBVideo.mobileObjectPosition ?? '50% 50%' : '50% 50%',
         }}
+        autoPlay={frontSlot === 1}
         muted
         playsInline
         preload="auto"
