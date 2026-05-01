@@ -28,10 +28,12 @@ import {
 
 type HeroBgVideo = {
   src: string;
+  poster?: string;
   mobileObjectPosition?: string;
 };
+const HERO_BG_VIDEO_POSTER = '/images/hero/jumping-poster.jpg';
 const HERO_BG_VIDEO_SOURCES: HeroBgVideo[] = [
-  { src: '/videos/hero/jumping.mp4' },
+  { src: '/videos/hero/jumping.mp4', poster: HERO_BG_VIDEO_POSTER },
   { src: '/videos/hero/showcase.mp4' },
   { src: '/videos/hero/girlstalkingtocamera.mp4' },
   { src: '/videos/hero/guysdancing.mp4' },
@@ -41,7 +43,7 @@ const HERO_BG_VIDEO_SOURCES: HeroBgVideo[] = [
   { src: '/videos/hero/girlstalking.mp4' },
   { src: '/videos/hero/gamer.mp4' },
 ];
-const HERO_BG_VIDEO_MAX_DURATION_MS = 5000;
+const HERO_BG_VIDEO_MAX_DURATION_MS = 4000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
 const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide-screen-recording.mp4';
 const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
@@ -286,10 +288,10 @@ type CoursePreviewItem = {
   buyer: string;
 };
 
-const COURSE_IMAGE_SHORT_FORM_VIDEO = 'https://images.unsplash.com/photo-1753005329524-f2f26aa6e5ad?auto=format&fit=crop&fm=jpg&q=72&w=900';
-const COURSE_IMAGE_MONETIZATION = 'https://images.unsplash.com/photo-1751257983922-a627088d4c21?auto=format&fit=crop&fm=jpg&q=72&w=900';
-const COURSE_IMAGE_PERSONAL_FINANCE = 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&fm=jpg&q=72&w=900';
-const COURSE_IMAGE_FITNESS = 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&fm=jpg&q=72&w=900';
+const COURSE_IMAGE_SHORT_FORM_VIDEO = '/images/local-photos/photo-1753005329524-f2f26aa6e5ad-900-0b3f9984.jpg';
+const COURSE_IMAGE_MONETIZATION = '/images/local-photos/photo-1751257983922-a627088d4c21-900-5dcdc8fb.jpg';
+const COURSE_IMAGE_PERSONAL_FINANCE = '/images/local-photos/photo-1554224155-6726b3ff858f-900-29f5141f.jpg';
+const COURSE_IMAGE_FITNESS = '/images/local-photos/photo-1517836357463-d25dfeac3438-900-903a3545.jpg';
 
 const COURSES_PREVIEW_COPY: Record<'en' | 'es', { eyebrow: string; items: CoursePreviewItem[] }> = {
   en: {
@@ -1697,6 +1699,7 @@ function HeroBackgroundVideoLoop() {
     HERO_BG_VIDEO_SOURCES.length > 1 ? 1 : 0,
   ]);
   const [isCrossfading, setIsCrossfading] = useState(false);
+  const [canPreloadNextVideo, setCanPreloadNextVideo] = useState(false);
   const videoARef = useRef<HTMLVideoElement | null>(null);
   const videoBRef = useRef<HTMLVideoElement | null>(null);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -1791,8 +1794,11 @@ function HeroBackgroundVideoLoop() {
     }
 
     safePlay(activeVideoEl);
+    if (activeVideoEl.readyState >= 2) {
+      setCanPreloadNextVideo(true);
+    }
 
-    if (isCrossfading || HERO_BG_VIDEO_SOURCES.length <= 1) {
+    if (!canPreloadNextVideo || isCrossfading || HERO_BG_VIDEO_SOURCES.length <= 1) {
       return;
     }
 
@@ -1804,10 +1810,10 @@ function HeroBackgroundVideoLoop() {
     return () => {
       clearAdvanceTimer();
     };
-  }, [frontSlot, activeVideoIndex, isCrossfading]);
+  }, [frontSlot, activeVideoIndex, isCrossfading, canPreloadNextVideo]);
 
   useEffect(() => {
-    if (isCrossfading) {
+    if (isCrossfading || !canPreloadNextVideo) {
       return;
     }
 
@@ -1820,7 +1826,7 @@ function HeroBackgroundVideoLoop() {
     backVideoEl.pause();
     backVideoEl.currentTime = 0;
     backVideoEl.load();
-  }, [slotVideoIndices, frontSlot, isCrossfading]);
+  }, [slotVideoIndices, frontSlot, isCrossfading, canPreloadNextVideo]);
 
   useEffect(() => {
     const activeVideoEl = getVideoBySlot(frontSlot);
@@ -1847,12 +1853,15 @@ function HeroBackgroundVideoLoop() {
 
   const slotAVideo = HERO_BG_VIDEO_SOURCES[slotVideoIndices[0]];
   const slotBVideo = HERO_BG_VIDEO_SOURCES[slotVideoIndices[1]];
+  const slotAPreload = frontSlot === 0 || canPreloadNextVideo ? 'auto' : 'none';
+  const slotBPreload = frontSlot === 1 || canPreloadNextVideo ? 'auto' : 'none';
 
   return (
     <div className="relative w-full h-full">
       <video
         ref={videoARef}
         src={slotAVideo.src}
+        poster={slotAVideo.poster}
         className="absolute inset-0 w-full h-full object-cover transition-opacity ease-out"
         style={{
           opacity: frontSlot === 0 ? 1 : 0,
@@ -1862,13 +1871,15 @@ function HeroBackgroundVideoLoop() {
         autoPlay={frontSlot === 0}
         muted
         playsInline
-        preload="auto"
+        preload={slotAPreload}
+        onCanPlay={() => setCanPreloadNextVideo(true)}
         aria-hidden="true"
       />
 
       <video
         ref={videoBRef}
         src={slotBVideo.src}
+        poster={slotBVideo.poster}
         className="absolute inset-0 w-full h-full object-cover transition-opacity ease-out"
         style={{
           opacity: frontSlot === 1 ? 1 : 0,
@@ -1878,7 +1889,8 @@ function HeroBackgroundVideoLoop() {
         autoPlay={frontSlot === 1}
         muted
         playsInline
-        preload="auto"
+        preload={slotBPreload}
+        onCanPlay={() => setCanPreloadNextVideo(true)}
         aria-hidden="true"
       />
     </div>
@@ -2002,19 +2014,19 @@ const MEMBERSHIPS_PREVIEW_COPY: Record<'en' | 'es', MembershipPreviewCopy> = {
 const MEMBERSHIPS_ROTATION_MS = 3100;
 const MEMBERSHIP_MEMBER_IMAGES = {
   sara: {
-    src: 'https://images.unsplash.com/photo-1542596594-ae13eaf915cd?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    src: '/images/local-photos/photo-1542596594-ae13eaf915cd-320-6cfb28d7.jpg',
     position: 'center 30%',
   },
   diego: {
-    src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    src: '/images/local-photos/photo-1500648767791-00dcc994a43e-320-ac0834fc.jpg',
     position: 'center 32%',
   },
   lucia: {
-    src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    src: '/images/local-photos/photo-1438761681033-6461ffad8d80-320-155bde23.jpg',
     position: 'center 30%',
   },
   maya: {
-    src: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&fm=jpg&q=72&w=320',
+    src: '/images/local-photos/photo-1554151228-14d9def656e4-320-ad86f00e.jpg',
     position: 'center 30%',
   },
 };
@@ -2025,7 +2037,7 @@ const MEMBERSHIP_MEMBER_STACK_IMAGES = [
   MEMBERSHIP_MEMBER_IMAGES.maya,
 ];
 const MEMBERSHIP_CLASS_IMAGE =
-  'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&fm=jpg&q=72&w=900';
+  '/images/local-photos/photo-1501504905252-473c47e087f8-900-f5d5964b.jpg';
 
 function MembershipsFeaturePreview() {
   const { locale } = useLanguage();
@@ -3431,7 +3443,7 @@ const DESIGN_SITE_PREVIEW_COPY = {
 
 const DESIGN_SITE_ROTATION_MS = 2600;
 const DESIGN_SITE_AVATAR_SRC =
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&facepad=3&w=160&q=80';
+  '/images/local-photos/photo-1494790108377-be9c29b29330-160-7f6134f2.jpg';
 
 function DesignSiteLinkIcon({
   name,

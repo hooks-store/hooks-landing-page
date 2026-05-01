@@ -266,6 +266,9 @@ const imageVariants = {
   hiddenRight: ({ scale, y }: ImageMotionSettings) => ({ x: '-10%', y, scale: scale * 1.16 }),
 } as const;
 
+const isVisibleCardPosition = (position: CardPosition) =>
+  position === 'center' || position === 'left' || position === 'right';
+
 export default function PhoneMockup() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoplayStarted, setAutoplayStarted] = useState(false);
@@ -330,6 +333,9 @@ export default function PhoneMockup() {
       <div className="relative w-full h-full flex items-center justify-center" style={{ transformStyle: 'preserve-3d' }}>
         {CREATORS.map((creator, index) => {
           const position = getPosition(index);
+          const shouldLoadImages = isVisibleCardPosition(position);
+          const isPriorityCard = position === 'center';
+          const imageFetchPriority = isPriorityCard ? 'high' : 'low';
 
           return (
             <motion.div
@@ -353,17 +359,27 @@ export default function PhoneMockup() {
               }}
             >
               <div className="absolute inset-0 w-full h-full overflow-hidden">
-                <motion.img
-                  src={creator.image}
-                  alt={creator.name}
-                  className="absolute inset-0 w-full h-full object-cover"
+                <motion.div
+                  className="absolute inset-0 w-full h-full"
                   variants={imageVariants}
                   custom={{ scale: creator.imageScale ?? 1, y: creator.imageOffsetY ?? '0%' }}
                   transition={activeImageTransition}
-                  loading="lazy"
-                  decoding="async"
-                  style={{ objectPosition: creator.imagePosition ?? 'center' }}
+                  style={{ backgroundColor: creator.color }}
                 />
+                {shouldLoadImages && (
+                  <motion.img
+                    src={creator.image}
+                    alt={creator.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    variants={imageVariants}
+                    custom={{ scale: creator.imageScale ?? 1, y: creator.imageOffsetY ?? '0%' }}
+                    transition={activeImageTransition}
+                    loading="eager"
+                    decoding="async"
+                    fetchPriority={imageFetchPriority}
+                    style={{ objectPosition: creator.imagePosition ?? 'center' }}
+                  />
+                )}
               </div>
 
               <div className="absolute inset-0 z-[5] pointer-events-none" style={{ backgroundColor: creator.color, opacity: 0.08 }} />
@@ -543,7 +559,17 @@ export default function PhoneMockup() {
                                   backgroundColor: creator.id === 'anyajensen' ? 'rgba(255,255,255,0.18)' : `${creator.color}1A`,
                                 }}
                               >
-                                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${link.image})` }} />
+                                {shouldLoadImages && link.image && (
+                                  <img
+                                    src={link.image}
+                                    alt=""
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchPriority={imageFetchPriority}
+                                    aria-hidden="true"
+                                  />
+                                )}
                                 <div className={`absolute inset-0 ${creator.id === 'anyajensen' ? 'bg-white/10' : 'bg-black/20'}`} />
 
                                 <div className="relative z-10 w-full h-full">
