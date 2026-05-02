@@ -15,6 +15,7 @@ import WorldMap from '@/components/WorldMap';
 import PhoneMockup from '@/components/iphone-mockup/PhoneMockup';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/useMobile';
+import { REGISTER_URL } from '@/lib/registerUrl';
 import {
   Eye, Globe, ShoppingBag, Lock,
   BarChart3, Users,
@@ -1046,12 +1047,12 @@ export default function Home() {
                 {copy.finalCta.line3}
               </h2>
 
-              <button
-                type="button"
-                className="mt-10 sm:mt-12 w-full sm:w-auto min-w-[164px] bg-white text-black text-[15px] sm:text-[16px] font-semibold leading-tight px-6 sm:px-8 py-3 sm:py-3.5 rounded-full whitespace-normal sm:whitespace-nowrap hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              <a
+                href={REGISTER_URL}
+                className="inline-flex items-center justify-center mt-10 sm:mt-12 w-full sm:w-auto min-w-[164px] bg-white text-black text-[15px] sm:text-[16px] font-semibold leading-tight px-6 sm:px-8 py-3 sm:py-3.5 rounded-full whitespace-normal sm:whitespace-nowrap hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 {copy.finalCta.primaryCta}
-              </button>
+              </a>
 
               <div className="mt-6 flex flex-col items-center gap-6 text-[15px]">
                 <p className="text-[#FF624F]">✓ {copy.finalCta.trust1}</p>

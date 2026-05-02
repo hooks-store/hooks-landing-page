@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { HooksIcon } from './HooksIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { LOGIN_URL, REGISTER_URL } from '@/lib/registerUrl';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -64,17 +65,17 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-6 ml-auto">
-            <a href="#" className="text-white text-[15px] font-medium opacity-85 hover:opacity-100 hover:text-[#D94B78] transition-opacity">{copy.login}</a>
-            <button className="bg-white text-black text-[15px] font-semibold px-6 py-2.5 rounded-full hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+            <a href={LOGIN_URL} className="text-white text-[15px] font-medium opacity-85 hover:opacity-100 hover:text-[#D94B78] transition-opacity">{copy.login}</a>
+            <a href={REGISTER_URL} className="inline-flex items-center justify-center bg-white text-black text-[15px] font-semibold px-6 py-2.5 rounded-full hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
               {copy.primaryCta}
-            </button>
+            </a>
           </div>
 
           {/* Mobile actions */}
           <div className="md:hidden flex items-center gap-3">
-            <button className="bg-transparent text-white text-[13px] font-semibold px-4 py-2 rounded-full ring-1 ring-inset ring-white active:ring-0 active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] active:scale-[0.98] transition-all duration-200">
+            <a href={REGISTER_URL} className="inline-flex items-center justify-center bg-transparent text-white text-[13px] font-semibold px-4 py-2 rounded-full ring-1 ring-inset ring-white active:ring-0 active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] active:scale-[0.98] transition-all duration-200">
               {copy.primaryCta}
-            </button>
+            </a>
             <button
               className="text-white p-1.5"
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -114,12 +115,12 @@ export default function Navbar() {
             </a>
           ))}
           <div className="mt-auto pt-6 border-t border-white/[0.08] flex flex-col gap-3">
-            <a href="#" className="w-full text-center bg-transparent text-white text-[15px] font-semibold px-6 py-2.5 rounded-full ring-1 ring-inset ring-white active:ring-0 active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] active:scale-[0.98] transition-all duration-200">
+            <a href={LOGIN_URL} className="w-full text-center bg-transparent text-white text-[15px] font-semibold px-6 py-2.5 rounded-full ring-1 ring-inset ring-white active:ring-0 active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] active:scale-[0.98] transition-all duration-200">
               {copy.mobileLogin}
             </a>
-            <button className="w-full bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] text-white text-[15px] font-semibold px-6 py-2.5 rounded-full hover:shadow-[0_0_20px_rgba(90,75,255,0.24)] active:scale-[0.98] transition-all duration-200">
+            <a href={REGISTER_URL} className="inline-flex w-full items-center justify-center bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] text-white text-[15px] font-semibold px-6 py-2.5 rounded-full hover:shadow-[0_0_20px_rgba(90,75,255,0.24)] active:scale-[0.98] transition-all duration-200">
               {copy.primaryCta}
-            </button>
+            </a>
           </div>
         </div>
       </div>
