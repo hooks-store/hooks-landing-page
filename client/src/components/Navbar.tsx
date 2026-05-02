@@ -15,6 +15,7 @@ export default function Navbar() {
     login: isSpanish ? 'Iniciar sesión' : 'Log In',
     mobileLogin: isSpanish ? 'Iniciar sesión' : 'Log In',
     primaryCta: isSpanish ? 'Crear gratis' : 'Start for free',
+    brandAria: isSpanish ? 'Volver arriba' : 'Back to top',
     toggleMenuAria: isSpanish ? 'Abrir o cerrar menú' : 'Toggle menu',
   };
 
@@ -34,6 +35,11 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
+  const handleBrandClick = () => {
+    setMobileOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
       <nav
@@ -46,10 +52,15 @@ export default function Navbar() {
         }}
       >
         <div className="container h-full flex items-center justify-between md:justify-start md:gap-14 lg:gap-20">
-          <div className="flex items-center gap-2.5 sm:gap-3">
+          <button
+            type="button"
+            onClick={handleBrandClick}
+            aria-label={copy.brandAria}
+            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer"
+          >
             <HooksIcon size={36} />
             <span className="text-white text-[24px] sm:text-[28px] font-bold tracking-[-0.02em] leading-none">Hooks</span>
-          </div>
+          </button>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8 lg:gap-12">
