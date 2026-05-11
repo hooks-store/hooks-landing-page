@@ -34,7 +34,7 @@ export default function EarningsCalculator() {
   const salesPercent = ((dailySales - 1) / 199) * 100;
 
   return (
-    <div ref={ref} className="card-navy-teal overflow-hidden transition-all duration-300">
+    <div ref={ref} className="card-navy-teal overflow-hidden transition-colors duration-300">
       <div className="flex flex-col lg:flex-row">
         {/* Left: Product image */}
         <div className="lg:w-[40%] h-64 lg:h-auto relative overflow-hidden">
@@ -56,7 +56,7 @@ export default function EarningsCalculator() {
                   <button
                     key={product}
                     onClick={() => setSelectedProduct(product)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-[background-color,border-color,color,box-shadow,transform] duration-200 ${
                       selectedProduct === product
                         ? 'bg-white text-black shadow-[0_0_12px_rgba(255,255,255,0.1)] scale-105'
                         : 'border border-white/20 text-white/80 hover:border-white/40 hover:text-white'
@@ -125,7 +125,7 @@ export default function EarningsCalculator() {
             <p className="text-white text-[40px] sm:text-[48px] md:text-[56px] lg:text-[64px] font-bold tracking-tight leading-none break-all sm:break-normal">
               ${displayRevenue}
             </p>
-            <button className="mt-6 bg-white/5 border border-white/20 text-white font-semibold px-8 py-3 rounded-full hover:bg-white/10 hover:border-white/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+            <button className="mt-6 bg-white/5 border border-white/20 text-white font-semibold px-8 py-3 rounded-full hover:bg-white/10 hover:border-white/30 hover:scale-[1.02] active:scale-[0.98] transition-[background-color,border-color,transform] duration-200">
               Make Money
             </button>
           </div>
