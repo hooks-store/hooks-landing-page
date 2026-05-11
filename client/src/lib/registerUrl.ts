@@ -1,5 +1,5 @@
-export const REGISTER_URL = "https://hooks.store/register";
-export const LOGIN_URL = "https://hooks.store/login";
+export const REGISTER_URL = "https://app.hooks.store/register";
+export const LOGIN_URL = "https://app.hooks.store/login";
 
 export function getRegisterUrl(username?: string) {
   const trimmedUsername = username?.trim();
