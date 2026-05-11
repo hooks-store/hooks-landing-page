@@ -48,7 +48,7 @@ const HERO_BG_VIDEO_CROSSFADE_MS = 550;
 const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide-screen-recording.mp4';
 const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
 const SECTION_HEADLINE_CLASS = 'text-[30px] sm:text-[40px] md:text-[48px] lg:text-[clamp(36px,3.6vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] lg:whitespace-nowrap';
-const FEATURE_CARD_CLASS = 'bg-[linear-gradient(180deg,_#0B1926_0%,_#0A0A0A_76%)] border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-all duration-300 group';
+const FEATURE_CARD_CLASS = 'bg-[linear-gradient(180deg,_#0B1926_0%,_#0A0A0A_76%)] border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-colors duration-300 group';
 const FEATURE_CARD_MEDIA_CLASS = 'h-[320px] sm:h-[390px] relative overflow-hidden bg-transparent';
 const FEATURE_CARD_BODY_CLASS = 'bg-transparent p-6 sm:p-7 pt-6';
 const FEATURE_CARD_TITLE_CLASS = 'text-white text-[24px] font-semibold mb-2';
@@ -774,29 +774,27 @@ export default function Home() {
       <Navbar />
 
       {/* ===== 1. HERO SECTION ===== */}
-      <section className="relative min-h-screen flex items-center pt-16">
+      <section className="relative min-h-screen flex items-center pt-[74px]">
         <div className="absolute inset-0 overflow-hidden">
           <HeroBackgroundVideoLoop />
         </div>
         <div className="absolute inset-0 bg-black/50 pointer-events-none" />
 
-        <div className="container relative z-10 flex flex-col lg:flex-row items-center gap-10 md:gap-12 lg:gap-8 py-16 sm:py-20">
-          <div className="w-full lg:w-[55%] text-left">
+        <div className="container relative z-10 grid items-center gap-10 md:gap-12 lg:grid-cols-[minmax(0,1fr)_306px] lg:gap-[clamp(3.5rem,7vw,7rem)] py-16 sm:py-20">
+          <div className="w-full min-w-0 text-left">
             <h1
-              className="text-[34px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-bold leading-[1.08] tracking-[-0.02em] mb-6"
+              className="text-[34px] sm:text-[52px] md:text-[64px] lg:text-[clamp(56px,5.4vw,72px)] font-bold leading-[1.08] tracking-[-0.02em] mb-6"
               style={{
                 opacity: heroLoaded ? 1 : 0,
                 transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
-                transition: 'all 0.6s ease-out 0.2s',
+                transition: 'opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s',
               }}
             >
-              <span className="relative block h-[1.08em]">
-                <span
-                  key={`${locale}-hero-phrase-${heroPhraseIndex}`}
-                  className="hero-phrase-gradient absolute inset-x-0 top-0 whitespace-nowrap italic"
-                >
-                  {heroRotatingPhrases[heroPhraseIndex % heroRotatingPhrases.length]}
-                </span>
+              <span
+                key={`${locale}-hero-phrase-${heroPhraseIndex}`}
+                className="hero-phrase-gradient block max-w-full whitespace-normal [text-wrap:balance] italic"
+              >
+                {heroRotatingPhrases[heroPhraseIndex % heroRotatingPhrases.length]}
               </span>
               <span className="block">{copy.hero.titleEnd}</span>
             </h1>
@@ -805,7 +803,7 @@ export default function Home() {
               style={{
                 opacity: heroLoaded ? 1 : 0,
                 transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
-                transition: 'all 0.6s ease-out 0.5s',
+                transition: 'opacity 0.6s ease-out 0.5s, transform 0.6s ease-out 0.5s',
               }}
             >
               {copy.hero.subheadline}
@@ -815,7 +813,7 @@ export default function Home() {
               style={{
                 opacity: heroLoaded ? 1 : 0,
                 transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
-                transition: 'all 0.6s ease-out 0.8s',
+                transition: 'opacity 0.6s ease-out 0.8s, transform 0.6s ease-out 0.8s',
               }}
             >
               <UrlInputBar />
@@ -823,11 +821,11 @@ export default function Home() {
           </div>
 
           <div
-            className="w-full lg:w-[45%] flex justify-center lg:justify-end lg:pr-12 xl:pr-16"
+            className="w-full flex justify-center lg:justify-end"
             style={{
               opacity: heroLoaded ? 1 : 0,
               transform: heroLoaded ? 'translateY(0)' : 'translateY(30px)',
-              transition: 'all 0.8s ease-out 0.6s',
+              transition: 'opacity 0.8s ease-out 0.6s, transform 0.8s ease-out 0.6s',
             }}
           >
             <PhoneMockup />
@@ -1048,9 +1046,9 @@ export default function Home() {
 
               <button
                 type="button"
-                className="mt-10 sm:mt-12 w-full sm:w-auto min-w-[164px] bg-white text-black text-[15px] sm:text-[16px] font-semibold leading-tight px-6 sm:px-8 py-3 sm:py-3.5 rounded-full whitespace-normal sm:whitespace-nowrap hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="button-shine button-shine-primary mt-10 sm:mt-12 inline-flex w-full sm:w-auto min-w-[164px] items-center justify-center bg-white text-black text-[15px] sm:text-[16px] font-semibold leading-tight px-6 sm:px-8 py-3 sm:py-3.5 rounded-full whitespace-normal sm:whitespace-nowrap hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] active:text-white active:shadow-[0_0_20px_rgba(255,255,255,0.15)] active:scale-[0.98] focus-visible:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] focus-visible:text-white focus-visible:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-[background,color,box-shadow,transform] duration-200"
               >
-                {copy.finalCta.primaryCta}
+                <span>{copy.finalCta.primaryCta}</span>
               </button>
 
               <div className="mt-6 flex flex-col items-center gap-6 text-[15px]">
@@ -2126,7 +2124,7 @@ function MembershipsFeaturePreview() {
   return (
     <div
       ref={containerRef}
-      className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
+      className="h-full w-full overflow-hidden bg-transparent px-3 py-4 sm:px-4 sm:py-5 flex items-center justify-center"
       aria-hidden="true"
     >
       <div className="relative w-full max-w-[360px] h-full max-h-[332px] min-h-[280px] rounded-[26px] border border-white/[0.08] bg-[#07111D] overflow-hidden">
@@ -2141,7 +2139,7 @@ function MembershipsFeaturePreview() {
           transition={{ duration: 0.7, ease: DIGITAL_PRODUCT_EASE }}
         />
 
-        <div className="relative h-full p-3.5 sm:p-4 flex flex-col gap-2.5">
+        <div className="relative h-full p-3 sm:p-4 flex flex-col gap-2 sm:gap-2.5">
           <div className="flex items-center gap-2.5 h-9 shrink-0">
             <div className="relative h-9 w-9 shrink-0">
               <motion.div
@@ -2226,12 +2224,15 @@ function MembershipsFeaturePreview() {
                 />
               </motion.div>
 
-              <motion.div variants={childVariants} className="flex items-end justify-between gap-3">
-                <div className="min-w-0">
-                  <h4 className="text-[14px] sm:text-[15px] font-bold leading-[1.15] tracking-tight text-white line-clamp-1">
+              <motion.div
+                variants={childVariants}
+                className="flex items-end justify-between gap-2 sm:flex-col sm:items-stretch md:flex-row md:items-end md:gap-3"
+              >
+                <div className="min-w-0 flex-1 pr-1 sm:pr-0 md:pr-1">
+                  <h4 className="text-[13px] sm:text-[15px] font-bold leading-[1.15] tracking-tight text-white line-clamp-1">
                     {item.title}
                   </h4>
-                  <p className="mt-0.5 text-[11px] leading-[1.35] text-white/55 line-clamp-1">
+                  <p className="mt-0.5 text-[10px] sm:text-[11px] leading-[1.35] text-white/55 line-clamp-1">
                     {item.description}
                   </p>
                 </div>
@@ -2239,7 +2240,7 @@ function MembershipsFeaturePreview() {
                   initial={reduceMotion ? false : { scale: 0.92, opacity: 0 }}
                   animate={reduceMotion ? undefined : { scale: [0.92, 1.04, 1], opacity: 1 }}
                   transition={{ delay: 0.35, duration: 0.45, ease: DIGITAL_PRODUCT_EASE }}
-                  className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold text-[#07111D] shadow-[0_8px_18px_rgba(0,0,0,0.25)]"
+                  className="inline-flex min-w-[82px] shrink-0 items-center justify-center gap-1 self-auto rounded-full px-2.5 py-1.5 text-[10.5px] font-bold text-[#07111D] shadow-[0_8px_18px_rgba(0,0,0,0.25)] sm:self-end sm:px-3 sm:text-[11px] md:self-auto"
                   style={{ background: accent }}
                 >
                   <span className="whitespace-nowrap">{item.ctaLabel}</span>
@@ -2353,9 +2354,10 @@ function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
         ];
 
   return (
-    <div className="h-full grid grid-cols-3 gap-1.5">
+    <div className="h-full min-h-0 overflow-hidden grid grid-cols-3 gap-1.5">
       {tiers.map((tier, i) => {
         const isActive = i === 1;
+        const visibleBenefits = tier.benefits.slice(0, i === 2 ? 6 : tier.benefits.length);
         return (
           <motion.div
             key={tier.name}
@@ -2370,7 +2372,7 @@ function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
               duration: 0.42,
               ease: DIGITAL_PRODUCT_EASE,
             }}
-            className="relative rounded-[12px] border flex flex-col justify-between p-2"
+            className="relative min-h-0 overflow-hidden rounded-[12px] border flex flex-col justify-between p-1.5 sm:p-2"
             style={{
               borderColor: isActive ? accent : 'rgba(255,255,255,0.10)',
               background: isActive
@@ -2386,23 +2388,25 @@ function TiersScene({ accent, reduceMotion, locale }: MembershipSceneProps) {
               >
                 {tier.name}
               </div>
-              <div className="mt-1.5 text-[14px] font-extrabold text-white tabular-nums leading-none">
+              <div className="mt-1.5 text-[13px] sm:text-[14px] font-extrabold text-white tabular-nums leading-none">
                 {tier.price}
                 <span className="ml-0.5 text-[7.5px] font-bold text-white/45">{tier.cadence}</span>
               </div>
             </div>
-            <ul className="my-2 space-y-0.5 text-[7px] font-medium leading-[1.15] text-white/52">
-              {tier.benefits.map((benefit) => (
-                <li key={benefit} className="flex items-start gap-1">
+            <ul className="my-1.5 sm:my-2 min-h-0 overflow-hidden space-y-0.5 text-[6.75px] sm:text-[7px] font-medium leading-[1.1] text-white/52">
+              {visibleBenefits.map((benefit) => (
+                <li key={benefit} className="flex min-w-0 items-start gap-1">
                   <span
-                    className="mt-[3px] h-1 w-1 shrink-0 rounded-full"
+                    className="mt-[2.5px] h-1 w-1 shrink-0 rounded-full"
                     style={{ background: isActive ? accent : 'rgba(255,255,255,0.35)' }}
                   />
-                  <span>{benefit}</span>
+                  <span className="min-w-0 truncate">{benefit}</span>
                 </li>
               ))}
             </ul>
-            <div className="text-[8.5px] font-medium text-white/55 mt-1.5">{tier.perks}</div>
+            <div className="mt-1 text-[8px] sm:mt-1.5 sm:text-[8.5px] font-medium text-white/55 truncate">
+              {tier.perks}
+            </div>
           </motion.div>
         );
       })}

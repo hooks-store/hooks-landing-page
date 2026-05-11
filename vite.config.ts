@@ -155,7 +155,7 @@ function replaceDeprecatedUnloadListeners(source: string) {
 }
 
 function vitePluginManusRuntimeWithoutDeprecatedUnload(): Plugin {
-  const plugin = vitePluginManusRuntime();
+  const plugin = vitePluginManusRuntime({ injectTo: "body" });
   const transformIndexHtml = plugin.transformIndexHtml;
 
   if (typeof transformIndexHtml !== "function") {
@@ -186,7 +186,35 @@ function vitePluginManusRuntimeWithoutDeprecatedUnload(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntimeWithoutDeprecatedUnload(), vitePluginManusDebugCollector()];
+function vitePluginNonBlockingStylesheets(): Plugin {
+  return {
+    name: "non-blocking-render-stylesheets",
+    enforce: "post",
+    transformIndexHtml: {
+      order: "post",
+      handler(html, context) {
+        if (context.server) {
+          return html;
+        }
+
+        return html.replace(
+          /<link\s+rel="stylesheet"([^>]*)href="([^"]+\.css)"([^>]*)>/g,
+          (_linkTag, beforeHref: string, href: string, afterHref: string) =>
+            `<link rel="preload" as="style"${beforeHref}href="${href}"${afterHref} onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet"${beforeHref}href="${href}"${afterHref}></noscript>`,
+        );
+      },
+    },
+  };
+}
+
+const plugins = [
+  react(),
+  tailwindcss(),
+  jsxLocPlugin(),
+  vitePluginManusRuntimeWithoutDeprecatedUnload(),
+  vitePluginManusDebugCollector(),
+  vitePluginNonBlockingStylesheets(),
+];
 
 export default defineConfig({
   plugins,

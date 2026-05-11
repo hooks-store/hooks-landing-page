@@ -39,7 +39,9 @@ export default function UrlInputBar() {
           spellCheck={false}
         />
       </div>
-      <button className="shrink-0 bg-black text-white text-[13px] sm:text-base font-semibold px-4 sm:px-5 py-2.5 rounded-full hover:bg-gray-900 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 whitespace-nowrap">
+      <button
+        className="button-shine button-shine-primary shrink-0 bg-black text-white text-[13px] sm:text-base font-semibold px-4 sm:px-5 py-2.5 rounded-full hover:bg-gray-900 hover:scale-[1.02] active:scale-[0.98] transition-[background-color,transform] duration-200 whitespace-nowrap"
+      >
         {isSpanish ? 'Crear gratis' : 'Start for free'}
       </button>
     </div>

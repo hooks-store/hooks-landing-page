@@ -83,7 +83,7 @@ export default function AppIconGrid() {
             {row.map((app, i) => (
               <div
                 key={i}
-                className="w-14 h-14 md:w-[76px] md:h-[76px] rounded-[18px] flex items-center justify-center text-xl md:text-2xl shadow-lg shrink-0 hover:scale-110 hover:shadow-xl hover:z-20 transition-all duration-300 cursor-pointer relative overflow-hidden"
+                className="w-14 h-14 md:w-[76px] md:h-[76px] rounded-[18px] flex items-center justify-center text-xl md:text-2xl shadow-lg shrink-0 hover:scale-110 hover:shadow-xl hover:z-20 transition-[box-shadow,transform] duration-300 cursor-pointer relative overflow-hidden"
                 style={{ background: app.bg }}
                 title={app.name}
               >
