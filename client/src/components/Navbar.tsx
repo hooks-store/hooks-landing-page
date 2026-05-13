@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { HooksIcon } from './HooksIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LOGIN_URL, REGISTER_URL } from '@/lib/registerUrl';
+import { useLocation } from 'wouter';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [location, setLocation] = useLocation();
   const { locale } = useLanguage();
   const isSpanish = locale === 'es';
   const navItems: string[] = [];
@@ -23,6 +25,11 @@ export default function Navbar() {
   }, []);
 
   const handleBrandClick = () => {
+    if (location !== '/') {
+      setLocation('/');
+      return;
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -69,7 +76,7 @@ export default function Navbar() {
           </a>
           <a
             href={REGISTER_URL}
-            className="button-shine button-shine-primary inline-flex items-center justify-center bg-white text-black text-[15px] font-semibold px-6 py-2.5 rounded-full hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:scale-[0.98] transition-[background,color,box-shadow,transform] duration-200"
+            className="button-shine button-shine-primary button-gradient-cta inline-flex items-center justify-center bg-white text-black text-[15px] font-semibold px-6 py-2.5 rounded-full transition-[background,color,box-shadow,scale] duration-200"
           >
             {copy.primaryCta}
           </a>
@@ -79,17 +86,17 @@ export default function Navbar() {
         <div className="md:hidden ml-3 flex min-w-0 flex-1 items-center justify-end gap-1.5 min-[375px]:gap-2">
           <a
             href={LOGIN_URL}
-            className="button-shine button-shine-outline group min-w-0 rounded-full bg-white p-px active:scale-[0.98] hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] focus-visible:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] focus-visible:outline-none transition-[background,transform] duration-200"
+            className="button-shine button-shine-outline group min-w-0 w-[96px] min-[400px]:w-[112px] rounded-full bg-white p-px active:scale-[0.98] hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] focus-visible:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] focus-visible:outline-none transition-[background,transform] duration-200"
           >
-            <span className="flex h-8 min-w-0 items-center justify-center rounded-full bg-black px-2 min-[360px]:px-2.5 min-[400px]:h-9 min-[400px]:px-3">
-              <span className="block truncate text-white text-[10.5px] min-[360px]:text-[11px] min-[400px]:text-[13px] font-semibold leading-none transition-colors duration-200 group-hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] group-hover:bg-clip-text group-hover:text-transparent group-active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] group-active:bg-clip-text group-active:text-transparent group-focus-visible:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] group-focus-visible:bg-clip-text group-focus-visible:text-transparent">
+            <span className="flex h-8 w-full min-w-0 items-center justify-center rounded-full bg-black px-2 min-[360px]:px-2.5 min-[400px]:h-9 min-[400px]:px-3">
+              <span className="button-shine-outline-label block truncate text-white text-[10.5px] min-[360px]:text-[11px] min-[400px]:text-[13px] font-semibold leading-none transition-colors duration-200">
                 {copy.mobileLogin}
               </span>
             </span>
           </a>
           <a
             href={REGISTER_URL}
-            className="button-shine button-shine-primary flex h-8 min-w-0 items-center justify-center truncate rounded-full bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] px-2.5 text-[10.5px] font-semibold leading-none text-white active:scale-[0.98] transition-transform duration-200 min-[360px]:px-3 min-[360px]:text-[11px] min-[400px]:h-9 min-[400px]:px-4 min-[400px]:text-[13px]"
+            className="button-shine button-shine-primary button-gradient-cta flex h-8 min-w-0 items-center justify-center truncate rounded-full bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] px-2.5 text-[10.5px] font-semibold leading-none text-white transition-[box-shadow,scale] duration-200 min-[360px]:px-3 min-[360px]:text-[11px] min-[400px]:h-9 min-[400px]:px-4 min-[400px]:text-[13px]"
           >
             {copy.primaryCta}
           </a>

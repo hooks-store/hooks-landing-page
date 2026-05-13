@@ -1223,9 +1223,137 @@
     const TAU = Math.PI * 2;
     const LOOP_SECONDS = 10;
 
-    const axisLabels = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const I18N = {
+      en: {
+        metricRevenue: 'Net revenue',
+        metricConversion: 'Conversion rate',
+        metricEfficiency: 'Efficiency',
+        realTimeStats: 'Real-time statistics',
+        performanceSummary: 'Performance summary',
+        panelSubtitle: 'A polished visual loop for a premium web experience.',
+        liveBlend: 'Live blend',
+        weeklyHigh: 'Weekly high',
+        trendStrength: 'Trend strength',
+        signalDepthPrefix: 'Signal depth',
+        activeSegment: 'Active segment',
+        originalLoop: 'Original analytics loop',
+        channelMix: 'Channel mix',
+        acquisitionBalance: 'Acquisition balance',
+        leadingPrefix: 'Leading',
+        topSource: 'Top source',
+        breakdown: 'Breakdown',
+        audienceResponse: 'Audience response',
+        activeSignals: 'active signals',
+        depthScore: 'Depth score',
+        sessionLift: 'Session lift',
+        returningUsers: 'Returning users',
+        channelNames: { organic: 'Organic', paid: 'Paid', email: 'Email', direct: 'Direct' },
+        axisLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        weekdayLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        labelPhases: ['Real-time mix', 'Signal pulse', 'Performance cloud', 'Adaptive blend'],
+        tagPhases: [
+          ['High intent', 'Fast checkout'],
+          ['Strong loyalty', 'Premium audience'],
+          ['Low friction', 'Clean funnel'],
+          ['Warm leads', 'Efficient spend'],
+        ],
+      },
+      es: {
+        metricRevenue: 'Ingresos netos',
+        metricConversion: 'Tasa de conversión',
+        metricEfficiency: 'Eficiencia',
+        realTimeStats: 'Estadísticas en tiempo real',
+        performanceSummary: 'Resumen de rendimiento',
+        panelSubtitle: 'Un bucle visual pulido para una experiencia web premium.',
+        liveBlend: 'Mezcla en vivo',
+        weeklyHigh: 'Máximo semanal',
+        trendStrength: 'Fuerza de tendencia',
+        signalDepthPrefix: 'Profundidad de señal',
+        activeSegment: 'Segmento activo',
+        originalLoop: 'Bucle original de estadísticas',
+        channelMix: 'Mezcla de canales',
+        acquisitionBalance: 'Balance de adquisición',
+        leadingPrefix: 'Lidera',
+        topSource: 'Fuente principal',
+        breakdown: 'Desglose',
+        audienceResponse: 'Respuesta de la audiencia',
+        activeSignals: 'señales activas',
+        depthScore: 'Puntuación de profundidad',
+        sessionLift: 'Aumento de sesión',
+        returningUsers: 'Usuarios recurrentes',
+        channelNames: { organic: 'Orgánico', paid: 'Pago', email: 'Correo', direct: 'Directo' },
+        axisLabels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        weekdayLabels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        labelPhases: [
+          'Mezcla en tiempo real',
+          'Pulso de señal',
+          'Nube de rendimiento',
+          'Mezcla adaptativa',
+        ],
+        tagPhases: [
+          ['Alta intención', 'Pago rápido'],
+          ['Lealtad fuerte', 'Audiencia premium'],
+          ['Baja fricción', 'Embudo limpio'],
+          ['Prospectos cálidos', 'Gasto eficiente'],
+        ],
+      },
+    };
+
+    function resolveLocale() {
+      const requested = new URLSearchParams(window.location.search).get('lang');
+      const languages = requested
+        ? [requested]
+        : (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language]);
+      const supported = languages
+        .map((language) => String(language || '').toLowerCase().split('-')[0])
+        .find((language) => language === 'en' || language === 'es');
+
+      return supported || 'en';
+    }
+
+    const locale = resolveLocale();
+    const copy = I18N[locale];
+    document.documentElement.lang = locale;
+
+    function setText(selector, value) {
+      const element = document.querySelector(selector);
+      if (element) element.textContent = value;
+    }
+
+    function applyStaticCopy() {
+      setText('#metric-revenue .label', copy.metricRevenue);
+      setText('#metric-conversion .label', copy.metricConversion);
+      setText('#metric-efficiency .label', copy.metricEfficiency);
+      setText('.content > .panel .eyebrow', copy.realTimeStats);
+      setText('.content > .panel .panel-title', copy.performanceSummary);
+      setText('.content > .panel .panel-subtitle', copy.panelSubtitle);
+      setText('#blend-label', copy.liveBlend);
+      setText('.chart-topline .stat-block:nth-child(1) span', copy.weeklyHigh);
+      setText('.chart-topline .stat-block:nth-child(2) span', copy.trendStrength);
+      setText('#tooltip .label', copy.activeSegment);
+      setText('.corner-chip span:last-child', copy.originalLoop);
+      setText('.right-col .panel:nth-child(1) .eyebrow', copy.channelMix);
+      setText('.right-col .panel:nth-child(1) .panel-title', copy.acquisitionBalance);
+      setText('.donut-center span', copy.topSource);
+      setText('.legend-row:nth-child(1) .legend-name', copy.channelNames.organic);
+      setText('.legend-row:nth-child(2) .legend-name', copy.channelNames.paid);
+      setText('.legend-row:nth-child(3) .legend-name', copy.channelNames.email);
+      setText('.legend-row:nth-child(4) .legend-name', copy.channelNames.direct);
+      setText('.right-col .panel:nth-child(2) .eyebrow', copy.breakdown);
+      setText('.right-col .panel:nth-child(2) .panel-title', copy.audienceResponse);
+      setText('.bars-topline .stat-block:nth-child(1) span', copy.depthScore);
+      setText('.bars-topline .stat-block:nth-child(2) span', copy.sessionLift);
+      setText('.footer-metric span', copy.returningUsers);
+
+      document.querySelectorAll('.bar-label').forEach((element, index) => {
+        element.textContent = copy.weekdayLabels[index] || '';
+      });
+    }
+
+    const axisLabels = copy.axisLabels;
     const axis = document.getElementById('axis-x');
     axis.innerHTML = axisLabels.map(label => `<span>${label}</span>`).join('');
+    applyStaticCopy();
 
     const lineSets = [
       [38, 44, 42, 55, 59, 63, 61, 72, 76, 81, 86, 91],
@@ -1284,19 +1412,8 @@
       returningUsers: [41.8, 44.6, 42.9, 45.3]
     };
 
-    const labelPhases = [
-      "Mezcla en tiempo real",
-      "Pulso de señal",
-      "Nube de rendimiento",
-      "Mezcla adaptativa"
-    ];
-
-    const tagPhases = [
-      ["Alta intención", "Pago rápido"],
-      ["Lealtad fuerte", "Audiencia premium"],
-      ["Baja fricción", "Embudo limpio"],
-      ["Prospectos cálidos", "Gasto eficiente"]
-    ];
+    const labelPhases = copy.labelPhases;
+    const tagPhases = copy.tagPhases;
 
     const chartPadding = { left: 82, right: 28, top: 58, bottom: 58 };
     const chartW = 820;
@@ -1565,7 +1682,7 @@
 
       weekHighEl.textContent = `+${weekHigh.toFixed(1)}%`;
       trendStrengthEl.textContent = `${Math.round(trendStrength)} / 100`;
-      signalPill.textContent = `Profundidad de señal ${Math.round(signalDepth)}`;
+      signalPill.textContent = `${copy.signalDepthPrefix} ${Math.round(signalDepth)}`;
 
       const idx = getPhaseIndex(labelPhases, t);
       blendLabel.textContent = labelPhases[idx];
@@ -1574,7 +1691,7 @@
     function updateDonut(t) {
       const values = cycleArray(channelSets, t);
       const names = ['organic', 'paid', 'email', 'direct'];
-      const displayNames = { organic: 'Orgánico', paid: 'Pago', email: 'Correo', direct: 'Directo' };
+      const displayNames = copy.channelNames;
       const circumference = 2 * Math.PI * 92;
       const gap = 10;
       let offset = 0;
@@ -1597,7 +1714,7 @@
       const pairs = names.map((name, idx) => ({ name, value: values[idx] })).sort((a, b) => b.value - a.value);
       topSource.textContent = displayNames[pairs[0].name];
       topShare.textContent = `${pairs[0].value.toFixed(0)}%`;
-      mixPill.textContent = `Lidera ${displayNames[pairs[0].name].toLowerCase()}`;
+      mixPill.textContent = `${copy.leadingPrefix} ${displayNames[pairs[0].name].toLowerCase()}`;
       donutGroup.style.transform = `rotate(${(-3 + Math.sin(TAU * t) * 5).toFixed(2)}deg)`;
     }
 
@@ -1614,7 +1731,7 @@
       depthScoreEl.textContent = `${Math.round(depthScore)} / 100`;
       sessionLiftEl.textContent = `+${Math.round(sessionLift)}%`;
       returningUsersEl.textContent = `${returningUsers.toFixed(1)}%`;
-      burstPill.textContent = `${Math.round(10 + (depthScore - 76) / 2)} señales activas`;
+      burstPill.textContent = `${Math.round(10 + (depthScore - 76) / 2)} ${copy.activeSignals}`;
 
       const idx = getPhaseIndex(tagPhases, t);
       tagOne.textContent = tagPhases[idx][0];

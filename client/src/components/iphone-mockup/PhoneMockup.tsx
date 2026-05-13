@@ -19,7 +19,8 @@ import {
   Video,
   Youtube,
 } from 'lucide-react';
-import { CREATORS, type Creator, type CreatorSocial } from './data';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { CREATORS, type Creator, type CreatorSocial, type LocalizedText } from './data';
 
 type CardPosition = 'center' | 'left' | 'right' | 'hiddenLeft' | 'hiddenRight';
 
@@ -290,6 +291,8 @@ const afterImagePaint = (callback: () => void) => {
   });
 };
 
+const getLocalizedText = (copy: LocalizedText, locale: 'en' | 'es') => copy[locale];
+
 // IMPORTANT: a page-level ancestor (the app shell) has `overflow-x: hidden`.
 // If hidden cards translate far off-screen, they get clipped by the viewport
 // edge — and during the transit between hidden and side, you see only a
@@ -336,6 +339,7 @@ const isVisibleCardPosition = (position: CardPosition) =>
   position === 'center' || position === 'left' || position === 'right';
 
 export default function PhoneMockup() {
+  const { locale } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoplayStarted, setAutoplayStarted] = useState(false);
   const lastNavigationAtRef = useRef(0);
@@ -616,14 +620,14 @@ export default function PhoneMockup() {
                       className="text-[14px] font-medium mb-1 w-full text-white/90 flex items-center justify-center gap-1"
                       style={{ fontFamily: "'Inter', sans-serif" }}
                     >
-                      {creator.followers} Total de seguidores
+                      {creator.followers} {locale === 'es' ? 'Total de seguidores' : 'Total Followers'}
                     </motion.p>
 
                     <motion.p
                       className={`text-[14px] font-normal ${creator.id === 'anyajensen' ? 'mb-2' : 'mb-6'} w-full text-white/80`}
                       style={{ fontFamily: "'Inter', sans-serif" }}
                     >
-                      {creator.title}
+                      {getLocalizedText(creator.title, locale)}
                     </motion.p>
 
                     <div className="flex-1 w-full overflow-y-auto flex flex-col [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -684,7 +688,7 @@ export default function PhoneMockup() {
                           const linkImage = link.image;
 
                           return (
-                            <div key={`${link.title}-${idx}`} className={itemClasses}>
+                            <div key={`${link.title.es}-${idx}`} className={itemClasses}>
                               <div
                                 className="absolute inset-0 backdrop-blur-md rounded-[16px] overflow-hidden"
                                 style={{
@@ -716,7 +720,7 @@ export default function PhoneMockup() {
                                       className="text-white/95 font-medium text-[13px] leading-tight drop-shadow-md block"
                                       style={{ fontFamily: "'Inter', sans-serif" }}
                                     >
-                                      {link.title}
+                                      {getLocalizedText(link.title, locale)}
                                     </span>
                                   </div>
                                 </div>

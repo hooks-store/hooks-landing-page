@@ -487,19 +487,21 @@ const HOME_COPY = {
       frameTitle: 'Premium analytics animation',
     },
     tiktokStore: {
-      eyebrow: 'Consigue más ventas con',
-      headline: 'Una tienda optimizada para tráfico de TikTok',
-      verifiedTitle: 'Tu Perfil verificado',
-      verifiedBody: 'Deja de perder visitantes. Tu insignia verificada genera confianza al instante y confirma que están en el lugar correcto, listos para comprar.',
-      browserTitle: '¿TikTok está bloqueando tu link?',
-      browserBody: 'La mayoría de herramientas de link en bio ignoran el problema del navegador de TikTok. Creamos una guía animada que lleva a tus visitantes a su navegador preferido para que cada clic realmente convierta.',
-      browserVideoLabel: 'Guía animada para abrir un link de TikTok en el navegador preferido',
+      eyebrow: 'Get more sales with',
+      headline: 'A store optimized for TikTok traffic',
+      verifiedTitle: 'Your verified profile',
+      verifiedBody: 'Stop losing visitors. Your verified badge builds instant trust and confirms they are in the right place, ready to buy.',
+      browserTitle: 'Is TikTok blocking your link?',
+      browserBody: "Most link-in-bio tools ignore TikTok's in-app browser problem. Hooks shows visitors a clear guide to open your link in their preferred browser so every click can actually convert.",
+      browserVideoLabel: 'Animated guide for opening a TikTok link in the preferred browser',
+      browserOverlayTitle: 'To open this page',
+      browserOverlayBody: 'tap the three dots ... and choose "Open in browser".',
     },
     finalCta: {
       line1: 'Build your store.',
       line2: 'Share your links.',
       line3: 'Get paid.',
-      primaryCta: 'Start free — only pay when you sell',
+      primaryCta: 'Start for free',
       trust1: 'No card required',
       trust2: 'Verified profile included',
       trust3: 'Optimized for TikTok traffic',
@@ -605,6 +607,8 @@ const HOME_COPY = {
       browserTitle: '¿TikTok está bloqueando tu link?',
       browserBody: 'La mayoría de herramientas de link en bio ignoran el problema del navegador de TikTok. Creamos una guía animada que lleva a tus visitantes a su navegador preferido para que cada clic realmente convierta.',
       browserVideoLabel: 'Guía animada para abrir un link de TikTok en el navegador preferido',
+      browserOverlayTitle: 'Para abrir esta página',
+      browserOverlayBody: 'toca los tres puntos ... y elige "Abrir en el navegador".',
     },
     finalCta: {
       line1: 'Crea tu perfil.',
@@ -931,6 +935,14 @@ export default function Home() {
                           preload="metadata"
                           aria-label={copy.tiktokStore.browserVideoLabel}
                         />
+                        <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/95 to-transparent px-3 pb-4 pt-12 text-center text-white">
+                          <div className="text-[8px] font-extrabold leading-tight sm:text-[9px]">
+                            {copy.tiktokStore.browserOverlayTitle}
+                          </div>
+                          <div className="mt-1 text-[6px] font-semibold leading-snug text-white/80 sm:text-[7px]">
+                            {copy.tiktokStore.browserOverlayBody}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1015,7 +1027,7 @@ export default function Home() {
               <div className={FEATURE_CARD_CLASS}>
                 <div className={FEATURE_CARD_MEDIA_CLASS}>
                   <iframe
-                    src="/videos/features/premium_analytics_loop_v2.html"
+                    src={`/videos/features/premium_analytics_loop_v2.html?lang=${locale}`}
                     title={copy.analytics.frameTitle}
                     className="w-full h-full bg-transparent"
                     loading="lazy"
@@ -1035,7 +1047,7 @@ export default function Home() {
       </section>
 
       {/* ===== 13. FINAL CTA SECTION ===== */}
-      <section className="py-20 md:py-28">
+      <section className="pt-20 pb-10 md:pt-28 md:pb-24">
         <div className="container">
           <SectionWrapper>
             <div className="max-w-[750px] mx-auto px-4 sm:px-6 md:px-8 text-center">
@@ -1047,12 +1059,12 @@ export default function Home() {
 
               <a
                 href={REGISTER_URL}
-                className="button-shine button-shine-primary mt-10 sm:mt-12 inline-flex w-full sm:w-auto min-w-[164px] items-center justify-center bg-white text-black text-[15px] sm:text-[16px] font-semibold leading-tight px-6 sm:px-8 py-3 sm:py-3.5 rounded-full whitespace-normal sm:whitespace-nowrap hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:scale-[1.02] active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] active:text-white active:shadow-[0_0_20px_rgba(255,255,255,0.15)] active:scale-[0.98] focus-visible:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] focus-visible:text-white focus-visible:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-[background,color,box-shadow,transform] duration-200"
+                className="button-shine button-shine-primary button-gradient-cta mt-8 inline-flex w-full sm:w-auto min-w-[164px] items-center justify-center bg-white text-black text-[15px] sm:text-[16px] font-semibold leading-tight px-6 sm:px-8 py-3 sm:py-3.5 rounded-full whitespace-normal sm:whitespace-nowrap transition-[background,color,box-shadow,scale] duration-200"
               >
                 <span>{copy.finalCta.primaryCta}</span>
               </a>
 
-              <div className="mt-6 flex flex-col items-center gap-6 text-[15px]">
+              <div className="mt-4 flex flex-col items-center gap-6 text-[15px]">
                 <p className="text-[#FF624F]">✓ {copy.finalCta.trust1}</p>
                 <a
                   href="#tienda-optimizada-tiktok"
@@ -3468,7 +3480,7 @@ const DESIGN_SITE_PREVIEW_COPY = {
   en: {
     eyebrow: 'Theme',
     name: 'Julia Ross',
-    handle: '@whereisdonde',
+    handle: '@juliaross',
     links: [
       { title: 'Book a 1:1 session', icon: 'calendar' as const },
       { title: 'Master the hooks that grow', icon: 'play' as const },
@@ -3479,7 +3491,7 @@ const DESIGN_SITE_PREVIEW_COPY = {
   es: {
     eyebrow: 'Tema',
     name: 'Julia Ross',
-    handle: '@whereisdonde',
+    handle: '@juliaross',
     links: [
       { title: 'Agendar una sesión 1:1', icon: 'calendar' as const },
       { title: 'Domina los hooks que hacen crecer', icon: 'play' as const },
@@ -3540,10 +3552,10 @@ function DesignSiteFeaturePreview() {
   return (
     <div
       ref={containerRef}
-      className="h-full w-full overflow-hidden bg-transparent px-4 py-5 flex items-center justify-center"
+      className="h-full w-full overflow-hidden bg-transparent px-3 py-3 sm:px-4 sm:py-4 flex items-center justify-center"
       aria-hidden="true"
     >
-      <div className="relative w-full max-w-[360px] mt-2 max-h-[460px] min-h-[368px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden">
+      <div className="relative h-full min-h-0 w-full max-w-[360px] rounded-[26px] border border-white/12 bg-[#07111D] overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0)_34%),linear-gradient(180deg,_rgba(10,26,43,0.92),_#050913)]" />
         <div className="absolute inset-0 digital-product-grid opacity-45" />
 
@@ -3553,7 +3565,7 @@ function DesignSiteFeaturePreview() {
           transition={screenTransition}
         />
 
-        <div className="relative h-full flex flex-col gap-2.5 px-3.5 py-3 sm:px-4 sm:py-3.5">
+        <div className="relative h-full min-h-0 flex flex-col gap-1.5 px-3 py-2.5 sm:gap-2 sm:px-3.5 sm:py-3">
           {/* Theme picker strip */}
           <div className="flex items-center gap-2 shrink-0">
             <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/55">
@@ -3595,9 +3607,9 @@ function DesignSiteFeaturePreview() {
           </div>
 
           {/* Phone mockup */}
-          <div className="relative flex-1 min-h-0 flex items-center justify-center">
+          <div className="relative flex-1 min-h-0 flex items-start justify-center overflow-hidden pt-1">
             <div
-              className="relative w-[208px] h-full max-h-[326px] min-h-[268px] rounded-[30px] border border-white/12 overflow-hidden shadow-[0_22px_56px_rgba(0,0,0,0.5)]"
+              className="relative h-[408px] w-[168px] shrink-0 origin-top scale-[0.86] sm:scale-[0.92] rounded-[34px] border border-white/12 overflow-hidden shadow-[0_22px_56px_rgba(0,0,0,0.5)]"
               style={{ background: '#000' }}
             >
               {/* Animated screen background */}

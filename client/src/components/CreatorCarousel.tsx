@@ -5,7 +5,7 @@ const creators = [
   {
     name: 'Liam Parker',
     handle: '@liamparker',
-    followers: '8.4M',
+    followers: '1M',
     bio: {
       en: 'ALL MY LINKS',
       es: 'TODOS MIS LINKS',
@@ -15,9 +15,9 @@ const creators = [
     socials: ['IG', 'X', 'TT', 'FB', 'YT', 'TH'],
   },
   {
-    name: 'Ava Martinez',
-    handle: '@avamartinez',
-    followers: '6.1M',
+    name: 'Julia Ross',
+    handle: '@juliaross',
+    followers: '789K',
     bio: {
       en: 'Beauty, style and daily routines',
       es: 'Belleza, estilo y rutinas diarias',
@@ -29,7 +29,7 @@ const creators = [
   {
     name: 'Noah Brooks',
     handle: '@noahbrooks',
-    followers: '5.3M',
+    followers: '512K',
     bio: {
       en: 'Street culture and travel stories',
       es: 'Cultura urbana e historias de viaje',
@@ -41,7 +41,7 @@ const creators = [
   {
     name: 'Mia Collins',
     handle: '@miacollins',
-    followers: '4.9M',
+    followers: '300K',
     bio: {
       en: 'Creator tips, wellness and vlogs',
       es: 'Tips para creadores, bienestar y vlogs',
@@ -53,7 +53,7 @@ const creators = [
   {
     name: 'Ethan Ross',
     handle: '@ethanross',
-    followers: '3.7M',
+    followers: '100K',
     bio: {
       en: 'Fitness, productivity and business',
       es: 'Fitness, productividad y negocio',
@@ -65,7 +65,7 @@ const creators = [
   {
     name: 'Sofia Patel',
     handle: '@sofiapatel',
-    followers: '2.9M',
+    followers: '436K',
     bio: {
       en: 'Fashion editorials and city moments',
       es: 'Editoriales de moda y momentos en la ciudad',
@@ -77,7 +77,7 @@ const creators = [
   {
     name: 'Daniel Reed',
     handle: '@danielreed',
-    followers: '7.2M',
+    followers: '684K',
     bio: {
       en: 'Founder life and creator economy',
       es: 'Vida de fundador y economía de creadores',
@@ -89,7 +89,7 @@ const creators = [
   {
     name: 'Isabella Cruz',
     handle: '@isabellacruz',
-    followers: '3.5M',
+    followers: '257K',
     bio: {
       en: 'Lifestyle shoots and travel diaries',
       es: 'Estilo de vida, sesiones y diarios de viaje',

@@ -1,5 +1,10 @@
+export interface LocalizedText {
+  en: string;
+  es: string;
+}
+
 export interface CreatorLink {
-  title: string;
+  title: LocalizedText;
   icon: string;
   url: string;
   image?: string;
@@ -19,7 +24,7 @@ export interface Creator {
   imagePosition?: string;
   imageScale?: number;
   imageOffsetY?: string;
-  title: string;
+  title: LocalizedText;
   followers: string;
   gridStyle:
     | 'single-wide'
@@ -44,7 +49,10 @@ export const CREATORS: Creator[] = [
     imagePosition: '55% center',
     imageScale: 1.16,
     imageOffsetY: '-5%',
-    title: 'Explorando las 7 maravillas.',
+    title: {
+      en: 'Exploring the 7 wonders.',
+      es: 'Explorando las 7 maravillas.',
+    },
     followers: '1.1M',
     gridStyle: 'single-wide',
     socials: [
@@ -54,21 +62,30 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Mi vlog más reciente',
+        title: {
+          en: 'My latest vlog',
+          es: 'Mi vlog más reciente',
+        },
         icon: 'youtube',
         url: '#',
         image:
           '/images/local-photos/photo-1476514525535-07fb3b4ae5f1-640-26b3228e.jpg',
       },
       {
-        title: 'Guía de viaje 2026',
+        title: {
+          en: '2026 travel guide',
+          es: 'Guía de viaje 2026',
+        },
         icon: 'globe',
         url: '#',
         image:
           '/images/local-photos/photo-1507525428034-b723cf961d3e-640-f229e17b.jpg',
       },
       {
-        title: 'Esenciales para empacar',
+        title: {
+          en: 'Packing essentials',
+          es: 'Esenciales para empacar',
+        },
         icon: 'merch',
         url: '#',
         image:
@@ -85,7 +102,10 @@ export const CREATORS: Creator[] = [
     imagePosition: '50% center',
     imageScale: 1.08,
     imageOffsetY: '-4%',
-    title: 'Himnos del futuro, ahora. Nuevo sencillo.',
+    title: {
+      en: 'Future anthems, now. New single.',
+      es: 'Himnos del futuro, ahora. Nuevo sencillo.',
+    },
     followers: '530K',
     gridStyle: 'mixed-stack',
     socials: [
@@ -95,42 +115,60 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Escucha el nuevo sencillo',
+        title: {
+          en: 'Listen to the new single',
+          es: 'Escucha el nuevo sencillo',
+        },
         icon: 'music',
         url: '#',
         image:
           '/images/local-photos/photo-1514525253161-7a46d19cd819-640-7319d345.jpg',
       },
       {
-        title: 'Entradas de la gira',
+        title: {
+          en: 'Tour tickets',
+          es: 'Entradas de la gira',
+        },
         icon: 'ticket',
         url: '#',
         image:
           '/images/local-photos/photo-1470229722913-7c0e2dbbafd3-640-75a7a8db.jpg',
       },
       {
-        title: 'Merch oficial',
+        title: {
+          en: 'Official merch',
+          es: 'Merch oficial',
+        },
         icon: 'merch',
         url: '#',
         image:
           '/images/local-photos/photo-1523381210434-271e8be1f52b-640-91671088.jpg',
       },
       {
-        title: 'Detrás de cámaras',
+        title: {
+          en: 'Behind the scenes',
+          es: 'Detrás de cámaras',
+        },
         icon: 'youtube',
         url: '#',
         image:
           '/images/local-photos/photo-1598488035139-bdbb2231ce04-640-005d4e0a.jpg',
       },
       {
-        title: 'Playlist de Spotify',
+        title: {
+          en: 'Spotify playlist',
+          es: 'Playlist de Spotify',
+        },
         icon: 'spotify',
         url: '#',
         image:
           '/images/local-photos/photo-1614680376573-df3480f0c6ff-640-f02ad2a6.jpg',
       },
       {
-        title: 'Club de fans',
+        title: {
+          en: 'Fan club',
+          es: 'Club de fans',
+        },
         icon: 'heart',
         url: '#',
         image:
@@ -145,7 +183,10 @@ export const CREATORS: Creator[] = [
     accentColor: '#FF8200',
     image:
       '/images/local-photos/photo-1749743823062-df9d9de55e94-640-ac8b9464.jpg',
-    title: 'Baloncesto. Negocios. Construyendo un legado.',
+    title: {
+      en: 'Basketball. Business. Building a legacy.',
+      es: 'Baloncesto. Negocios. Construyendo un legado.',
+    },
     followers: '4.3M',
     gridStyle: '1x2-featured',
     socials: [
@@ -155,21 +196,30 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Mejores jugadas',
+        title: {
+          en: 'Best plays',
+          es: 'Mejores jugadas',
+        },
         icon: 'youtube',
         url: '#',
         image:
           '/images/local-photos/photo-1546519638-68e109498ffc-640-6858135f.jpg',
       },
       {
-        title: 'Zapatillas exclusivas',
+        title: {
+          en: 'Exclusive sneakers',
+          es: 'Zapatillas exclusivas',
+        },
         icon: 'merch',
         url: '#',
         image:
           '/images/local-photos/photo-1542291026-7eec264c27ff-640-ffb2ffb2.jpg',
       },
       {
-        title: 'Fundación',
+        title: {
+          en: 'Foundation',
+          es: 'Fundación',
+        },
         icon: 'heart',
         url: '#',
         image:
@@ -186,7 +236,10 @@ export const CREATORS: Creator[] = [
     imagePosition: '50% center',
     imageScale: 1,
     imageOffsetY: '-6%',
-    title: 'Análisis profundos sobre rendimiento. Todos mis links aquí abajo.',
+    title: {
+      en: 'Deep dives on performance. All my links below.',
+      es: 'Análisis profundos sobre rendimiento. Todos mis links aquí abajo.',
+    },
     followers: '100K',
     gridStyle: 'balanced',
     socials: [
@@ -197,42 +250,60 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Ep 142: Enfoque',
+        title: {
+          en: 'Ep 142: Focus',
+          es: 'Ep 142: Enfoque',
+        },
         icon: 'podcast',
         url: '#',
         image:
           '/images/local-photos/photo-1583531172005-814191b8b6c0-640-b1baada5.jpg',
       },
       {
-        title: 'Ep 141: Hábitos',
+        title: {
+          en: 'Ep 141: Habits',
+          es: 'Ep 141: Hábitos',
+        },
         icon: 'podcast',
         url: '#',
         image:
           '/images/local-photos/photo-1589903308904-1010c2294adc-640-335f47f2.jpg',
       },
       {
-        title: 'Ep 140: Sueño',
+        title: {
+          en: 'Ep 140: Sleep',
+          es: 'Ep 140: Sueño',
+        },
         icon: 'podcast',
         url: '#',
         image:
           '/images/local-photos/photo-1590602847861-f357a9332bbc-640-726894e3.jpg',
       },
       {
-        title: 'Ep 139: Rutina',
+        title: {
+          en: 'Ep 139: Routine',
+          es: 'Ep 139: Rutina',
+        },
         icon: 'podcast',
         url: '#',
         image:
           '/images/local-photos/photo-1478737270239-2f02b77fc618-640-75827163.jpg',
       },
       {
-        title: 'Boletín',
+        title: {
+          en: 'Newsletter',
+          es: 'Boletín',
+        },
         icon: 'mail',
         url: '#',
         image:
           '/images/local-photos/photo-1596526131083-e8c633c948d2-640-4a40c1f9.jpg',
       },
       {
-        title: 'Únete a Patreon',
+        title: {
+          en: 'Join Patreon',
+          es: 'Únete a Patreon',
+        },
         icon: 'patreon',
         url: '#',
         image:
@@ -249,7 +320,10 @@ export const CREATORS: Creator[] = [
     imagePosition: '48% center',
     imageScale: 1.12,
     imageOffsetY: '-13%',
-    title: 'Recetas gourmet y accesibles. Links aquí abajo.',
+    title: {
+      en: 'Accessible gourmet recipes. Links below.',
+      es: 'Recetas gourmet y accesibles. Links aquí abajo.',
+    },
     followers: '12.4M',
     gridStyle: 'quad',
     socials: [
@@ -259,28 +333,40 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Nuevo libro de recetas',
+        title: {
+          en: 'New cookbook',
+          es: 'Nuevo libro de recetas',
+        },
         icon: 'merch',
         url: '#',
         image:
           '/images/local-photos/pexels-anthonyshkraba-production-8902114.jpg',
       },
       {
-        title: 'Masterclass',
+        title: {
+          en: 'Masterclass',
+          es: 'Masterclass',
+        },
         icon: 'youtube',
         url: '#',
         image:
           '/images/local-photos/photo-1556910103-1c02745aae4d-640-e5e3d51f.jpg',
       },
       {
-        title: 'Equipo de cocina',
+        title: {
+          en: 'Kitchen gear',
+          es: 'Equipo de cocina',
+        },
         icon: 'merch',
         url: '#',
         image:
           '/images/local-photos/photo-1581622558667-3419a8dc5f83-640-d70190ad.jpg',
       },
       {
-        title: 'Recetas secretas',
+        title: {
+          en: 'Secret recipes',
+          es: 'Recetas secretas',
+        },
         icon: 'mail',
         url: '#',
         image:
@@ -297,7 +383,10 @@ export const CREATORS: Creator[] = [
     imagePosition: '67% center',
     imageScale: 1,
     imageOffsetY: '0%',
-    title: 'Gamer y streamer competitivo de Valorant. Ranked, scrims y torneos aquí.',
+    title: {
+      en: 'Competitive Valorant gamer and streamer. Ranked, scrims, and tournaments here.',
+      es: 'Gamer y streamer competitivo de Valorant. Ranked, scrims y torneos aquí.',
+    },
     followers: '280K',
     gridStyle: 'mixed-media',
     socials: [
@@ -307,28 +396,40 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Streams en Twitch',
+        title: {
+          en: 'Twitch streams',
+          es: 'Streams en Twitch',
+        },
         icon: 'twitch',
         url: '#',
         image:
           '/images/local-photos/photo-1542751371-adc38448a05e-640-6e76632d.jpg',
       },
       {
-        title: 'Equipo de eSports',
+        title: {
+          en: 'eSports team',
+          es: 'Equipo de eSports',
+        },
         icon: 'gamepad',
         url: '#',
         image:
           '/images/local-photos/photo-1511512578047-dfb367046420-640-abdca219.jpg',
       },
       {
-        title: 'Mi club',
+        title: {
+          en: 'My club',
+          es: 'Mi club',
+        },
         icon: 'globe',
         url: '#',
         image:
           '/images/local-photos/photo-1775725181800-f55689a25857-640-bdeac775.jpg',
       },
       {
-        title: 'Mejores jugadas',
+        title: {
+          en: 'Best plays',
+          es: 'Mejores jugadas',
+        },
         icon: 'youtube',
         url: '#',
         image:
@@ -345,7 +446,10 @@ export const CREATORS: Creator[] = [
     imagePosition: '50% center',
     imageScale: 1,
     imageOffsetY: '-14%',
-    title: 'Datos honestos. Sin sesgos. Tu correo abajo.',
+    title: {
+      en: 'Honest data. No bias. Your email below.',
+      es: 'Datos honestos. Sin sesgos. Tu correo abajo.',
+    },
     followers: '21.3M',
     gridStyle: 'lead-gen',
     socials: [
@@ -355,28 +459,40 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Mi lista de equipo',
+        title: {
+          en: 'My gear list',
+          es: 'Mi lista de equipo',
+        },
         icon: 'merch',
         url: '#',
         image:
           '/images/local-photos/photo-1498049794561-7780e7231661-640-bef56bf8.jpg',
       },
       {
-        title: 'Armados de PC',
+        title: {
+          en: 'PC builds',
+          es: 'Armados de PC',
+        },
         icon: 'gamepad',
         url: '#',
         image:
           '/images/local-photos/photo-1587202372634-32705e3bf49c-640-382babe8.jpg',
       },
       {
-        title: 'Servidor de Discord',
+        title: {
+          en: 'Discord server',
+          es: 'Servidor de Discord',
+        },
         icon: 'discord',
         url: '#',
         image:
           '/images/local-photos/photo-1614680376408-81e91ffe3db7-640-a589057e.jpg',
       },
       {
-        title: 'Patrocinios',
+        title: {
+          en: 'Sponsorships',
+          es: 'Patrocinios',
+        },
         icon: 'mail',
         url: '#',
         image:
@@ -393,7 +509,10 @@ export const CREATORS: Creator[] = [
     imagePosition: '24% center',
     imageScale: 1,
     imageOffsetY: '-3%',
-    title: 'Peleadora. Campeona. Leyenda. Links aquí abajo.',
+    title: {
+      en: 'Fighter. Champion. Legend. Links below.',
+      es: 'Peleadora. Campeona. Leyenda. Links aquí abajo.',
+    },
     followers: '190K',
     gridStyle: 'carousel',
     socials: [
@@ -403,28 +522,40 @@ export const CREATORS: Creator[] = [
     ],
     links: [
       {
-        title: 'Merch del campamento',
+        title: {
+          en: 'Camp merch',
+          es: 'Merch del campamento',
+        },
         icon: 'merch',
         url: '#',
         image:
           '/images/local-photos/photo-1549719386-74dfcbf7dbed-640-62a2739c.jpg',
       },
       {
-        title: 'Plan de entrenamiento',
+        title: {
+          en: 'Training plan',
+          es: 'Plan de entrenamiento',
+        },
         icon: 'activity',
         url: '#',
         image:
           '/images/local-photos/photo-1647482272246-cd545777ad0c-640-1a2c7fb4.jpg',
       },
       {
-        title: 'Patrocinios',
+        title: {
+          en: 'Sponsorships',
+          es: 'Patrocinios',
+        },
         icon: 'mail',
         url: '#',
         image:
           '/images/local-photos/photo-1773682614225-c9b92727ce1a-640-bab9bd61.jpg',
       },
       {
-        title: 'Próxima pelea PPV',
+        title: {
+          en: 'Next PPV fight',
+          es: 'Próxima pelea PPV',
+        },
         icon: 'ticket',
         url: '#',
         image:

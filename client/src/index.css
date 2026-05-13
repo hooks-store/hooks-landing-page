@@ -200,16 +200,44 @@
   }
 
   .button-shine-outline::after {
-    background: linear-gradient(
+    display: none;
+  }
+
+  .button-shine-outline:is(:hover, :focus-visible, :active) {
+    background-image: linear-gradient(
       90deg,
-      transparent 0%,
-      rgba(255, 106, 74, 0) 32%,
-      rgba(255, 106, 74, 0.46) 43%,
-      rgba(233, 74, 106, 0.4) 52%,
-      rgba(90, 75, 255, 0.42) 61%,
-      transparent 74%
+      #ffffff 0%,
+      #ffffff 30%,
+      #FF6A4A 43%,
+      #E94A6A 52%,
+      #5A4BFF 61%,
+      #ffffff 74%,
+      #ffffff 100%
     );
-    mix-blend-mode: screen;
+    background-repeat: no-repeat;
+    background-size: 260% 100%;
+    animation: loginTextShine 1.15s ease-out both;
+  }
+
+  .button-shine-outline:is(:hover, :focus-visible, :active) .button-shine-outline-label {
+    background-image: linear-gradient(
+      90deg,
+      #ffffff 0%,
+      #ffffff 34%,
+      #FF6A4A 46%,
+      #E94A6A 52%,
+      #5A4BFF 58%,
+      #ffffff 72%,
+      #ffffff 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 260% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: loginTextShine 1.15s ease-out both;
   }
 
   .button-shine-login::after {
@@ -242,7 +270,7 @@
     animation: loginTextShine 1.15s ease-out;
   }
 
-  .button-shine:not(.button-shine-login):is(:hover, :focus-visible, :active)::after {
+  .button-shine:not(.button-shine-login):not(.button-shine-outline):is(:hover, :focus-visible, :active)::after {
     animation: buttonShine 1.15s ease-out;
   }
 }
@@ -317,6 +345,20 @@ html {
   100% {
     background-position: 0% 0;
   }
+}
+
+.button-gradient-cta:is(:hover, :focus-visible, :active) {
+  background-image: linear-gradient(135deg, #FF6A4A 0%, #E94A6A 50%, #5A4BFF 100%);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+.button-gradient-cta:is(:hover, :focus-visible) {
+  scale: 1.02;
+}
+
+.button-gradient-cta:active {
+  scale: 0.98;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,4 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useLanguage, type SupportedLocale } from '@/contexts/LanguageContext';
+
+type SaleChannel = 'mobile' | 'desktop';
 
 interface SaleActivity {
   id: string;
@@ -6,7 +9,7 @@ interface SaleActivity {
   handle: string;
   city: string;
   amount: string;
-  channel: string;
+  channel: SaleChannel;
   flag: string;
   lat: number;
   lon: number;
@@ -34,15 +37,59 @@ const GLOBE_RADIUS = 148;
 const GLOBE_CENTER_LAT = 13;
 
 const SALES_ACTIVITY: SaleActivity[] = [
-  { id: 'los-angeles', creator: 'Ava Torres', handle: '@avatorres', city: 'Los Angeles', amount: '$0.43', channel: 'Mobile', flag: '🇺🇸', lat: 34.0522, lon: -118.2437 },
-  { id: 'new-york', creator: 'Noah Lee', handle: '@noahlee', city: 'New York', amount: '$0.20', channel: 'Desktop', flag: '🇺🇸', lat: 40.7128, lon: -74.0060 },
-  { id: 'sao-paulo', creator: 'Lia Costa', handle: '@liacosta', city: 'Sao Paulo', amount: '$1.24', channel: 'Mobile', flag: '🇧🇷', lat: -23.5505, lon: -46.6333 },
-  { id: 'london', creator: 'Mason Reid', handle: '@masonreid', city: 'London', amount: '$0.87', channel: 'Desktop', flag: '🇬🇧', lat: 51.5074, lon: -0.1278 },
-  { id: 'lagos', creator: 'Ife Ayo', handle: '@ifeayo', city: 'Lagos', amount: '$1.10', channel: 'Mobile', flag: '🇳🇬', lat: 6.5244, lon: 3.3792 },
-  { id: 'dubai', creator: 'Nora Salem', handle: '@norasalem', city: 'Dubai', amount: '$0.56', channel: 'Desktop', flag: '🇦🇪', lat: 25.2048, lon: 55.2708 },
-  { id: 'singapore', creator: 'Kai Lim', handle: '@kailim', city: 'Singapore', amount: '$0.74', channel: 'Mobile', flag: '🇸🇬', lat: 1.3521, lon: 103.8198 },
-  { id: 'sydney', creator: 'Mila Hart', handle: '@mila.h', city: 'Sydney', amount: '$1.89', channel: 'Mobile', flag: '🇦🇺', lat: -33.8688, lon: 151.2093 },
+  { id: 'los-angeles', creator: 'Ava Torres', handle: '@avatorres', city: 'Los Angeles', amount: '$0.43', channel: 'mobile', flag: '🇺🇸', lat: 34.0522, lon: -118.2437 },
+  { id: 'new-york', creator: 'Noah Lee', handle: '@noahlee', city: 'New York', amount: '$0.20', channel: 'desktop', flag: '🇺🇸', lat: 40.7128, lon: -74.0060 },
+  { id: 'sao-paulo', creator: 'Lia Costa', handle: '@liacosta', city: 'Sao Paulo', amount: '$1.24', channel: 'mobile', flag: '🇧🇷', lat: -23.5505, lon: -46.6333 },
+  { id: 'london', creator: 'Mason Reid', handle: '@masonreid', city: 'London', amount: '$0.87', channel: 'desktop', flag: '🇬🇧', lat: 51.5074, lon: -0.1278 },
+  { id: 'lagos', creator: 'Ife Ayo', handle: '@ifeayo', city: 'Lagos', amount: '$1.10', channel: 'mobile', flag: '🇳🇬', lat: 6.5244, lon: 3.3792 },
+  { id: 'dubai', creator: 'Nora Salem', handle: '@norasalem', city: 'Dubai', amount: '$0.56', channel: 'desktop', flag: '🇦🇪', lat: 25.2048, lon: 55.2708 },
+  { id: 'singapore', creator: 'Kai Lim', handle: '@kailim', city: 'Singapore', amount: '$0.74', channel: 'mobile', flag: '🇸🇬', lat: 1.3521, lon: 103.8198 },
+  { id: 'sydney', creator: 'Mila Hart', handle: '@mila.h', city: 'Sydney', amount: '$1.89', channel: 'mobile', flag: '🇦🇺', lat: -33.8688, lon: 151.2093 },
 ];
+
+const WORLD_MAP_COPY: Record<
+  SupportedLocale,
+  {
+    newSale: string;
+    channels: Record<SaleChannel, string>;
+    cities: Record<SaleActivity['id'], string>;
+  }
+> = {
+  en: {
+    newSale: 'New sale',
+    channels: {
+      mobile: 'Mobile',
+      desktop: 'Desktop',
+    },
+    cities: {
+      'los-angeles': 'Los Angeles',
+      'new-york': 'New York',
+      'sao-paulo': 'Sao Paulo',
+      london: 'London',
+      lagos: 'Lagos',
+      dubai: 'Dubai',
+      singapore: 'Singapore',
+      sydney: 'Sydney',
+    },
+  },
+  es: {
+    newSale: 'Nueva venta',
+    channels: {
+      mobile: 'Móvil',
+      desktop: 'Escritorio',
+    },
+    cities: {
+      'los-angeles': 'Los Ángeles',
+      'new-york': 'Nueva York',
+      'sao-paulo': 'São Paulo',
+      london: 'Londres',
+      lagos: 'Lagos',
+      dubai: 'Dubái',
+      singapore: 'Singapur',
+      sydney: 'Sídney',
+    },
+  },
+};
 
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
 
@@ -112,6 +159,8 @@ function generateGlobeDots() {
 }
 
 export default function WorldMap() {
+  const { locale } = useLanguage();
+  const copy = WORLD_MAP_COPY[locale];
   const globeDots = useMemo(() => generateGlobeDots(), []);
   const [rotation, setRotation] = useState(-14);
   const [activeSaleId, setActiveSaleId] = useState(SALES_ACTIVITY[0].id);
@@ -193,6 +242,8 @@ export default function WorldMap() {
   const toastTop = (activeSale.y / MAP_HEIGHT) * 100;
   const toastOffsetX = activeSale.x > GLOBE_CENTER_X + 18 ? -222 : 20;
   const toastOffsetY = activeSale.y > GLOBE_CENTER_Y + 26 ? -142 : -104;
+  const activeSaleCity = copy.cities[activeSale.id] ?? activeSale.city;
+  const activeSaleChannel = copy.channels[activeSale.channel];
 
   return (
     <div className="relative w-full h-full">
@@ -355,7 +406,7 @@ export default function WorldMap() {
               <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-emerald-100 text-emerald-600">
                 $
               </span>
-              <span>New sale</span>
+              <span>{copy.newSale}</span>
             </div>
             <div className="mt-2 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-2">
               <div className="text-[21px] font-bold leading-none text-gray-900">
@@ -368,9 +419,9 @@ export default function WorldMap() {
             </div>
             <div className="mt-2 flex items-center justify-between text-[11px] text-gray-500">
               <span>
-                {activeSale.flag} {activeSale.city}
+                {activeSale.flag} {activeSaleCity}
               </span>
-              <span>{activeSale.channel}</span>
+              <span>{activeSaleChannel}</span>
             </div>
           </div>
         </div>
@@ -382,7 +433,7 @@ export default function WorldMap() {
           className="world-map-sale-toast-card w-[148px] rounded-lg border border-black/6 bg-white px-3 py-2 shadow-xl"
         >
           <div className="truncate text-[10px] font-semibold text-gray-600">
-            New sale • {activeSale.flag} {activeSale.city}
+            {copy.newSale} • {activeSale.flag} {activeSaleCity}
           </div>
           <div className="truncate text-[16px] font-bold leading-tight text-gray-900">
             {activeSale.amount}{' '}

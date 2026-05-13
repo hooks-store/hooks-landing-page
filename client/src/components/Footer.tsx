@@ -1,5 +1,6 @@
 import { HooksLogo } from './HooksIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Link } from 'wouter';
 
 const socialLinks = [
   {
@@ -19,9 +20,15 @@ type FooterColumn = {
   links: string[];
 };
 
+type FooterLegalLink = {
+  label: string;
+  href: string;
+};
+
 export default function Footer() {
   const { locale } = useLanguage();
   const isSpanish = locale === 'es';
+  const contactEmail = isSpanish ? 'equipo@hooks.store' : 'support@hooks.store';
 
   const copy = {
     brandSentence: isSpanish
@@ -66,26 +73,36 @@ export default function Footer() {
         ]) as FooterColumn[],
     rightsReserved: isSpanish ? 'Todos los derechos reservados.' : 'All rights reserved.',
     contactLabel: isSpanish ? 'Contacto' : 'Contact',
-    legalShort: isSpanish ? ['Privacidad', 'Términos', 'Cookies'] : ['Privacy', 'Terms', 'Cookies'],
+    legalShort: (isSpanish
+      ? [
+          { label: 'Privacidad', href: '/privacy' },
+          { label: 'Términos', href: '/terms' },
+          { label: 'FAQs', href: '/faqs' },
+        ]
+      : [
+          { label: 'Privacy', href: '/privacy' },
+          { label: 'Terms', href: '/terms' },
+          { label: 'FAQs', href: '/faqs' },
+        ]) as FooterLegalLink[],
   };
 
   return (
     <footer className="bg-[#0A0A0A] border-t border-white/[0.06] pt-20 pb-10">
       <div className="container">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 md:gap-12">
-          <div className="col-span-1 sm:col-span-2 md:col-span-1">
+        <div className="grid grid-cols-1 gap-8 text-center sm:grid-cols-2 md:grid-cols-5 md:gap-12 md:text-left">
+          <div className="col-span-1 mx-auto flex flex-col items-center sm:col-span-2 md:col-span-1 md:mx-0 md:items-start">
             <HooksLogo />
             <p className="text-[#8A8F98] text-sm mt-4 max-w-[200px] leading-relaxed">
               {copy.brandSentence}
             </p>
             <a
-              href="mailto:equipo@hooks.store"
+              href={`mailto:${contactEmail}`}
               className="text-[#8A8F98] text-sm mt-4 inline-block hover:text-white transition-colors"
             >
-              {copy.contactLabel}: equipo@hooks.store
+              {copy.contactLabel}: {contactEmail}
             </a>
             {/* Social icons */}
-            <div className="flex gap-3 mt-6">
+            <div className="flex justify-center gap-3 mt-6 md:justify-start">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
@@ -116,13 +133,17 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col md:flex-row justify-center md:justify-between items-center gap-4 text-center md:text-left">
           <p className="text-[#8A8F98] text-sm text-center md:text-left">&copy; {new Date().getFullYear()} Hooks. {copy.rightsReserved}</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             {copy.legalShort.map((item) => (
-              <span key={item} className="text-[#8A8F98] text-xs">
-                {item}
-              </span>
+              <Link
+                key={item.label}
+                href={item.href}
+                className="text-[#8A8F98] text-xs transition-colors hover:text-white"
+              >
+                {item.label}
+              </Link>
             ))}
           </div>
         </div>
