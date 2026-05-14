@@ -86,7 +86,7 @@ export default function Navbar() {
         <div className="md:hidden ml-3 flex min-w-0 flex-1 items-center justify-end gap-1.5 min-[375px]:gap-2">
           <a
             href={LOGIN_URL}
-            className="button-shine button-shine-outline group min-w-0 w-[96px] min-[400px]:w-[112px] rounded-full bg-white p-px active:scale-[0.98] hover:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] active:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] focus-visible:bg-[linear-gradient(135deg,_#FF6A4A_0%,_#E94A6A_50%,_#5A4BFF_100%)] focus-visible:outline-none transition-[background,transform] duration-200"
+            className="button-shine button-shine-outline group min-w-0 w-[96px] min-[400px]:w-[112px] rounded-full bg-white p-px active:scale-[0.98] focus-visible:outline-none transition-[background,transform] duration-200"
           >
             <span className="flex h-8 w-full min-w-0 items-center justify-center rounded-full bg-black px-2 min-[360px]:px-2.5 min-[400px]:h-9 min-[400px]:px-3">
               <span className="button-shine-outline-label block truncate text-white text-[10.5px] min-[360px]:text-[11px] min-[400px]:text-[13px] font-semibold leading-none transition-colors duration-200">

@@ -46,7 +46,10 @@ const HERO_BG_VIDEO_SOURCES: HeroBgVideo[] = [
 ];
 const HERO_BG_VIDEO_MAX_DURATION_MS = 4000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
-const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE = '/videos/features/tiktok-browser-guide-screen-recording.mp4';
+const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE_BY_LOCALE = {
+  en: '/videos/features/tiktok-browser-guide-en.mp4',
+  es: '/videos/features/tiktok-browser-guide-screen-recording.mp4',
+} as const;
 const SECTION_EYEBROW_CLASS = 'text-[#FF624F] text-base font-semibold mb-3';
 const SECTION_HEADLINE_CLASS = 'text-[30px] sm:text-[40px] md:text-[48px] lg:text-[clamp(36px,3.6vw,56px)] font-bold leading-[1.1] tracking-[-0.02em] lg:whitespace-nowrap';
 const FEATURE_CARD_CLASS = 'bg-[linear-gradient(180deg,_#0B1926_0%,_#0A0A0A_76%)] border border-white/[0.08] rounded-[20px] overflow-hidden h-full hover:border-white/[0.12] transition-colors duration-300 group';
@@ -926,8 +929,8 @@ export default function Home() {
                       <div className="absolute -right-0.5 top-[118px] h-16 w-0.5 rounded-r-full bg-[#151515]" />
                       <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-black">
                         <video
-                          src={FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE}
-                          className="h-full w-full -translate-y-2 object-contain"
+                          src={FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE_BY_LOCALE[locale]}
+                          className="h-full w-full -translate-y-[1px] object-contain object-top"
                           autoPlay
                           muted
                           loop
