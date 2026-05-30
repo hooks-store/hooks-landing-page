@@ -20,6 +20,7 @@ import {
   Youtube,
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsMobile } from '@/hooks/useMobile';
 import { CREATORS, type Creator, type CreatorSocial, type LocalizedText } from './data';
 
 type CardPosition = 'center' | 'left' | 'right' | 'hiddenLeft' | 'hiddenRight';
@@ -40,10 +41,10 @@ interface IconRendererProps {
 
 const INSTAGRAM_GLYPH_WHITE_SRC = '/images/icons/instagram-glyph-white.svg';
 const TIKTOK_SOCIAL_ICON_CIRCLE_BLACK_SRC = '/images/icons/tiktok-social-icon-circle-black.svg';
-const YOUTUBE_ICON_WHITE_DIGITAL_SRC = '/images/icons/youtube-icon-white-digital.png';
+const YOUTUBE_ICON_WHITE_DIGITAL_SRC = '/images/icons/youtube-icon-white-digital-64.png';
 const X_LOGO_SRC = '/images/icons/x-logo.svg';
-const FACEBOOK_LOGO_PRIMARY_SRC = '/images/icons/facebook-logo-primary.png';
-const SPOTIFY_PRIMARY_LOGO_RGB_BLACK_SRC = '/images/icons/spotify-primary-logo-rgb-green.png';
+const FACEBOOK_LOGO_PRIMARY_SRC = '/images/icons/facebook-logo-primary-64.png';
+const SPOTIFY_PRIMARY_LOGO_RGB_BLACK_SRC = '/images/icons/spotify-primary-logo-rgb-green-64.png';
 
 function IconRenderer({ name, size = 20, className = '', imageRef, onImageLoad, onImageError }: IconRendererProps) {
   switch (name) {
@@ -340,6 +341,9 @@ const isVisibleCardPosition = (position: CardPosition) =>
 
 export default function PhoneMockup() {
   const { locale } = useLanguage();
+  const isMobile = useIsMobile();
+  const shouldUseMobileLoading =
+    isMobile || (typeof window !== 'undefined' && window.innerWidth < 768);
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoplayStarted, setAutoplayStarted] = useState(false);
   const lastNavigationAtRef = useRef(0);
@@ -443,6 +447,12 @@ export default function PhoneMockup() {
     let isCancelled = false;
     const autoplayTimer = setTimeout(() => {
       const nextIndex = getNavigationTargetIndex(activeIndex, 'next');
+
+      if (shouldUseMobileLoading) {
+        navigate('next');
+        return;
+      }
+
       void waitForCreatorAssets(nextIndex).then(() => {
         if (!isCancelled) {
           navigate('next');
@@ -454,7 +464,7 @@ export default function PhoneMockup() {
       isCancelled = true;
       clearTimeout(autoplayTimer);
     };
-  }, [autoplayStarted, activeIndex, navigate, waitForCreatorAssets]);
+  }, [autoplayStarted, activeIndex, navigate, shouldUseMobileLoading, waitForCreatorAssets]);
 
   return (
     <div className="relative w-[255px] h-[525.3px] sm:w-[280.5px] sm:h-[576.3px] md:w-[306px] md:h-[629px]" style={{ perspective: 1400 }}>
@@ -467,9 +477,19 @@ export default function PhoneMockup() {
       <div className="relative w-full h-full flex items-center justify-center" style={{ transformStyle: 'preserve-3d' }}>
         {CREATORS.map((creator, index) => {
           const position = getPosition(index);
-          const shouldLoadImages = isVisibleCardPosition(position);
-          const isPriorityCard = position === 'center' || position === 'right';
-          const imageFetchPriority = isPriorityCard ? 'high' : 'low';
+          const isCenterCard = position === 'center';
+          const isInitialVisibleCard = activeIndex === 0 && isVisibleCardPosition(position);
+          const shouldLoadProfileImage = shouldUseMobileLoading
+            ? isCenterCard || isInitialVisibleCard || (autoplayStarted && isVisibleCardPosition(position))
+            : isVisibleCardPosition(position);
+          const shouldLoadLinkImages = shouldUseMobileLoading
+            ? isCenterCard || (autoplayStarted && isVisibleCardPosition(position))
+            : isVisibleCardPosition(position);
+          const isPriorityProfileImage = isCenterCard || (shouldUseMobileLoading && isInitialVisibleCard);
+          const imageFetchPriority = isPriorityProfileImage ? 'high' : 'low';
+          const profileImageLoading = isPriorityProfileImage ? 'eager' : 'lazy';
+          const linkImageLoading = shouldUseMobileLoading ? 'lazy' : profileImageLoading;
+          const linkImageFetchPriority = shouldUseMobileLoading ? 'low' : imageFetchPriority;
 
           return (
             <motion.div
@@ -500,7 +520,7 @@ export default function PhoneMockup() {
                   transition={activeImageTransition}
                   style={{ backgroundColor: creator.color }}
                 />
-                {shouldLoadImages && (
+                {shouldLoadProfileImage && (
                   <motion.img
                     src={creator.image}
                     alt={creator.name}
@@ -508,7 +528,7 @@ export default function PhoneMockup() {
                     variants={imageVariants}
                     custom={{ scale: creator.imageScale ?? 1, y: creator.imageOffsetY ?? '0%' }}
                     transition={activeImageTransition}
-                    loading="eager"
+                    loading={profileImageLoading}
                     decoding="async"
                     fetchPriority={imageFetchPriority}
                     ref={(image) => trackImageElement(creator.image, image)}
@@ -695,14 +715,14 @@ export default function PhoneMockup() {
                                   backgroundColor: creator.id === 'anyajensen' ? 'rgba(255,255,255,0.18)' : `${creator.color}1A`,
                                 }}
                               >
-                                {shouldLoadImages && linkImage && (
+                                {shouldLoadLinkImages && linkImage && (
                                   <img
                                     src={linkImage}
                                     alt=""
                                     className="absolute inset-0 w-full h-full object-cover"
-                                    loading="eager"
+                                    loading={linkImageLoading}
                                     decoding="async"
-                                    fetchPriority={imageFetchPriority}
+                                    fetchPriority={linkImageFetchPriority}
                                     ref={(image) => trackImageElement(linkImage, image)}
                                     onLoad={(event) => handleTrackedImageLoad(linkImage, event)}
                                     onError={() => markImageSourceReady(linkImage)}

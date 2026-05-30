@@ -4,14 +4,12 @@
  * orange accent (#E8930C), Inter font, magazine-scale typography.
  */
 
-import { useState, useEffect, useRef, type CSSProperties } from 'react';
+import { lazy, Suspense, useState, useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
 import { AnimatePresence, motion, useInView, useReducedMotion, type Variants } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SectionWrapper from '@/components/SectionWrapper';
 import UrlInputBar from '@/components/UrlInputBar';
-import CreatorCarousel from '@/components/CreatorCarousel';
-import WorldMap from '@/components/WorldMap';
 import PhoneMockup from '@/components/iphone-mockup/PhoneMockup';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/useMobile';
@@ -26,6 +24,9 @@ import {
   Crown, BookOpen, Headphones, Briefcase, Mail, Package, Radio,
   type LucideIcon
 } from 'lucide-react';
+
+const CreatorCarousel = lazy(() => import('@/components/CreatorCarousel'));
+const WorldMap = lazy(() => import('@/components/WorldMap'));
 
 type HeroBgVideo = {
   src: string;
@@ -46,6 +47,8 @@ const HERO_BG_VIDEO_SOURCES: HeroBgVideo[] = [
 ];
 const HERO_BG_VIDEO_MAX_DURATION_MS = 4000;
 const HERO_BG_VIDEO_CROSSFADE_MS = 550;
+const HERO_BG_VIDEO_DESKTOP_START_DELAY_MS = 1200;
+const HERO_BG_VIDEO_MOBILE_START_DELAY_MS = 5000;
 const FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE_BY_LOCALE = {
   en: '/videos/features/tiktok-browser-guide-en.mp4',
   es: '/videos/features/tiktok-browser-guide-screen-recording.mp4',
@@ -635,6 +638,109 @@ const HOME_COPY = {
   },
 } as const;
 
+type TiktokBrowserGuideVideoProps = {
+  locale: keyof typeof FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE_BY_LOCALE;
+  ariaLabel: string;
+};
+
+function TiktokBrowserGuideVideo({ locale, ariaLabel }: TiktokBrowserGuideVideoProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const isInView = useInView(containerRef, { amount: 0.35, once: true });
+
+  useEffect(() => {
+    if (!isInView || !videoRef.current) {
+      return;
+    }
+
+    const playPromise = videoRef.current.play();
+    if (playPromise) {
+      void playPromise.catch(() => undefined);
+    }
+  }, [isInView]);
+
+  return (
+    <div ref={containerRef} className="h-full w-full">
+      <video
+        ref={videoRef}
+        src={isInView ? FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE_BY_LOCALE[locale] : undefined}
+        className="h-full w-full -translate-y-[1px] object-contain object-top"
+        autoPlay={isInView}
+        muted
+        loop
+        playsInline
+        preload={isInView ? 'metadata' : 'none'}
+        aria-label={ariaLabel}
+      />
+    </div>
+  );
+}
+
+type LazyOnViewProps = {
+  children: ReactNode;
+  className?: string;
+  fallback?: ReactNode;
+  rootMargin?: string;
+};
+
+function LazyOnView({
+  children,
+  className = '',
+  fallback = null,
+  rootMargin = '0px',
+}: LazyOnViewProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    if (shouldRender || typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const element = containerRef.current;
+    if (!element) {
+      return undefined;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      setShouldRender(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldRender(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin, threshold: 0 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [rootMargin, shouldRender]);
+
+  return (
+    <div ref={containerRef} className={className}>
+      {shouldRender ? <Suspense fallback={fallback}>{children}</Suspense> : fallback}
+    </div>
+  );
+}
+
+function CreatorCarouselFallback() {
+  return <div aria-hidden="true" className="h-[356px] sm:h-[384px]" />;
+}
+
+function WorldMapFallback() {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-full w-full bg-[radial-gradient(circle_at_50%_42%,_rgba(33,81,120,0.52),_rgba(8,29,52,0.82)_58%,_rgba(7,17,29,0.94)_100%)]"
+    />
+  );
+}
+
 export default function Home() {
   const { locale } = useLanguage();
   const copy = HOME_COPY[locale];
@@ -861,7 +967,9 @@ export default function Home() {
         </div>
         <div className="mt-16 md:mt-24">
           <SectionWrapper delay={200}>
-            <CreatorCarousel />
+            <LazyOnView fallback={<CreatorCarouselFallback />} rootMargin="200px 0px">
+              <CreatorCarousel />
+            </LazyOnView>
           </SectionWrapper>
         </div>
       </section>
@@ -928,15 +1036,9 @@ export default function Home() {
                       <div className="absolute -left-0.5 top-[92px] h-12 w-0.5 rounded-l-full bg-[#151515]" />
                       <div className="absolute -right-0.5 top-[118px] h-16 w-0.5 rounded-r-full bg-[#151515]" />
                       <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-black">
-                        <video
-                          src={FEATURE_VIDEO_TIKTOK_BROWSER_GUIDE_BY_LOCALE[locale]}
-                          className="h-full w-full -translate-y-[1px] object-contain object-top"
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                          preload="metadata"
-                          aria-label={copy.tiktokStore.browserVideoLabel}
+                        <TiktokBrowserGuideVideo
+                          locale={locale}
+                          ariaLabel={copy.tiktokStore.browserVideoLabel}
                         />
                         <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/95 to-transparent px-3 pb-4 pt-12 text-center text-white">
                           <div className="text-[8px] font-extrabold leading-tight sm:text-[9px]">
@@ -977,7 +1079,13 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
               <div className={FEATURE_CARD_CLASS}>
                 <div className={`${FEATURE_CARD_MEDIA_CLASS} h-[340px] sm:h-[390px]`}>
-                  <WorldMap />
+                  <LazyOnView
+                    className="h-full w-full"
+                    fallback={<WorldMapFallback />}
+                    rootMargin="900px 0px"
+                  >
+                    <WorldMap />
+                  </LazyOnView>
                   {/* Floating stat cards */}
                   <div className="absolute top-3 left-3 sm:top-4 sm:left-4 md:top-6 md:left-6 bg-white rounded-xl p-2 sm:p-3 shadow-xl animate-bob z-10">
                     <div className="flex items-center gap-2 sm:gap-2.5">
@@ -1107,11 +1215,13 @@ function DigitalProductCover({
   accent,
   accentSoft,
   variant,
+  shouldLoadImage,
 }: {
   kind: DigitalProductKind;
   accent: string;
   accentSoft: string;
   variant: DigitalProductSlot;
+  shouldLoadImage: boolean;
 }) {
   const Icon = DIGITAL_PRODUCT_KIND_ICON[kind];
   const imageSrc = DIGITAL_PRODUCT_KIND_IMAGE[kind];
@@ -1125,15 +1235,20 @@ function DigitalProductCover({
         background: `linear-gradient(135deg, ${accent}38 0%, ${accentSoft} 38%, rgba(7, 17, 29, 0) 92%)`,
       }}
     >
-      <img
-        src={imageSrc}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover"
-        style={{
-          filter: 'brightness(0.94) saturate(1.08)',
-          opacity: isWide ? 0.76 : 0.94,
-        }}
-      />
+      {shouldLoadImage && (
+        <img
+          src={imageSrc}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
+          style={{
+            filter: 'brightness(0.94) saturate(1.08)',
+            opacity: isWide ? 0.76 : 0.94,
+          }}
+        />
+      )}
       <div
         className="absolute inset-0"
         style={{
@@ -1188,6 +1303,13 @@ function DigitalProductsFeaturePreview() {
   const [hoveredKind, setHoveredKind] = useState<DigitalProductKind | null>(null);
   const [activityIndex, setActivityIndex] = useState(0);
   const [showActivity, setShowActivity] = useState(false);
+  const [shouldLoadProductImages, setShouldLoadProductImages] = useState(false);
+
+  useEffect(() => {
+    if (isInView) {
+      setShouldLoadProductImages(true);
+    }
+  }, [isInView]);
 
   // Reset on locale change so the cycle re-stars cleanly.
   useEffect(() => {
@@ -1286,6 +1408,7 @@ function DigitalProductsFeaturePreview() {
             accent={item.accent}
             accentSoft={item.accentSoft}
             variant={slot}
+            shouldLoadImage={shouldLoadProductImages}
           />
         </div>
 
@@ -1473,14 +1596,33 @@ function CoursesFeaturePreview() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { amount: 0.4 });
   const reduceMotion = useReducedMotion() ?? false;
+  const [shouldLoadCourseImages, setShouldLoadCourseImages] = useState(false);
 
   useEffect(() => {
-    copy.items.forEach((course) => {
-      const image = new Image();
-      image.decoding = 'async';
-      image.src = course.imageUrl;
-    });
-  }, [copy.items]);
+    if (isInView) {
+      setShouldLoadCourseImages(true);
+    }
+  }, [isInView]);
+
+  useEffect(() => {
+    if (!isInView || typeof window === 'undefined') return;
+
+    let cancelled = false;
+    const preloadTimer = window.setTimeout(() => {
+      if (cancelled) return;
+
+      copy.items.forEach((course) => {
+        const image = new Image();
+        image.decoding = 'async';
+        image.src = course.imageUrl;
+      });
+    }, 800);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(preloadTimer);
+    };
+  }, [copy.items, isInView]);
 
   useEffect(() => {
     if (!isInView) return;
@@ -1582,15 +1724,17 @@ function CoursesFeaturePreview() {
                   background: `radial-gradient(120% 80% at 30% 20%, ${accent}55 0%, transparent 65%), linear-gradient(135deg, #0E1F36 0%, #06101D 100%)`,
                 }}
               >
-                <img
-                  src={activeCourse.imageUrl}
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={{ objectPosition: activeCourse.imagePosition ?? 'center' }}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+                {shouldLoadCourseImages && (
+                  <img
+                    src={activeCourse.imageUrl}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={{ objectPosition: activeCourse.imagePosition ?? 'center' }}
+                    loading="lazy"
+                    fetchPriority="low"
+                    decoding="async"
+                  />
+                )}
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(0,0,0,0.1)_0%,_rgba(0,0,0,0.34)_100%)]" />
                 <motion.div
                   className="absolute inset-0 mix-blend-color"
@@ -1706,6 +1850,7 @@ function CoursesFeaturePreview() {
 
 function HeroBackgroundVideoLoop() {
   const isMobile = useIsMobile();
+  const [canStartHeroVideo, setCanStartHeroVideo] = useState(false);
   const [frontSlot, setFrontSlot] = useState<0 | 1>(0);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [slotVideoIndices, setSlotVideoIndices] = useState<[number, number]>([
@@ -1757,6 +1902,32 @@ function HeroBackgroundVideoLoop() {
       void playPromise.catch(() => undefined);
     }
   };
+
+  useEffect(() => {
+    let startTimer: number | null = null;
+    const startDelay = isMobile
+      ? HERO_BG_VIDEO_MOBILE_START_DELAY_MS
+      : HERO_BG_VIDEO_DESKTOP_START_DELAY_MS;
+
+    const scheduleVideoStart = () => {
+      startTimer = window.setTimeout(() => {
+        setCanStartHeroVideo(true);
+      }, startDelay);
+    };
+
+    if (document.readyState === 'complete') {
+      scheduleVideoStart();
+    } else {
+      window.addEventListener('load', scheduleVideoStart, { once: true });
+    }
+
+    return () => {
+      window.removeEventListener('load', scheduleVideoStart);
+      if (startTimer) {
+        window.clearTimeout(startTimer);
+      }
+    };
+  }, [isMobile]);
 
   const advanceToNextVideo = () => {
     if (isCrossfading || isWaitingForNextVideoRef.current || HERO_BG_VIDEO_SOURCES.length <= 1) {
@@ -1840,6 +2011,10 @@ function HeroBackgroundVideoLoop() {
       return;
     }
 
+    if (!canStartHeroVideo) {
+      return;
+    }
+
     safePlay(activeVideoEl);
     if (activeVideoEl.readyState >= 2) {
       setCanPreloadNextVideo(true);
@@ -1857,10 +2032,10 @@ function HeroBackgroundVideoLoop() {
     return () => {
       clearAdvanceTimer();
     };
-  }, [frontSlot, activeVideoIndex, isCrossfading, canPreloadNextVideo, isWaitingForNextVideo]);
+  }, [frontSlot, activeVideoIndex, isCrossfading, canPreloadNextVideo, isWaitingForNextVideo, canStartHeroVideo]);
 
   useEffect(() => {
-    if (isCrossfading || !canPreloadNextVideo) {
+    if (isCrossfading || !canStartHeroVideo || !canPreloadNextVideo) {
       return;
     }
 
@@ -1873,7 +2048,7 @@ function HeroBackgroundVideoLoop() {
     backVideoEl.pause();
     backVideoEl.currentTime = 0;
     backVideoEl.load();
-  }, [slotVideoIndices, frontSlot, isCrossfading, canPreloadNextVideo]);
+  }, [slotVideoIndices, frontSlot, isCrossfading, canPreloadNextVideo, canStartHeroVideo]);
 
   useEffect(() => {
     const activeVideoEl = getVideoBySlot(frontSlot);
@@ -1906,8 +2081,8 @@ function HeroBackgroundVideoLoop() {
 
   const slotAVideo = HERO_BG_VIDEO_SOURCES[slotVideoIndices[0]];
   const slotBVideo = HERO_BG_VIDEO_SOURCES[slotVideoIndices[1]];
-  const slotAPreload = frontSlot === 0 || canPreloadNextVideo ? 'auto' : 'none';
-  const slotBPreload = frontSlot === 1 || canPreloadNextVideo ? 'auto' : 'none';
+  const slotAPreload = canStartHeroVideo && (frontSlot === 0 || canPreloadNextVideo) ? 'auto' : 'none';
+  const slotBPreload = canStartHeroVideo && (frontSlot === 1 || canPreloadNextVideo) ? 'auto' : 'none';
   const slotALoop = frontSlot === 0 && isWaitingForNextVideo;
   const slotBLoop = frontSlot === 1 && isWaitingForNextVideo;
 
@@ -1923,12 +2098,16 @@ function HeroBackgroundVideoLoop() {
           transitionDuration: `${HERO_BG_VIDEO_CROSSFADE_MS}ms`,
           objectPosition: isMobile ? slotAVideo.mobileObjectPosition ?? '50% 50%' : '50% 50%',
         }}
-        autoPlay={frontSlot === 0}
+        autoPlay={canStartHeroVideo && frontSlot === 0}
         loop={slotALoop}
         muted
         playsInline
         preload={slotAPreload}
-        onCanPlay={() => setCanPreloadNextVideo(true)}
+        onCanPlay={() => {
+          if (canStartHeroVideo) {
+            setCanPreloadNextVideo(true);
+          }
+        }}
         aria-hidden="true"
       />
 
@@ -1942,12 +2121,16 @@ function HeroBackgroundVideoLoop() {
           transitionDuration: `${HERO_BG_VIDEO_CROSSFADE_MS}ms`,
           objectPosition: isMobile ? slotBVideo.mobileObjectPosition ?? '50% 50%' : '50% 50%',
         }}
-        autoPlay={frontSlot === 1}
+        autoPlay={canStartHeroVideo && frontSlot === 1}
         loop={slotBLoop}
         muted
         playsInline
         preload={slotBPreload}
-        onCanPlay={() => setCanPreloadNextVideo(true)}
+        onCanPlay={() => {
+          if (canStartHeroVideo) {
+            setCanPreloadNextVideo(true);
+          }
+        }}
         aria-hidden="true"
       />
     </div>

@@ -5,7 +5,7 @@ export function HooksIcon({ size = 32 }: { size?: number }) {
 
   return (
     <img
-      src="/favicon.png"
+      src="/images/icons/hooks-logo-96.png"
       alt={locale === "es" ? "Logo de Hooks" : "Hooks logo"}
       width={size}
       height={size}

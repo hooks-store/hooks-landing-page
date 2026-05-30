@@ -21,9 +21,17 @@
     <meta
       name="twitter:description"
       content="Crea un perfil verificado, vende productos, cursos, asesorías y membresías desde un solo lugar. Hooks ayuda a convertir tu audiencia en ingresos." />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="/images/icons/hooks-logo-96.png" />
+    <link rel="preload" as="image" href="/images/hero/jumping-poster.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/creator-profiles/anya-jensen.jpg" fetchpriority="high" media="(max-width: 767px)" />
+    <link rel="preload" as="image" href="/images/creator-profiles/quinn-brax.jpg" fetchpriority="high" media="(max-width: 767px)" />
+    <link rel="preload" as="image" href="/images/creator-profiles/kayla-harris.jpg" fetchpriority="high" media="(max-width: 767px)" />
     <script>
       (() => {
+        const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
+        const shellLocale = languages
+          .map((language) => language.toLowerCase().split("-")[0])
+          .find((language) => language === "en" || language === "es") || "en";
         const navigationEntry = performance.getEntriesByType?.("navigation")?.[0];
         const isReload = navigationEntry?.type === "reload";
         const resetScrollTop = () => {
@@ -50,6 +58,9 @@
             }, 250);
           }, { once: true });
         }
+
+        document.documentElement.dataset.shellLocale = shellLocale;
+        document.documentElement.lang = shellLocale;
       })();
     </script>
     <style id="critical-above-fold">
@@ -73,6 +84,175 @@
       #root {
         min-height: 100vh;
       }
+
+      .initial-hero-shell {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        padding-top: 74px;
+        background: #0a0a0a;
+      }
+
+      .initial-hero-shell::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/images/hero/jumping-poster.jpg");
+        background-position: center;
+        background-size: cover;
+        opacity: 0.92;
+      }
+
+      .initial-hero-nav {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        background: #050505;
+        box-sizing: border-box;
+      }
+
+      .initial-hero-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: 800;
+      }
+
+      .initial-hero-brand img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .initial-hero-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .initial-hero-action {
+        min-width: 96px;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 999px;
+        padding: 12px 16px;
+        color: #ffffff;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .initial-hero-action-primary {
+        border-color: transparent;
+        background: linear-gradient(135deg, #ff624f 0%, #b144ff 100%);
+      }
+
+      .initial-hero-content {
+        position: relative;
+        z-index: 1;
+        width: min(100% - 40px, 1120px);
+        margin: 0 auto;
+        padding: 64px 0;
+        box-sizing: border-box;
+      }
+
+      .initial-hero-title {
+        max-width: 680px;
+        margin: 0 0 24px;
+        color: #ffffff;
+        font-size: 34px;
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: 0;
+      }
+
+      .initial-hero-title em {
+        display: block;
+        font-style: italic;
+        background: linear-gradient(135deg, #ffffff 0%, #ffb199 55%, #ff624f 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .initial-hero-copy {
+        max-width: 550px;
+        margin: 0 0 30px;
+        color: #ffffff;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .initial-hero-url {
+        display: flex;
+        align-items: center;
+        max-width: 480px;
+        min-height: 54px;
+        border-radius: 999px;
+        padding: 8px 10px 8px 16px;
+        background: rgba(255, 255, 255, 0.78);
+        color: rgba(10, 10, 10, 0.58);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+        box-sizing: border-box;
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .initial-hero-url span {
+        color: #0a0a0a;
+      }
+
+      .initial-hero-url strong {
+        margin-left: auto;
+        border-radius: 999px;
+        padding: 13px 17px;
+        background: #211714;
+        color: #ffffff;
+        font-size: 12px;
+        line-height: 1;
+      }
+
+      html[data-shell-locale="es"] .shell-en,
+      html:not([data-shell-locale="es"]) .shell-es {
+        display: none;
+      }
+
+      @media (min-width: 640px) {
+        .initial-hero-title {
+          font-size: 52px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .initial-hero-title {
+          font-size: 64px;
+        }
+
+        .initial-hero-copy {
+          font-size: 17px;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .initial-hero-actions {
+          gap: 6px;
+        }
+
+        .initial-hero-action {
+          min-width: 76px;
+          padding: 11px 12px;
+          font-size: 11px;
+        }
+      }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -84,13 +264,6 @@
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     </noscript>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-5XWW96PG');</script>
-    <!-- End Google Tag Manager -->
   </head>
 
   <body>
@@ -98,7 +271,45 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5XWW96PG"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    <div id="root"></div>
+    <div id="root">
+      <div class="initial-hero-shell">
+        <div class="initial-hero-nav">
+          <div class="initial-hero-brand">
+            <img src="/images/icons/hooks-logo-96.png" alt="" />
+            Hooks
+          </div>
+          <div class="initial-hero-actions">
+            <div class="initial-hero-action">
+              <span class="shell-en">Log In</span>
+              <span class="shell-es">Entrar</span>
+            </div>
+            <div class="initial-hero-action initial-hero-action-primary">
+              <span class="shell-en">Start for free</span>
+              <span class="shell-es">Empieza gratis</span>
+            </div>
+          </div>
+        </div>
+        <main class="initial-hero-content">
+          <h1 class="initial-hero-title">
+            <span class="shell-en"><em>Build your brand</em><span>and sell from one link.</span></span>
+            <span class="shell-es"><em>Construye tu marca</em><span>y vende desde un solo link.</span></span>
+          </h1>
+          <p class="initial-hero-copy shell-en">
+            Create a verified profile, sell products, courses, coaching, and memberships from one place. Hooks brings everything together to turn your audience into revenue.
+          </p>
+          <p class="initial-hero-copy shell-es">
+            Crea un perfil verificado, vende productos, cursos, asesorias y membresias desde un solo lugar. Hooks reune todo para convertir tu audiencia en ingresos.
+          </p>
+          <div class="initial-hero-url">
+            <span>hooks.store/</span>&nbsp;your-name
+            <strong>
+              <span class="shell-en">Start for free</span>
+              <span class="shell-es">Crear gratis</span>
+            </strong>
+          </div>
+        </main>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 

@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
+import { useInView } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const creators = [
@@ -115,9 +116,9 @@ const socialIconSources: Record<string, string> = {
   IG: '/images/icons/instagram-glyph-white.svg',
   X: '/images/icons/x-logo.svg',
   TT: '/images/icons/tiktok-social-icon-circle-black.svg',
-  FB: '/images/icons/facebook-logo-primary.png',
-  SP: '/images/icons/spotify-primary-logo-rgb-green.png',
-  YT: '/images/icons/youtube-icon-white-digital.png',
+  FB: '/images/icons/facebook-logo-primary-64.png',
+  SP: '/images/icons/spotify-primary-logo-rgb-green-64.png',
+  YT: '/images/icons/youtube-icon-white-digital-64.png',
 };
 
 const carouselSocials = ['IG', 'X', 'TT', 'FB', 'SP', 'YT'];
@@ -160,7 +161,9 @@ function VerifiedBadgeIcon({ size = 16, className = '' }: { size?: number; class
 export default function CreatorCarousel() {
   const { locale } = useLanguage();
   const isSpanish = locale === 'es';
+  const carouselRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const hasEnteredView = useInView(carouselRef, { amount: 0.2, once: true });
   const [isDragging, setIsDragging] = useState(false);
   const [isHoverPaused, setIsHoverPaused] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -171,7 +174,7 @@ export default function CreatorCarousel() {
   // Auto-scroll
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el || isAutoScrollPaused) return;
+    if (!el || !hasEnteredView || isAutoScrollPaused) return;
 
     let pos = el.scrollLeft;
     let lastTime = performance.now();
@@ -190,7 +193,7 @@ export default function CreatorCarousel() {
 
     animRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animRef.current);
-  }, [isAutoScrollPaused]);
+  }, [hasEnteredView, isAutoScrollPaused]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -236,7 +239,7 @@ export default function CreatorCarousel() {
   const allCreators = [...creators, ...creators, ...creators];
 
   return (
-    <div className="relative">
+    <div ref={carouselRef} className="relative">
       {/* Edge fades */}
       <div className="absolute inset-y-0 left-0 w-16 sm:w-24 md:w-40 bg-gradient-to-r from-[#0A0A0A] to-transparent z-10 pointer-events-none" />
       <div className="absolute inset-y-0 right-0 w-16 sm:w-24 md:w-40 bg-gradient-to-l from-[#0A0A0A] to-transparent z-10 pointer-events-none" />
@@ -260,16 +263,18 @@ export default function CreatorCarousel() {
           >
             {/* Avatar area */}
             <div className="h-52 relative overflow-hidden">
-              <img
-                src={creator.image}
-                alt={isSpanish ? `Retrato de ${creator.name}` : `${creator.name} portrait`}
-                className="w-full h-full object-cover"
-                style={{ objectPosition: creator.imagePosition }}
-                draggable={false}
-                onDragStart={(e) => e.preventDefault()}
-                loading="lazy"
-                decoding="async"
-              />
+              {hasEnteredView && (
+                <img
+                  src={creator.image}
+                  alt={isSpanish ? `Retrato de ${creator.name}` : `${creator.name} portrait`}
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: creator.imagePosition }}
+                  draggable={false}
+                  onDragStart={(e) => e.preventDefault()}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
             </div>
 
@@ -294,13 +299,15 @@ export default function CreatorCarousel() {
                       }`}
                       style={hasStandaloneLogo ? undefined : { background: socialColors[s] || '#666' }}
                     >
-                      <img
-                        src={socialIconSources[s]}
-                        alt={isSpanish ? `Logo de ${socialLabels[s]}` : `${socialLabels[s]} logo`}
-                        className={`block object-contain object-center ${isSpotify ? 'w-6 h-6' : hasStandaloneLogo ? 'w-full h-full' : 'w-3.5 h-3.5'}`}
-                        loading="lazy"
-                        decoding="async"
-                      />
+                      {hasEnteredView && (
+                        <img
+                          src={socialIconSources[s]}
+                          alt={isSpanish ? `Logo de ${socialLabels[s]}` : `${socialLabels[s]} logo`}
+                          className={`block object-contain object-center ${isSpotify ? 'w-6 h-6' : hasStandaloneLogo ? 'w-full h-full' : 'w-3.5 h-3.5'}`}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      )}
                     </div>
                   );
                 })}
