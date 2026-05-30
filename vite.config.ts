@@ -207,12 +207,20 @@ function vitePluginNonBlockingStylesheets(): Plugin {
   };
 }
 
+const includeDebugPlugins =
+  process.env.NODE_ENV !== "production" ||
+  process.env.VITE_ENABLE_PRODUCTION_DEBUG_TOOLS === "true";
+
 const plugins = [
   react(),
   tailwindcss(),
-  jsxLocPlugin(),
-  vitePluginManusRuntimeWithoutDeprecatedUnload(),
-  vitePluginManusDebugCollector(),
+  ...(includeDebugPlugins
+    ? [
+        jsxLocPlugin(),
+        vitePluginManusRuntimeWithoutDeprecatedUnload(),
+        vitePluginManusDebugCollector(),
+      ]
+    : []),
   vitePluginNonBlockingStylesheets(),
 ];
 

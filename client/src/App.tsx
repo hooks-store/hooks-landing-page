@@ -1,14 +1,13 @@
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { useEffect, useLayoutEffect } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect } from "react";
 import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import FAQ from "./pages/FAQ";
 import Home from "./pages/Home";
-import LegalPage from "./pages/LegalPage";
+
+const FAQ = lazy(() => import("./pages/FAQ"));
+const LegalPage = lazy(() => import("./pages/LegalPage"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function PrivacyPage() {
   return <LegalPage documentType="privacy" />;
@@ -48,16 +47,18 @@ function ScrollToTop() {
 
 function Router() {
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/privacy"} component={PrivacyPage} />
-      <Route path={"/terms"} component={TermsPage} />
-      <Route path={"/faq"} component={FAQ} />
-      <Route path={"/faqs"} component={FAQ} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route path={"*"} component={NotFound} />
-    </Switch>
+    <Suspense fallback={null}>
+      <Switch>
+        <Route path={"/"} component={Home} />
+        <Route path={"/privacy"} component={PrivacyPage} />
+        <Route path={"/terms"} component={TermsPage} />
+        <Route path={"/faq"} component={FAQ} />
+        <Route path={"/faqs"} component={FAQ} />
+        <Route path={"/404"} component={NotFound} />
+        {/* Final fallback route */}
+        <Route path={"*"} component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 
@@ -74,11 +75,8 @@ function App() {
           defaultTheme="dark"
           // switchable
         >
-          <TooltipProvider>
-            <Toaster />
-            <ScrollToTop />
-            <Router />
-          </TooltipProvider>
+          <ScrollToTop />
+          <Router />
         </ThemeProvider>
       </ErrorBoundary>
     </LanguageProvider>
