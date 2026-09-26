@@ -10,7 +10,7 @@ const socialLinks = [
   },
   {
     name: 'TikTok',
-    href: 'https://www.tiktok.com/@tradingsharksoficial?_r=1&_t=ZN-95kiUln8K5C',
+    href: 'https://www.tiktok.com/@hooks.crea',
     icon: '/images/icons/tiktok-social-icon-circle-black.svg',
   },
 ];

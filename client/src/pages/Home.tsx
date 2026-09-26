@@ -745,15 +745,9 @@ export default function Home() {
   const { locale } = useLanguage();
   const copy = HOME_COPY[locale];
   const heroRotatingPhrases = copy.hero.rotatingPhrases;
-  const [heroLoaded, setHeroLoaded] = useState(false);
   const [heroPhraseIndex, setHeroPhraseIndex] = useState(0);
   const manifestoSectionRef = useRef<HTMLElement | null>(null);
   const [manifestoScrollProgress, setManifestoScrollProgress] = useState(0);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setHeroLoaded(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     setHeroPhraseIndex(0);
@@ -898,11 +892,6 @@ export default function Home() {
           <div className="w-full min-w-0 text-left">
             <h1
               className="text-[34px] sm:text-[52px] md:text-[64px] lg:text-[clamp(56px,5.4vw,72px)] font-bold leading-[1.08] tracking-[-0.02em] mb-6"
-              style={{
-                opacity: heroLoaded ? 1 : 0,
-                transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
-                transition: 'opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s',
-              }}
             >
               <span
                 key={`${locale}-hero-phrase-${heroPhraseIndex}`}
@@ -914,21 +903,11 @@ export default function Home() {
             </h1>
             <p
               className="text-white text-base md:text-[17px] max-w-[550px] leading-[1.6] mb-8 mx-auto lg:mx-0"
-              style={{
-                opacity: heroLoaded ? 1 : 0,
-                transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
-                transition: 'opacity 0.6s ease-out 0.5s, transform 0.6s ease-out 0.5s',
-              }}
             >
               {copy.hero.subheadline}
             </p>
             <div
               className="mx-auto w-full max-w-[480px] lg:mx-0"
-              style={{
-                opacity: heroLoaded ? 1 : 0,
-                transform: heroLoaded ? 'translateY(0)' : 'translateY(20px)',
-                transition: 'opacity 0.6s ease-out 0.8s, transform 0.6s ease-out 0.8s',
-              }}
             >
               <UrlInputBar />
             </div>
@@ -936,11 +915,6 @@ export default function Home() {
 
           <div
             className="w-full flex justify-center lg:justify-end"
-            style={{
-              opacity: heroLoaded ? 1 : 0,
-              transform: heroLoaded ? 'translateY(0)' : 'translateY(30px)',
-              transition: 'opacity 0.8s ease-out 0.6s, transform 0.8s ease-out 0.6s',
-            }}
           >
             <PhoneMockup />
           </div>
