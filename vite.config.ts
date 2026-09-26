@@ -250,7 +250,7 @@ const plugins = [
       ]
     : []),
   vitePluginNonBlockingStylesheets(),
-  vitePluginStaticSpaRoutes(["/privacy", "/terms"]),
+  vitePluginStaticSpaRoutes(["/privacy", "/terms", "/partners"]),
 ];
 
 export default defineConfig({
