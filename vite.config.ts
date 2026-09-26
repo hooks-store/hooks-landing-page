@@ -186,27 +186,6 @@ function vitePluginManusRuntimeWithoutDeprecatedUnload(): Plugin {
   };
 }
 
-function vitePluginNonBlockingStylesheets(): Plugin {
-  return {
-    name: "non-blocking-render-stylesheets",
-    enforce: "post",
-    transformIndexHtml: {
-      order: "post",
-      handler(html, context) {
-        if (context.server) {
-          return html;
-        }
-
-        return html.replace(
-          /<link\s+rel="stylesheet"([^>]*)href="([^"]+\.css)"([^>]*)>/g,
-          (_linkTag, beforeHref: string, href: string, afterHref: string) =>
-            `<link rel="preload" as="style"${beforeHref}href="${href}"${afterHref} onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet"${beforeHref}href="${href}"${afterHref}></noscript>`,
-        );
-      },
-    },
-  };
-}
-
 function vitePluginStaticSpaRoutes(routes: string[]): Plugin {
   return {
     name: "static-spa-routes",
@@ -249,7 +228,6 @@ const plugins = [
         vitePluginManusDebugCollector(),
       ]
     : []),
-  vitePluginNonBlockingStylesheets(),
   vitePluginStaticSpaRoutes(["/privacy", "/terms"]),
 ];
 
