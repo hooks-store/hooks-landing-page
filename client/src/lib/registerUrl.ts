@@ -8,7 +8,7 @@ export function getRegisterUrl(username?: string) {
     return REGISTER_URL;
   }
 
-  const registerUrl = new URL(REGISTER_URL);
+  const registerUrl = new URL("/onboarding/claim-handle", REGISTER_URL);
   registerUrl.searchParams.set("username", trimmedUsername);
 
   return registerUrl.toString();
