@@ -18,6 +18,10 @@ function TermsPage() {
   return <LegalPage documentType="terms" />;
 }
 
+function PartnerAgreementPage() {
+  return <LegalPage documentType="partner" />;
+}
+
 function ScrollToTop() {
   const [location] = useLocation();
 
@@ -59,6 +63,8 @@ function Router() {
         <Route path={"/faqs"} component={FAQ} />
         <Route path={"/partners"} component={Partners} />
         <Route path={"/partners/"} component={Partners} />
+        <Route path={"/partners/agreement"} component={PartnerAgreementPage} />
+        <Route path={"/partners/agreement/"} component={PartnerAgreementPage} />
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
         <Route path={"*"} component={NotFound} />

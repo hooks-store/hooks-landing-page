@@ -228,7 +228,7 @@ const plugins = [
         vitePluginManusDebugCollector(),
       ]
     : []),
-  vitePluginStaticSpaRoutes(["/privacy", "/terms", "/partners"]),
+  vitePluginStaticSpaRoutes(["/privacy", "/terms", "/partners", "/partners/agreement"]),
 ];
 
 export default defineConfig({

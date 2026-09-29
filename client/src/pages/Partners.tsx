@@ -1,19 +1,27 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { useLanguage, type SupportedLocale } from "@/contexts/LanguageContext";
+import {
+  COOKIE_DAYS,
+  FOUNDING_RATE_PERCENT,
+  FOUNDING_SLOTS,
+  PARTNER_AGREEMENT_PATH,
+  PAYOUT_THRESHOLD_CENTS,
+  PLAN_PRICE_CENTS,
+  STANDARD_RATE_PERCENT,
+  formatUsd,
+} from "@/lib/partnerProgram";
 import { Check, X } from "lucide-react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
-const PLAN_PRICE_CENTS = 1499;
-const STANDARD_RATE_PERCENT = 25;
-const FOUNDING_RATE_PERCENT = 35;
-const COOKIE_DAYS = 90;
-const PAYOUT_THRESHOLD_CENTS = 5000;
-const FOUNDING_SLOTS = 15;
-const FOUNDING_BONUS_CENTS = 25000;
+type PlanId = keyof typeof PLAN_PRICE_CENTS;
+const PLAN_IDS: PlanId[] = ["pro", "growth"];
 const EARNINGS_REFERRAL_COUNTS = [10, 25, 100, 250];
 // Commission accrues per invoice, so each month's amount is rounded to whole cents.
-const MONTHLY_COMMISSION_CENTS = Math.round((PLAN_PRICE_CENTS * STANDARD_RATE_PERCENT) / 100);
+const MONTHLY_COMMISSION_CENTS: Record<PlanId, number> = {
+  pro: Math.round((PLAN_PRICE_CENTS.pro * STANDARD_RATE_PERCENT) / 100),
+  growth: Math.round((PLAN_PRICE_CENTS.growth * STANDARD_RATE_PERCENT) / 100),
+};
 
 const EYEBROW_CLASS = "mb-3 text-base font-semibold text-[#FF624F]";
 const SECTION_TITLE_CLASS =
@@ -21,17 +29,7 @@ const SECTION_TITLE_CLASS =
 const SPLIT_GRID_CLASS = "grid gap-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16";
 const CTA_CLASS =
   "button-shine button-shine-primary button-gradient-cta inline-flex w-full items-center justify-center rounded-full bg-white px-8 py-3.5 text-[15px] font-semibold leading-tight text-black transition-[background,color,box-shadow,scale] duration-200 sm:w-auto sm:text-[16px]";
-const TABLE_CELL_CLASS = "px-3 py-4 text-right text-[14px] sm:px-6 sm:py-5 sm:text-base";
-
-function formatUsd(cents: number, locale: SupportedLocale) {
-  const amount = new Intl.NumberFormat(locale === "es" ? "es-ES" : "en-US", {
-    minimumFractionDigits: cents % 100 === 0 ? 0 : 2,
-    maximumFractionDigits: 2,
-    useGrouping: "always",
-  }).format(cents / 100);
-
-  return `$${amount}`;
-}
+const TABLE_CELL_CLASS = "px-2.5 py-4 text-right text-[14px] sm:px-6 sm:py-5 sm:text-base";
 
 type Stat = { value: string; label: string };
 
@@ -50,13 +48,17 @@ type PartnerCopy = {
     eyebrow: string;
     title: string;
     body: string;
+    planLabel: string;
+    plans: Record<PlanId, string>;
     headers: string[];
-    footnote: string;
+    footnotes: Record<PlanId, string>;
   };
   terms: {
     eyebrow: string;
     title: string;
     rows: { label: string; value: string }[];
+    agreementNote: string;
+    agreementLink: string;
   };
   benefits: {
     eyebrow: string;
@@ -101,15 +103,26 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
     earnings: {
       eyebrow: "Los números",
       title: "Lo que realmente ganas",
-      body: `Con el plan de ${formatUsd(PLAN_PRICE_CENTS, "es")} al mes y un ${STANDARD_RATE_PERCENT}% de comisión, cada referido activo te genera ${formatUsd(MONTHLY_COMMISSION_CENTS, "es")} al mes durante todo el tiempo que se quede. Y se acumula, porque los referidos del mes pasado te siguen pagando este mes.`,
+      body: `Con un ${STANDARD_RATE_PERCENT}% de comisión, cada referido activo en Pro, a ${formatUsd(PLAN_PRICE_CENTS.pro, "es")} al mes, te genera ${formatUsd(MONTHLY_COMMISSION_CENTS.pro, "es")} al mes, y cada uno en Growth, a ${formatUsd(PLAN_PRICE_CENTS.growth, "es")} al mes, te genera ${formatUsd(MONTHLY_COMMISSION_CENTS.growth, "es")}, durante todo el tiempo que se quede. Y se acumula, porque los referidos del mes pasado te siguen pagando este mes. Si un referido se pasa a Growth, tu comisión sube también.`,
+      planLabel: "Plan",
+      plans: {
+        pro: `Pro · ${formatUsd(PLAN_PRICE_CENTS.pro, "es")} al mes`,
+        growth: `Growth · ${formatUsd(PLAN_PRICE_CENTS.growth, "es")} al mes`,
+      },
       headers: ["Referidos activos", "Al mes", "Al año", "En tres años"],
-      footnote: `Calculado a ${formatUsd(PLAN_PRICE_CENTS, "es")} al mes. Las cifras suponen que las cuentas siguen activas.`,
+      footnotes: {
+        pro: `Calculado con Pro a ${formatUsd(PLAN_PRICE_CENTS.pro, "es")} al mes. Las cifras suponen que las cuentas siguen activas.`,
+        growth: `Calculado con Growth a ${formatUsd(PLAN_PRICE_CENTS.growth, "es")} al mes. Las cifras suponen que las cuentas siguen activas.`,
+      },
     },
     terms: {
       eyebrow: "Las condiciones",
       title: "Todas las condiciones, por escrito",
       rows: [
-        { label: "Comisión", value: `${STANDARD_RATE_PERCENT}% de los ingresos por suscripción` },
+        {
+          label: "Comisión",
+          value: `${STANDARD_RATE_PERCENT}% de los ingresos por suscripción, tanto en Pro como en Growth`,
+        },
         { label: "Duración", value: "Toda la vida de la cuenta. Sin límite de 12 meses." },
         {
           label: "Ventana de cookie",
@@ -127,12 +140,10 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
           label: "Puja por la marca",
           value: 'No se permite pujar por "Hooks" ni por variantes cercanas',
         },
-        {
-          label: "Combinar cupones",
-          value: "No permitido. Los códigos de afiliado no se combinan con otras ofertas.",
-        },
         { label: "Aprobación", value: "Manual, normalmente en un día hábil" },
       ],
+      agreementNote: "Al unirte aceptas las condiciones completas del",
+      agreementLink: "Acuerdo del Programa de Afiliados",
     },
     benefits: {
       eyebrow: "Herramientas y soporte",
@@ -141,10 +152,6 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
         {
           title: "Un panel en tiempo real",
           body: "Clics, registros, pruebas, conversiones, MRR activo y comisiones pendientes frente a pagadas. Sin esperar a un correo mensual.",
-        },
-        {
-          title: "Links directos a cualquier página",
-          body: "Y tu propio código de cupón, si lo quieres.",
         },
         {
           title: "Una cuenta gratuita con todo desbloqueado",
@@ -182,15 +189,11 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
           value: `${FOUNDING_RATE_PERCENT}%`,
           label: `De por vida, en lugar del ${STANDARD_RATE_PERCENT}%`,
         },
-        {
-          value: formatUsd(FOUNDING_BONUS_CENTS, "es"),
-          label: "Cuando convierta tu tercer referido",
-        },
         { value: `${FOUNDING_SLOTS}`, label: "Plazas, y luego la oferta se cierra" },
       ],
       paragraphs: [
         "Te lo decimos claro: el programa es nuevo y todavía no hemos pagado mucho. Preferimos decirlo ahora a que lo descubras después.",
-        `Por eso, los primeros ${FOUNDING_SLOTS} afiliados reciben condiciones que no volveremos a ofrecer: ${FOUNDING_RATE_PERCENT}% de por vida en lugar del ${STANDARD_RATE_PERCENT}%, fijado a tu cuenta para siempre, más ${formatUsd(FOUNDING_BONUS_CENTS, "es")} cuando conviertas a tu tercer referido. Esa tarifa sigue siendo tuya, hagamos lo que hagamos después con el programa estándar.`,
+        `Por eso, los primeros ${FOUNDING_SLOTS} afiliados reciben condiciones que no volveremos a ofrecer: ${FOUNDING_RATE_PERCENT}% de por vida en lugar del ${STANDARD_RATE_PERCENT}%, fijado a tu cuenta para siempre, más acceso anticipado a nuevas funciones y voz en lo próximo que construyamos. Esa tarifa sigue siendo tuya, hagamos lo que hagamos después con el programa estándar.`,
       ],
       closing: "Te sumas a un programa sin historial. La tarifa es lo que recibes a cambio.",
       cta: "Reserva tu plaza de fundador",
@@ -216,15 +219,26 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
     earnings: {
       eyebrow: "The arithmetic",
       title: "What this actually pays",
-      body: `On the ${formatUsd(PLAN_PRICE_CENTS, "en")}/month plan at ${STANDARD_RATE_PERCENT}%, every active referral pays you ${formatUsd(MONTHLY_COMMISSION_CENTS, "en")} a month for as long as they stay. That compounds, because last month's referrals are still paying this month.`,
+      body: `At ${STANDARD_RATE_PERCENT}%, every active referral on Pro at ${formatUsd(PLAN_PRICE_CENTS.pro, "en")}/month pays you ${formatUsd(MONTHLY_COMMISSION_CENTS.pro, "en")} a month, and every one on Growth at ${formatUsd(PLAN_PRICE_CENTS.growth, "en")}/month pays ${formatUsd(MONTHLY_COMMISSION_CENTS.growth, "en")}, for as long as they stay. That compounds, because last month's referrals are still paying this month. If a referral upgrades to Growth, your commission goes up too.`,
+      planLabel: "Plan",
+      plans: {
+        pro: `Pro · ${formatUsd(PLAN_PRICE_CENTS.pro, "en")}/month`,
+        growth: `Growth · ${formatUsd(PLAN_PRICE_CENTS.growth, "en")}/month`,
+      },
       headers: ["Active referrals", "Per month", "Per year", "Over three years"],
-      footnote: `Worked at ${formatUsd(PLAN_PRICE_CENTS, "en")}/month. Figures assume accounts stay active.`,
+      footnotes: {
+        pro: `Worked at ${formatUsd(PLAN_PRICE_CENTS.pro, "en")}/month on Pro. Figures assume accounts stay active.`,
+        growth: `Worked at ${formatUsd(PLAN_PRICE_CENTS.growth, "en")}/month on Growth. Figures assume accounts stay active.`,
+      },
     },
     terms: {
       eyebrow: "The terms",
       title: "Every term, stated",
       rows: [
-        { label: "Commission", value: `${STANDARD_RATE_PERCENT}% of subscription revenue` },
+        {
+          label: "Commission",
+          value: `${STANDARD_RATE_PERCENT}% of subscription revenue, on both Pro and Growth`,
+        },
         { label: "Duration", value: "Lifetime of the account. Not capped at 12 months." },
         {
           label: "Cookie window",
@@ -236,12 +250,10 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
         { label: "Payout methods", value: "PayPal, bank transfer" },
         { label: "Self-referrals", value: "Not eligible" },
         { label: "Brand bidding", value: 'Not permitted on "Hooks" or close variants' },
-        {
-          label: "Coupon stacking",
-          value: "Not permitted. Partner codes can't be combined with other offers.",
-        },
         { label: "Approval", value: "Manual, usually within one business day" },
       ],
+      agreementNote: "Joining means agreeing to the full terms in the",
+      agreementLink: "Partner Program Agreement",
     },
     benefits: {
       eyebrow: "Tools and support",
@@ -250,10 +262,6 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
         {
           title: "A real-time dashboard",
           body: "Clicks, signups, trials, conversions, active MRR, and pending versus paid commission. No waiting for a monthly email.",
-        },
-        {
-          title: "Deep links to any page",
-          body: "Plus your own coupon code if you want one.",
         },
         {
           title: "A free account with everything unlocked",
@@ -291,15 +299,11 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
           value: `${FOUNDING_RATE_PERCENT}%`,
           label: `For life, instead of ${STANDARD_RATE_PERCENT}%`,
         },
-        {
-          value: formatUsd(FOUNDING_BONUS_CENTS, "en"),
-          label: "When your third referral converts",
-        },
         { value: `${FOUNDING_SLOTS}`, label: "Slots, then the offer closes" },
       ],
       paragraphs: [
         "Straight answer on where this program is: it's new, and we haven't paid out much yet. We'd rather say that than let you find out later.",
-        `So the first ${FOUNDING_SLOTS} partners get terms we won't offer again: ${FOUNDING_RATE_PERCENT}% for life instead of ${STANDARD_RATE_PERCENT}%, locked to your account permanently, plus ${formatUsd(FOUNDING_BONUS_CENTS, "en")} once you've converted your third referral. That rate stays yours no matter what we do with the standard program later.`,
+        `So the first ${FOUNDING_SLOTS} partners get terms we won't offer again: ${FOUNDING_RATE_PERCENT}% for life instead of ${STANDARD_RATE_PERCENT}%, locked to your account permanently, plus early access to new features and a say in what we build next. That rate stays yours no matter what we do with the standard program later.`,
       ],
       closing: "You're taking a program without a track record. The rate is what you get for that.",
       cta: "Claim a founding slot",
@@ -310,7 +314,9 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
 
 function StatList({ stats, className = "" }: { stats: Stat[]; className?: string }) {
   return (
-    <ul className={`border-t border-white/[0.08] sm:grid sm:grid-cols-3 sm:gap-6 ${className}`}>
+    <ul
+      className={`border-t border-white/[0.08] sm:grid sm:gap-6 ${stats.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"} ${className}`}
+    >
       {stats.map((stat) => (
         <li
           key={stat.label}
@@ -358,6 +364,7 @@ function PartnerSection({
 export default function Partners() {
   const { locale } = useLanguage();
   const copy = PARTNER_COPY[locale];
+  const [selectedPlan, setSelectedPlan] = useState<PlanId>("pro");
   const getApplyHref = (subject: string) =>
     `mailto:${copy.applyEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(copy.applyBody)}`;
 
@@ -386,6 +393,23 @@ export default function Partners() {
           title={copy.earnings.title}
           intro={copy.earnings.body}
         >
+          <div
+            role="group"
+            aria-label={copy.earnings.planLabel}
+            className="mb-4 inline-flex rounded-full border border-white/[0.08] bg-white/[0.02] p-1"
+          >
+            {PLAN_IDS.map((planId) => (
+              <button
+                key={planId}
+                type="button"
+                aria-pressed={selectedPlan === planId}
+                onClick={() => setSelectedPlan(planId)}
+                className={`whitespace-nowrap rounded-full px-3 py-2 text-[13px] font-semibold leading-5 transition-colors sm:px-4 sm:text-[14px] duration-200 ${selectedPlan === planId ? "bg-white text-black" : "text-[#8A8F98] hover:text-white"}`}
+              >
+                {copy.earnings.plans[planId]}
+              </button>
+            ))}
+          </div>
           <div className="overflow-x-auto rounded-[20px] border border-white/[0.08] bg-white/[0.02]">
             <table className="w-full border-collapse text-left tabular-nums">
               <thead>
@@ -394,7 +418,7 @@ export default function Partners() {
                     <th
                       key={header}
                       scope="col"
-                      className={`px-3 pt-5 pb-3 text-[12px] font-semibold leading-4 text-[#8A8F98] sm:px-6 sm:text-[13px] ${index === 0 ? "" : "text-right"}`}
+                      className={`px-2.5 pt-5 pb-3 text-[12px] font-semibold leading-4 text-[#8A8F98] sm:px-6 sm:text-[13px] ${index === 0 ? "" : "text-right"}`}
                     >
                       {header}
                     </th>
@@ -403,13 +427,13 @@ export default function Partners() {
               </thead>
               <tbody>
                 {EARNINGS_REFERRAL_COUNTS.map((referrals) => {
-                  const monthlyCents = MONTHLY_COMMISSION_CENTS * referrals;
+                  const monthlyCents = MONTHLY_COMMISSION_CENTS[selectedPlan] * referrals;
 
                   return (
                     <tr key={referrals} className="border-t border-white/[0.08]">
                       <th
                         scope="row"
-                        className="px-3 py-4 text-[15px] font-semibold text-white sm:px-6 sm:py-5 sm:text-[17px]"
+                        className="px-2.5 py-4 text-[15px] font-semibold text-white sm:px-6 sm:py-5 sm:text-[17px]"
                       >
                         {referrals}
                       </th>
@@ -428,7 +452,7 @@ export default function Partners() {
               </tbody>
             </table>
           </div>
-          <p className="mt-4 text-sm leading-6 text-[#8A8F98]">{copy.earnings.footnote}</p>
+          <p className="mt-4 text-sm leading-6 text-[#8A8F98]">{copy.earnings.footnotes[selectedPlan]}</p>
         </PartnerSection>
 
         <PartnerSection eyebrow={copy.terms.eyebrow} title={copy.terms.title}>
@@ -443,6 +467,16 @@ export default function Partners() {
               </div>
             ))}
           </dl>
+          <p className="mt-4 text-sm leading-6 text-[#8A8F98]">
+            {copy.terms.agreementNote}{" "}
+            <a
+              href={PARTNER_AGREEMENT_PATH}
+              className="text-[#C8CDD4] underline underline-offset-4 transition-colors hover:text-white"
+            >
+              {copy.terms.agreementLink}
+            </a>
+            .
+          </p>
         </PartnerSection>
 
         <PartnerSection eyebrow={copy.benefits.eyebrow} title={copy.benefits.title}>
