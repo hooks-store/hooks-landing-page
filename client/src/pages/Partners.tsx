@@ -8,6 +8,7 @@ import {
   PARTNER_AGREEMENT_PATH,
   PAYOUT_THRESHOLD_CENTS,
   PLAN_PRICE_CENTS,
+  REFUND_WINDOW_DAYS,
   STANDARD_RATE_PERCENT,
   formatUsd,
 } from "@/lib/partnerProgram";
@@ -132,7 +133,7 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
         { label: "Mínimo para cobrar", value: formatUsd(PAYOUT_THRESHOLD_CENTS, "es") },
         {
           label: "Calendario de pagos",
-          value: "Net 30, una vez cerrado el periodo de reembolso de 30 días",
+          value: `Mensual, Net 30. La comisión que supera el periodo de reembolso de ${REFUND_WINDOW_DAYS} días en un mes se paga dentro de los 30 días siguientes al final de ese mes.`,
         },
         { label: "Métodos de pago", value: "PayPal, transferencia bancaria" },
         { label: "Autorreferidos", value: "No son elegibles" },
@@ -155,7 +156,7 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
         },
         {
           title: "Una cuenta gratuita con todo desbloqueado",
-          body: "Para que reseñes el producto con honestidad y no a partir de capturas.",
+          body: "Disponible si la solicitas, para que reseñes el producto con honestidad y no a partir de capturas.",
         },
         {
           title: "Recursos de marca, imágenes del producto y grabaciones de pantalla",
@@ -246,7 +247,10 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
         },
         { label: "Commission triggers", value: "On the referred account's first payment" },
         { label: "Payout threshold", value: formatUsd(PAYOUT_THRESHOLD_CENTS, "en") },
-        { label: "Payout schedule", value: "Net 30, after the 30-day refund window closes" },
+        {
+          label: "Payout schedule",
+          value: `Monthly, Net 30. Commission that clears the ${REFUND_WINDOW_DAYS}-day refund window in a month is paid within 30 days of that month's end.`,
+        },
         { label: "Payout methods", value: "PayPal, bank transfer" },
         { label: "Self-referrals", value: "Not eligible" },
         { label: "Brand bidding", value: 'Not permitted on "Hooks" or close variants' },
@@ -265,7 +269,7 @@ const PARTNER_COPY: Record<SupportedLocale, PartnerCopy> = {
         },
         {
           title: "A free account with everything unlocked",
-          body: "So you can review the product honestly rather than from screenshots.",
+          body: "Available on request, so you can review the product honestly rather than from screenshots.",
         },
         {
           title: "Brand assets, product shots and screen recordings",
