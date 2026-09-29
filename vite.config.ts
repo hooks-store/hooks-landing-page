@@ -214,6 +214,11 @@ function withRouteMetadata(html: string, title: string, description: string) {
     );
 }
 
+// The image preloads in index.html are for the home page hero, which other routes don't render.
+function withoutImagePreloads(html: string) {
+  return html.replace(/[ \t]*<link\s+rel="preload"\s+as="image"[^>]*>\r?\n?/g, "");
+}
+
 function vitePluginStaticSpaRoutes(routes: StaticSpaRoute[]): Plugin {
   return {
     name: "static-spa-routes",
@@ -243,7 +248,11 @@ function vitePluginStaticSpaRoutes(routes: StaticSpaRoute[]): Plugin {
           fileName: `${routePath}/index.html`,
           source:
             "title" in routeConfig
-              ? withRouteMetadata(html, routeConfig.title, routeConfig.description)
+              ? withRouteMetadata(
+                  withoutImagePreloads(html),
+                  routeConfig.title,
+                  routeConfig.description,
+                )
               : indexHtml.source,
         });
       }
