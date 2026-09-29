@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 const FAQ = lazy(() => import("./pages/FAQ"));
 const LegalPage = lazy(() => import("./pages/LegalPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Partners = lazy(() => import("./pages/Partners"));
 
 function PrivacyPage() {
   return <LegalPage documentType="privacy" />;
@@ -15,6 +16,10 @@ function PrivacyPage() {
 
 function TermsPage() {
   return <LegalPage documentType="terms" />;
+}
+
+function PartnerAgreementPage() {
+  return <LegalPage documentType="partner" />;
 }
 
 function ScrollToTop() {
@@ -56,6 +61,10 @@ function Router() {
         <Route path={"/terms/"} component={TermsPage} />
         <Route path={"/faq"} component={FAQ} />
         <Route path={"/faqs"} component={FAQ} />
+        <Route path={"/partners"} component={Partners} />
+        <Route path={"/partners/"} component={Partners} />
+        <Route path={"/partners/agreement"} component={PartnerAgreementPage} />
+        <Route path={"/partners/agreement/"} component={PartnerAgreementPage} />
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
         <Route path={"*"} component={NotFound} />

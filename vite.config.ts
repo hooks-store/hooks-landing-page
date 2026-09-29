@@ -186,7 +186,40 @@ function vitePluginManusRuntimeWithoutDeprecatedUnload(): Plugin {
   };
 }
 
-function vitePluginStaticSpaRoutes(routes: string[]): Plugin {
+type StaticSpaRoute = string | { path: string; title: string; description: string };
+
+function escapeHtmlAttribute(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// Swaps the title and description, including their Open Graph and Twitter copies,
+// so shared links and search results describe the route instead of the home page.
+function withRouteMetadata(html: string, title: string, description: string) {
+  const safeTitle = escapeHtmlAttribute(title);
+  const safeDescription = escapeHtmlAttribute(description);
+
+  return html
+    .replace(/<title>[^<]*<\/title>/, () => `<title>${safeTitle}</title>`)
+    .replace(
+      /(<meta\s+(?:name|property)="(?:og|twitter):title"\s+content=")[^"]*/g,
+      (_match, prefix: string) => `${prefix}${safeTitle}`,
+    )
+    .replace(
+      /(<meta\s+(?:name|property)="(?:(?:og|twitter):)?description"\s+content=")[^"]*/g,
+      (_match, prefix: string) => `${prefix}${safeDescription}`,
+    );
+}
+
+// The image preloads in index.html are for the home page hero, which other routes don't render.
+function withoutImagePreloads(html: string) {
+  return html.replace(/[ \t]*<link\s+rel="preload"\s+as="image"[^>]*>\r?\n?/g, "");
+}
+
+function vitePluginStaticSpaRoutes(routes: StaticSpaRoute[]): Plugin {
   return {
     name: "static-spa-routes",
     enforce: "post",
@@ -197,8 +230,14 @@ function vitePluginStaticSpaRoutes(routes: string[]): Plugin {
         return;
       }
 
+      const html =
+        typeof indexHtml.source === "string"
+          ? indexHtml.source
+          : new TextDecoder().decode(indexHtml.source);
+
       for (const route of routes) {
-        const routePath = route.replace(/^\/+|\/+$/g, "");
+        const routeConfig = typeof route === "string" ? { path: route } : route;
+        const routePath = routeConfig.path.replace(/^\/+|\/+$/g, "");
 
         if (!routePath) {
           continue;
@@ -207,7 +246,14 @@ function vitePluginStaticSpaRoutes(routes: string[]): Plugin {
         this.emitFile({
           type: "asset",
           fileName: `${routePath}/index.html`,
-          source: indexHtml.source,
+          source:
+            "title" in routeConfig
+              ? withRouteMetadata(
+                  withoutImagePreloads(html),
+                  routeConfig.title,
+                  routeConfig.description,
+                )
+              : indexHtml.source,
         });
       }
     },
@@ -228,7 +274,22 @@ const plugins = [
         vitePluginManusDebugCollector(),
       ]
     : []),
-  vitePluginStaticSpaRoutes(["/privacy", "/terms"]),
+  vitePluginStaticSpaRoutes([
+    "/privacy",
+    "/terms",
+    {
+      path: "/partners",
+      title: "Hooks - Programa de afiliados",
+      description:
+        "Gana una comisión recurrente de por vida por cada cuenta que refieras a Hooks. Sin topes, sin niveles que escalar y sin audiencia mínima.",
+    },
+    {
+      path: "/partners/agreement",
+      title: "Hooks - Acuerdo del Programa de Afiliados",
+      description:
+        "Las condiciones completas del Programa de Afiliados de Hooks: atribución, comisiones, afiliados fundadores, pagos y normas de promoción.",
+    },
+  ]),
 ];
 
 export default defineConfig({
