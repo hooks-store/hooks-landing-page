@@ -16,7 +16,7 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
-  app.use(express.static(staticPath));
+  app.use(express.static(staticPath, { extensions: ["html"] }));
 
   // Handle client-side routing - serve index.html for all routes
   app.get("*", (_req, res) => {

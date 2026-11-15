@@ -96,6 +96,13 @@ export default function Footer() {
               {copy.brandSentence}
             </p>
             <a
+              href="/es/link-en-bio"
+              hrefLang="es"
+              className="mt-4 inline-block text-sm text-[#8A8F98] underline underline-offset-4 transition-colors hover:text-white"
+            >
+              {isSpanish ? 'Link en bio para vender' : 'Sell from your bio · Español'}
+            </a>
+            <a
               href={`mailto:${contactEmail}`}
               className="text-[#8A8F98] text-sm mt-4 inline-block hover:text-white transition-colors"
             >
