@@ -3,8 +3,11 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
+import LinkEnBio from "./client/src/pages/LinkEnBio";
 
 // =============================================================================
 // Manus Debug Collector - Vite Plugin
@@ -12,6 +15,8 @@ import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 // =============================================================================
 
 const PROJECT_ROOT = import.meta.dirname;
+const CLIENT_ROOT = path.join(PROJECT_ROOT, "client");
+const LINK_EN_BIO_HTML = path.join(CLIENT_ROOT, "es", "link-en-bio.html");
 const LOG_DIR = path.join(PROJECT_ROOT, ".manus-logs");
 const MAX_LOG_SIZE_BYTES = 1 * 1024 * 1024; // 1MB per log file
 const TRIM_TARGET_BYTES = Math.floor(MAX_LOG_SIZE_BYTES * 0.6); // Trim to 60% to avoid constant re-trimming
@@ -260,6 +265,19 @@ function vitePluginStaticSpaRoutes(routes: StaticSpaRoute[]): Plugin {
   };
 }
 
+function vitePluginLinkEnBioHtml(): Plugin {
+  return {
+    name: "link-en-bio-html",
+    transformIndexHtml(html, { filename }) {
+      if (filename !== LINK_EN_BIO_HTML) return html;
+
+      return html.replace("<!-- link-en-bio-page -->", () =>
+        renderToStaticMarkup(createElement(LinkEnBio)),
+      );
+    },
+  };
+}
+
 const includeDebugPlugins =
   process.env.NODE_ENV !== "production" ||
   process.env.VITE_ENABLE_PRODUCTION_DEBUG_TOOLS === "true";
@@ -267,6 +285,7 @@ const includeDebugPlugins =
 const plugins = [
   react(),
   tailwindcss(),
+  vitePluginLinkEnBioHtml(),
   ...(includeDebugPlugins
     ? [
         jsxLocPlugin(),
@@ -302,8 +321,11 @@ export default defineConfig({
     },
   },
   envDir: path.resolve(import.meta.dirname),
-  root: path.resolve(import.meta.dirname, "client"),
+  root: CLIENT_ROOT,
   build: {
+    rollupOptions: {
+      input: [path.join(CLIENT_ROOT, "index.html"), LINK_EN_BIO_HTML],
+    },
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
   },
