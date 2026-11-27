@@ -277,6 +277,7 @@ const plugins = [
   vitePluginStaticSpaRoutes([
     "/privacy",
     "/terms",
+    "/faqs",
     {
       path: "/partners",
       title: "Hooks - Programa de afiliados",
