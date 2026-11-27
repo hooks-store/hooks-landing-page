@@ -277,6 +277,12 @@ const plugins = [
   vitePluginStaticSpaRoutes([
     "/privacy",
     "/terms",
+    ...["/faq", "/faqs"].map(path => ({
+      path,
+      title: "Hooks - Preguntas frecuentes",
+      description:
+        "Comisiones, retiros y todo lo que necesitas saber sobre hooks.store.",
+    })),
     {
       path: "/partners",
       title: "Hooks - Programa de afiliados",
